@@ -1,0 +1,172 @@
+<%-include('../admin/partials/aheader.ejs') %>
+  <!-- Navigation Bar -->
+  <div class="container shadow-lg">
+
+    <div class="col-md-12 text-center mt-4 p-4">
+      <div class="">
+        <h4>Add product</h4>
+      </div>
+    </div>
+    <!-- Main Content -->
+    <% if(productData) { %>
+      <div class="container-fluid mt-3">
+        <form action="/admin/edit-product" id="update-product" class="row g-3 needs-validation mt-4" method="post"
+          enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="">
+                <div class="">
+
+                  <label for="productName" class="form-label">Product Name</label>
+                  <input type="text" class="form-control shadow-sm text-center" id="productName" name="productName"
+                    placeholder="product name" value="<%= productData.productName %>" autocomplete="off">
+                </div>
+                <div class="container-fluid mt-3">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="card-body">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-control shadow-sm text-center shadow-sm" id="category" name="category"
+                          value="<%=productData.category%>">
+                          <option selected value="" class="bg-info text-white" disabled>
+                            <%=productData.category.name%>
+                          </option>
+                          <% categoryData.forEach(data=> {%>
+                            <option value="<%=data._id%>">
+                              <%=data.name%>
+                            </option>
+                            <%}); %>
+
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="text" class="form-control shadow-sm text-center" id="price" name="price"
+                          placeholder="Price include all taxes" value="<%= productData.price%>" autocomplete="off">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="container-fluid mt-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="">
+                        <label for="discount" class="form-label">Discount</label>
+                        <input type="number" class="form-control shadow-sm text-center" id="discount" name="discount"
+                          placeholder="discount in percentage" value="<%= productData.discount %>" autocomplete="off">
+                      </div>
+                    </div>
+                    <div class="col-md-6 ">
+                      <div class="">
+                        <label for="quantity" class="form-label">quantity</label>
+                        <input type="number" class="form-control shadow-sm text-center" id="quantity" name="quantity"
+                          placeholder="Number of quantity" value="<%= productData.quantity %>" autocomplete="off">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm--12">
+              <div class="">
+                <div class="">
+                  <label for="description" class="form-label p-3">Description</label>
+                  <textarea class="form-control shadow-sm text-center" id="description" rows="8" name="description"
+                    placeholder="more about product..." value=""><%= productData.description %></textarea>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <% for(i=0 ; i<productData.images.length ; i++){%>
+                <div class="col-md-3 mt-4 p-4 text-center">
+                  <div class="text-center"> <img class="border border-dark" src="/images/<%= productData.images[i]%>"
+                      style="height: 12rem; width: 12rem;" alt="" id="imgView"> <input type="submit" value="Delete"
+                      class="btn btn-dark mt-3"
+                      onclick="deleteimgEdidtproducts('<%=productData._id%>','<%=productData.images[i]%>')"></div>
+                </div>
+                <%} %>
+            </div>
+            <div class="col-md-12 mt-3"> <input class="form-control" type="file" id="imageMultiple" name="images"
+                value="image.file" multiple onchange="previewImages(event)"></div>
+                <div id="preview"></div>
+          </div>
+          <div class="col-md-12 text-center mt-4 p-5">
+            <input type="hidden" name="id" value="<%= productData._id %>">
+            <div><input type="submit" class="btn btn-success" onclick="inserProduct()"><a
+              href="/admin/product-list" class="btn btn-dark ms-4 ">Back</a></div>
+          </div>
+        </form>
+      </div>
+      <% } %>
+  </div>
+  <script>
+    function inserProduct() {
+      console.log("working")
+      const updateProduct = document.querySelector('#update-product');
+      addProduct.addEventListener('submit', event => {
+        event.preventDefault();
+        const productName = document.getElementById('productName').value.trim();
+        const category = document.getElementById('category').value.trim();
+        const price = document.getElementById('price').value.trim();
+        const discount = document.getElementById('discount').value.trim();
+        const quantity = document.getElementById('quantity').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const imageMultiple = document.getElementById('imageMultiple').value
+        console.log(category)
+        if (!productName || !price || !discount || !quantity || !description) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'make unique card and its name atleast 5 character max 13.....!',
+            // footer: '<a href="">Why do I have this issue?</a>'
+          })
+
+        } else {
+          console.log("working")
+          updateProduct.submit()
+        }
+
+      })
+    }
+
+    function deleteimgEdidtproducts(id, images) {
+      event.preventDefault()
+      console.log("working")
+      $.ajax({
+        method: 'delete',
+        url: '/admin/delete-edit-productimages',
+        data: ({
+          id,
+          images
+        }),
+        success: function (response) {
+          location.href = '/admin/delete-edit-productimages'
+        }
+      })
+    }
+    function previewImages(event) {
+      var preview = document.getElementById('preview');
+      preview.innerHTML = '';
+
+      var files = event.target.files;
+      for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader();
+        reader.onload = (function (file) {
+          return function (e) {
+            var image = new Image();
+            image.src = e.target.result;
+            image.className = 'preview-image';
+            preview.appendChild(image);
+          };
+        })(files[i]);
+        reader.readAsDataURL(files[i]);
+      }
+    }
+  </script>
+
+  <%-include('../admin/partials/afooter.ejs') %>

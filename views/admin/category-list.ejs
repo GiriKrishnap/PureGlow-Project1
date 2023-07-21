@@ -1,0 +1,91 @@
+<%-include('../admin/partials/aheader.ejs') %>
+
+
+ <div class="container-fluid mt-2 text-center" >
+  <div class="col-md-12">
+      <div class="card mb-3 card">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-dark  border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">CATEGORY LIST</h6>
+            </div>
+          </div>
+          <div class="card-header">
+              <div class="btn-actions-pane-right">
+              </div>
+          </div>
+          <div class="table-responsive p-4">
+              <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-setting">
+                  <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    
+  
+                      <% categoryData.forEach((data,index) => { %>
+  
+                        <tr>
+                          <td class="text-center text-muted"><%= index+1 %></td>
+                          <td>
+                              <div class="widget-content p-0">
+                                  <div class="widget-content-wrapper">
+                                      <div class="widget-content-left mr-3">
+                                          <div class="widget-content-left">
+                                            <%= data.name%>
+                                          </div>
+                                      </div>
+                                    
+                                  </div>
+                              </div>
+                          </td>
+                          
+                          <td class="text-center"><a href="/admin/update-category?id=<%=data._id %>" class="btn btn-dark">Edit</a>
+                            
+                    <% if (data.list===true) { %>
+                      <a href="/admin/unList-category?id=<%= data._id %>" class="btn btn-dark">Listed</a>
+                      <% } else { %>
+                        <a href="/admin/list-category?id=<%= data._id %>" class="btn btn-danger">UnListed</a>
+                        <% } %>
+                          </td>
+                            
+                      </tr>
+                        
+                    <%  }); %>
+                      
+                 
+                   
+                  </tbody>
+              </table>
+          </div>
+          <div class="row text-end">
+            <div class="col-md-12 pl-4">
+              <a href="/admin/add-category" class="btn btn-dark me-5">add category</a>
+            </div>
+          </div>
+      </div>
+  </div>
+  
+  </div>
+  
+
+  
+
+
+
+
+
+
+
+  <%-include('../admin/partials/afooter.ejs') %>
+
+
+
+
+
+
+
+
+

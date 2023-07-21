@@ -1,0 +1,152 @@
+<%-include('../admin/partials/aheader.ejs') %>
+  <!-- Navigation Bar -->
+  <div class="container shadow-lg">
+
+    <div class="col-md-12 text-center mt-4 p-4">
+      <div class="row">
+        <div class="col-md-6 text-center">
+          <h4>Add product</h4>
+        </div>
+      </div>
+    </div>
+    <!-- Main Content -->
+
+    <div class="container-fluid mt-3">
+      <form action="/admin/add-product" id="add-product" class="row g-3 needs-validation mt-4" method="post"
+        enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="">
+              <div class="">
+
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" class="form-control shadow-sm text-center" id="productName" name="productName"
+                  placeholder="Product Name" value="" autocomplete="off">
+              </div>
+              <div class="container-fluid mt-3">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="card-body">
+                      <label for="category" class="form-label">Category</label>
+                      <select class="form-control shadow-sm text-center shadow-sm" id="category" name="category">
+                        <option selected disabled>category</option>
+                        <% categoryData.forEach(data=> {%>
+                          <option value="<%=data._id%>">
+                            <%=data.name%>
+                          </option>
+                          <%}); %>
+
+
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="">
+                      <label for="price" class="form-label">Price</label>
+                      <input type="text" class="form-control shadow-sm text-center" id="price" name="price"
+                        placeholder="Price include all taxes" value="" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container-fluid mt-2">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="">
+                      <label for="discount" class="form-label">Discount</label>
+                      <input type="number" class="form-control shadow-sm text-center" id="discount" name="discount"
+                        placeholder="discount in percentage" value="" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-md-6 ">
+                    <div class="">
+                      <label for="quantity" class="form-label">quantity</label>
+                      <input type="number" class="form-control shadow-sm text-center" id="quantity" name="quantity"
+                        placeholder="Number of quantity" value="" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm--12">
+            <div class="">
+              <div class="">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control shadow-sm text-center" id="description" rows="9" name="description"
+                  placeholder="More About This Product..." value="" autocomplete="off"></textarea>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-6"><input class="form-control" type="file" id="imageMultiple" name="images" value=""
+                onchange="previewImages(event)" multiple></div>
+            <div class="col-md-3">
+              <%if(typeof message !=='undefined' ){%>
+                <%= message %>
+                  <%}%>
+            </div>
+          </div>
+        </div>
+        <div id="preview"></div>
+        <div class="col-md-12 text-center mt-4 p-5">
+          <div class="row">
+            <div class="col-md-6"><input type="submit" class="btn btn-success ms-4" onclick="inserProduct()"><a
+                href="/admin/product-list" class="btn btn-dark ms-4 ">Back</a></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    function inserProduct() {
+      const addProduct = document.querySelector('#add-product');
+      addProduct.addEventListener('submit', event => {
+        event.preventDefault();
+        const productName = document.getElementById('productName').value.trim();
+        const category = document.getElementById('category').value.trim();
+        const price = document.getElementById('price').value.trim();
+        const discount = document.getElementById('discount').value.trim();
+        const quantity = document.getElementById('quantity').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const imageMultiple = document.getElementById('imageMultiple').value
+        console.log(category)
+        if (!productName || !price || !discount || !quantity || !description || !imageMultiple) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'make unique card and its name atleast 5 character max 13.....!',
+            // footer: '<a href="">Why do I have this issue?</a>'
+          })
+
+        } else {
+          addProduct.submit()
+
+        }
+
+      })
+    }
+    function previewImages(event) {
+      var preview = document.getElementById('preview');
+      preview.innerHTML = '';
+
+      var files = event.target.files;
+      for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader();
+        reader.onload = (function (file) {
+          return function (e) {
+            var image = new Image();
+            image.src = e.target.result;
+            image.className = 'preview-image';
+            preview.appendChild(image);
+          };
+        })(files[i]);
+        reader.readAsDataURL(files[i]);
+      }
+    }
+  </script>
+
+  <%-include('../admin/partials/afooter.ejs') %>

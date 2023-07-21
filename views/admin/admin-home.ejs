@@ -1,0 +1,126 @@
+<%-include('../admin/partials/aheader.ejs') %>
+<link rel="stylesheet" href="/admin/admin-home/style.css">
+<link href="https://demo.dashboardpack.com/architectui-html-free/main.css" rel="stylesheet"></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<div class="container-fluid mt-3">
+  
+   
+    
+   
+      <div class="row">
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-midnight-bloom">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Total Orders</div>
+                        <div class="widget-subheading">Last year expenses</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers"><span>14</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-arielle-smile">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Clients</div>
+                        <div class="widget-subheading">new Orders</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><span>2</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card mb-3 widget-content bg-grow-early">
+                <div class="widget-content-wrapper text-white">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">Total Clients</div>
+                        <div class="widget-subheading">People Interested</div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers"><span>5</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+    
+</div>
+<div class="col-md-12">
+<div class="row">
+    <div class="card col-md-7 me-2 p-4">
+        <canvas id="myChart"></canvas>
+    </div>
+    <div class="card col-md-4 ms-2 align-items-center justify-content-center">
+        <canvas id="myChart-donut" ></canvas>
+
+    </div>
+</div>
+</div>
+
+
+
+
+
+<script>
+    const xValues = [100,200,300,400,500,600,700,800,900,1000];
+    
+    new Chart("myChart", {
+      type: "line",
+      data: {
+        labels: xValues,
+        datasets: [{ 
+          data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
+          borderColor: "red",
+          fill: false
+        }, { 
+          data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
+          borderColor: "green",
+          fill: false
+        }, { 
+          data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
+          borderColor: "blue",
+          fill: false
+        }]
+      },
+      options: {
+        legend: {display: false}
+      }
+    });
+    </script>
+    <script>
+        var xValuesDonut = ["Italy", "France", "Spain", "USA", "Argentina"];
+        var yValues = [55, 49, 44, 24, 15];
+        var barColors = [
+          "#b91d47",
+          "#00aba9",
+          "#2b5797",
+          "#e8c3b9",
+          "#1e7145"
+        ];
+        
+        new Chart("myChart-donut", {
+          type: "doughnut",
+          data: {
+            labels: xValues,
+            datasets: [{
+              backgroundColor: barColors,
+              data: yValues
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: "World Wide Wine Production 2018"
+            }
+          }
+        });
+        </script>
+  
+  <%-include('../admin/partials/afooter.ejs') %>

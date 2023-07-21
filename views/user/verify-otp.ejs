@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>pureGlow | by Giri</title>
+  <link rel="shortcut icon" href="/images/user/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="/stylesheets/user/signupstyle.css">
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="wrapper p-4">
+    <h1 class="text-white bg-primary t-wraptex">VerifyBro!</h1>
+    <p>~ Check Your Email ~<br>Enter the Otp!</p>
+    <form method="post" action="/verify-otp">
+      <div class="mb-3 d-flex justify-content-center p-2 ">
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v1" maxlength="1" autocomplete="off"
+          required>
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v2" maxlength="1" autocomplete="off"
+          required>
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v3" maxlength="1" autocomplete="off"
+          required>
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v4" maxlength="1" autocomplete="off"
+          required>
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v5" maxlength="1" autocomplete="off"
+          required>
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v6" maxlength="1" autocomplete="off"
+          required>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary w-100" onclick="verifyOtp()">Verify</button>
+      </div>
+    </form>
+    <% if(typeof message !=='undefined' ){ %>
+      <p style="color: rgb(247, 0, 0);font-size: 19px; margin-top: 10px;">
+        <%= message %>
+      </p>
+      <% } %>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+        <script>
+
+          const digitInputs = document.querySelectorAll('.digit-input');
+
+          digitInputs.forEach(function (input, index) {
+            input.addEventListener('input', function () {
+              if (input.value.length === 1 && index < digitInputs.length - 1) {
+                digitInputs[index + 1].focus();
+              }
+            });
+          });
+
+          function verifyOtp() {
+            const verifyOtp = document.querySelector('#verifyOtp');
+            verifyOtp.addEventListener('submit', event => {
+              event.preventDefault()
+              const otp = document.getElementById('otp').value.trim()
+              if (!otp || otp.length < 6 || otp.length > 6) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Something went wrong!',
+                  footer: '<a href="">Why do I have this issue?</a>'
+                })
+
+              } else {
+                verifyOtp.submit()
+              }
+
+            })
+          }
+        </script>
+</body>
+
+</html>

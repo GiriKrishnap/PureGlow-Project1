@@ -1,0 +1,150 @@
+<%- include('../user/partials/header2.ejs'); %>
+
+    <!-- Breadcrumb Area Start Here -->
+
+    <div class="text-center mt-5">
+        <h3 class="font-style-giri">Shopping Cart</h3>
+    </div>
+    <% if ( cartData !==null & cartData !=='undefined' ) { %>
+        <% if ( cartData.products[0]) { %>
+            <!-- Breadcrumb Area End Here -->
+            <!-- cart main wrapper start -->
+            <div class="cart-main-wrapper mt-no-text">
+                <div class="container custom-area">
+                    <div class="row">
+                        <div class="col-lg-12 col-custom">
+                            <!-- Cart Table Area -->
+                            <div class="cart-table table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="pro-thumbnail">Image</th>
+                                            <th class="pro-title">Product</th>
+                                            <th class="pro-price">Price</th>
+                                            <th class="pro-quantity">Quantity</th>
+                                            <th class="pro-subtotal">Total</th>
+                                            <th class="pro-remove">Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        <% cartData.products.forEach((data)=> { %>
+                                            <tr>
+                                                <td class="pro-thumbnail"><a
+                                                        href="/single-product?id=<%= data.product_id._id%>"><img
+                                                            class="img-fluid"
+                                                            src="/images/<%= data.product_id.images[0]%>"
+                                                            alt="Product" /></a></td>
+                                                <td class="pro-title"><a
+                                                        href="/single-product?id=<%= data.product_id._id%>">
+                                                        <%= data.product_id.productName%>
+                                                    </a></td>
+                                                <td class="pro-price"><span><i class="bi bi-currency-rupee"></i>
+                                                        <%= (data.product_id.price * data.product_id.discount / 100 )%>
+                                                    </span></td>
+                                                <td class="pro-quantity">
+                                                    <div class="quantity">
+                                                        <div class="cart-plus-mnus">
+                                                            <a
+                                                                href="/dec?id=<%= data.product_id._id%>&qt=<%= data.quantity%>"><i
+                                                                    class="fa fa-minus mr-2"></i></a>
+                                                            <input class="cart-plus-minus-box w-25"
+                                                                value="<%= data.quantity%>" type="text" disabled>
+                                                            <a
+                                                                href="/inc?id=<%= data.product_id._id%>&qt=<%= data.quantity%>"><i
+                                                                    class="fa fa-plus ml-2 "></i></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="pro-subtotal"><span><i class="bi bi-currency-rupee"></i>
+                                                        <%= data.totalPrice%>
+                                                    </span></td>
+                                                <td class="pro-remove"><a href="/remove-product?id=<%= data._id%>"><i
+                                                            class="lnr lnr-trash" onclick="return confirmAlert(event, '/remove-product?id=<%= data._id%>')"></i></a></td>
+                                            </tr>
+                                            <%})%>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Cart Update Option -->
+                            <div class="cart-update-option d-block d-md-flex justify-content-between">
+                                <div class="apply-coupon-wrapper">
+                                    <form action="#" method="post" class=" d-block d-md-flex">
+                                        <input type="text" placeholder="Enter Your Coupon Code" required />
+                                        <button class="btn flosun-button primary-btn rounded-0 black-btn">Apply
+                                            Coupon</button>
+                                    </form>
+                                </div>
+                                <div class="cart-update mt-sm-16">
+                                    <a href="/products" class="btn flosun-button primary-btn rounded-0 black-btn">Update
+                                        Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-lg-5 ml-auto col-custom">
+                            <!-- Cart Calculation Area -->
+                            <div class="cart-calculator-wrapper">
+                                <div class="cart-calculate-items">
+                                    <h3>Cart Totals</h3>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <td>Sub Total</td>
+                                                <td><i class="bi bi-currency-rupee"></i>
+                                                    <%= subTotalPrice%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Coupon OFF</td>
+                                                <td>-<i class="bi bi-currency-rupee"></i>0</td>
+                                            </tr>
+                                            <tr class="total">
+                                                <td>Total</td>
+                                                <td class="total-amount"><i class="bi bi-currency-rupee"></i>
+                                                    <%= subTotalPrice%>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <a href="/checkout"
+                                    class="btn flosun-button primary-btn rounded-0 black-btn w-100">Proceed
+                                    To Checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% } else { %>
+                <h3 class="text-center text-light m-5 font-monospace bg-primary text-wrap ">There is no Products in Cart
+                </h3>
+                <% } %>
+                    <% } %>
+                        <!-- cart main wrapper end -->
+                        <script
+                            src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+                        <script>
+                            function confirmAlert(event ,linkUrl) {
+                                // Prevent the default link behavior
+                                event.preventDefault();
+
+                                // Show the SweetAlert confirmation dialog
+                                swal({
+                                    title: 'Are you sure?',
+                                    text: 'Are you sure you want to visit this link?',
+                                    icon: 'warning',
+                                    buttons: ['Cancel', 'OK'],
+                                }).then((value) => {
+                                    if (value) {
+                                        // If the user clicks "OK," proceed with following the link
+                                        window.location.href = linkUrl;
+                                    }
+                                });
+                            }
+                        </script>
+                        <%- include('../user/partials/footer2.ejs'); %>

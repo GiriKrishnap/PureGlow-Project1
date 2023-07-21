@@ -1,0 +1,149 @@
+<%- include('../user/partials/header2.ejs'); %>
+
+    <!-- Shop Main Area Start Here -->
+    <div class="shop-main-area">
+        <div class="container container-default custom-area">
+            <div class="row flex-row-reverse">
+                <div class="col-12 col-custom mt-2">
+                    <!--shop toolbar start-->
+                    <div class="shop_toolbar_wrapper mb-30">
+                        <div class="shop_toolbar_btn">
+                            <button data-role="grid_4" type="button" class="active btn-grid-4" title="Grid-4"><i
+                                    class="fa fa-th"></i></button>
+                            <button data-role="grid_3" type="button" class="btn-grid-3" title="Grid-3"> <i
+                                    class="fa fa-th-large"></i></button>
+                            <button data-role="grid_list" type="button" class="btn-list" title="List"><i
+                                    class="fa fa-th-list"></i></button>
+                        </div>
+                        <div class="text-center mt-2">
+                            <h3 class="font-style-giri">Shopping Products</h3>
+                        </div>
+                        <div class="">
+                            <input type="search" class="form-control text-center" placeholder="Search Products">
+                        </div>
+                        <div class="shop-select">
+                            <form class="d-flex flex-column w-100" action="#">
+                                <div class="form-group">
+                                    <select class="form-control mt-2 nice-select w-100">
+                                        <option selected value="1">SHOW ALL PRODUCTS</option>
+                                        <% category.forEach((data,index)=> { %>
+                                            <option value="index">
+                                                <%=data.name%>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--shop toolbar end-->
+                    <!-- Shop Wrapper Start -->
+                    <div class="row shop_wrapper grid_4">
+                        <% if (productData.length > 0) { %>
+                            <% productData.forEach(data=> { %>
+                                <div class="col-lg-3 col-md-6 col-sm-6  col-custom product-area">
+                                    <div class="product-item">
+                                        <div class="single-product position-relative mr-0 ml-0">
+                                            <div class="product-image">
+                                                <a class="d-block" href="/single-product?id=<%=data._id%>">
+                                                    <img src="/images/<%=data.images[0]%>" alt=""
+                                                        class="product-image-1 w-100">
+                                                    <img src="/images/<%=data.images[1]%>" alt=""
+                                                        class="product-image-2 position-absolute w-100">
+                                                </a>
+                                                <div class="add-action d-flex flex-column position-absolute">
+                                                    <a href="compare.html" title="Compare">
+                                                        <i class="lnr lnr-sync" data-toggle="tooltip"
+                                                            data-placement="left" title="Compare"></i>
+                                                    </a>
+                                                    <a href="wishlist.html" title="Add To Wishlist">
+                                                        <i class="lnr lnr-heart" data-toggle="tooltip"
+                                                            data-placement="left" title="Wishlist"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="product-content">
+                                                <div class="product-title">
+                                                    <h4 class="title-2"> <a href="/single-product?id=<%=data._id%>">
+                                                            <%=data.productName%>
+                                                        </a></h4>
+                                                </div>
+                                                <div class="price-box">
+                                                    <span class="regular-price "><i class="bi bi-currency-rupee"></i>
+                                                        <%=data.price * data.discount / 100 %>
+                                                    </span>
+                                                    <span class="old-price"><del>
+                                                            <%=data.price%>
+                                                        </del></span>
+                                                </div>
+                                                <a href="/add-to-cart?id=<%= data._id %>" class="btn product-cart">Add
+                                                    to Cart</a>
+                                            </div>
+                                            <div class="product-content-listview">
+                                                <div class="product-title">
+                                                    <h4 class="title-2"> <a href="/single-product?id=<%=data._id%>">
+                                                            <%=data.productName%>
+                                                        </a></h4>
+                                                </div>
+                                                <div class="price-box">
+                                                    <span class="regular-price "><i class="bi bi-currency-rupee"></i>
+                                                        <%=data.price * data.discount / 100 %>
+                                                    </span>
+                                                    <span class="old-price"><del>
+                                                            <%=data.price%>
+                                                        </del></span>
+                                                </div>
+                                                <p class="desc-content">
+                                                    <%=data.description%>
+                                                </p>
+                                                <div class="button-listview">
+                                                    <a href="/add-to-cart?id=<%= data._id %>"
+                                                        class="btn product-cart button-icon flosun-button dark-btn"
+                                                        data-toggle="tooltip" data-placement="top" title="Add to Cart">
+                                                        <span>Add to Cart</span> </a>
+                                                    <a class="list-icon" href="compare.html" title="Compare">
+                                                        <i class="lnr lnr-sync" data-toggle="tooltip"
+                                                            data-placement="top" title="Compare"></i>
+                                                    </a>
+                                                    <a class="list-icon" href="wishlist.html" title="Add To Wishlist">
+                                                        <i class="lnr lnr-heart" data-toggle="tooltip"
+                                                            data-placement="top" title="Wishlist"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <h3 class="text-center text-light mb-5 font-monospace bg-danger text-wrap ">
+                                            Sorry Product Is Empty</h3>
+                                        <% } %>
+
+                    </div>
+                    <!-- Shop Wrapper End -->
+                    <!-- Bottom Toolbar Start -->
+                    <div class="row mb-5">
+                        <div class="col-sm-12 col-custom">
+                            <div class="toolbar-bottom">
+                                <div class="pagination">
+                                    <ul>
+                                        <li class="current">1</li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li class="next"><a href="#">next</a></li>
+                                        <li><a href="#">&gt;&gt;</a></li>
+                                    </ul>
+                                </div>
+                                <p class="desc-content text-center text-sm-right mb-0">Showing 1 - 12 of 34 result</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bottom Toolbar End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Shop Main Area End Here -->
+
+    <%- include('../user/partials/footer2.ejs'); %>

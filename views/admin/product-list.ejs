@@ -1,0 +1,87 @@
+<%-include('../admin/partials/aheader.ejs') %>
+
+
+  <div class="container-fluid mt-2 text-center">
+    <div class="col-md-12">
+      <div class="card mb-3 card">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-dark  border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Products</h6>
+          </div>
+        </div>
+        <div class="table-responsive p-4">
+          <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-setting">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Images</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Discount</th>
+                <th scope="col">quantity</th>
+                <th scope="col">Category</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+              <% productData.forEach((data,index)=> { %>
+
+                <tr>
+                  <td class="text-center text-muted">
+                    <%= index+1 %>
+                  </td>
+
+
+                  <td><img src="/images/<%=data.images[0] %>" width="60px" alt=""></td>
+
+
+                  <td class="text-center">
+                    <%= data.productName%>
+                  </td>
+
+                  <td class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                      class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                      <path
+                        d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z" />
+                    </svg></i>
+                    <%=data.price%>
+                  </td>
+
+                  <td class="text-center">
+                    <%= data.discount %>
+                  </td>
+
+                  <td class="text-center">
+                    <%= data.quantity %>
+                  </td>
+
+                  <td class="text-center">
+                    <%=data.category.name %>
+                  </td>
+
+
+                  <td class="text-center"> <a href="/admin/edit-product?id=<%=data._id %>" class="btn btn-dark">Edit</a>
+
+                    <% if (data.list===true) { %>
+                      <a href="/admin/unList-product?id=<%= data._id %>" class="btn btn-dark">Listed</a>
+                      <% } else { %>
+                        <a href="/admin/list-product?id=<%= data._id %>" class="btn btn-danger">UnListed</a>
+                        <% } %>
+
+                  </td>
+                </tr>
+                <% }); %>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-md-12 text-end"><a href="/admin/add-product" class="btn btn-dark me-5">add product</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%-include('../admin/partials/afooter.ejs') %>

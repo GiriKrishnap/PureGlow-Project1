@@ -1,0 +1,182 @@
+<%- include('../admin/partials/aheader.ejs') %>
+
+  <div class="container-fluid mt-2 text-center">
+    <div class="col-md-12">
+      <div class="main-card mb-3 card">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-dark  border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">orders</h6>
+          </div>
+        </div>
+        <div class="table-responsive p-4">
+          <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-setting">
+            <thead>
+              <tr>
+                <th>order no:</th>
+                <th>user address</th>
+                <th>product Names</th>
+                <th>product Cost</th>
+                <th>payment Mode</th>
+                <th>payment status</th>
+                <th>order date</th>
+                <th>deliver Date</th>
+                <th>status</th>
+                <th>action</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+              <% successOrders.forEach((data,index)=> { %>
+
+                <tr>
+                  <td class="text-center text-muted">
+                    <%= index+1 %>
+                  </td>
+                  <td>
+                    <div class="widget-content p-0">
+                      <div class="widget-content-wrapper">
+                        <div class="widget-content-left mr-3">
+                          <div class="widget-content-left">
+
+                          </div>
+                        </div>
+
+
+
+
+                        <div class="widget-content-left flex2">
+
+
+
+
+                          <div class="text-dark m-1 text-bold">
+                            <%=data.address_id.name%>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.email %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.phone %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.address %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.state %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.district %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.city %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.landMark %>
+                          </div>
+                          <div class="text-dark m-1">
+                            <%=data.address_id.pincode %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="text-center text-bold">
+                    <% for (let i=0; i < data.products.length; i++) { %>
+                      <%= data.products[i].product_id.productName %> x <%=data.products[i].quantity%><br>
+                          <% } %>
+                  </td>
+
+                  <td class="text-center text-bold">
+                    <i class="bi bi-currency-rupee"></i><%= data.totalPrice %>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" id="PopoverCustomT-1" class="btn btn-dark btn-sm" disabled>
+                      <%= data.paymentMethod %>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" id="PopoverCustomT-1" class="btn btn-light btn-sm">
+                      <%=data.paymentStatus%>
+                    </button>
+                  </td>
+
+                  <td class="text-center">
+                    <b>
+                      <%= data.orderDate.toDateString() %>
+                    </b>
+                  </td>
+                  <td class="text-center">
+                    <b>
+                      <%= data.deliveryDate.toDateString() %>
+                    </b>
+                  </td>
+                  <td class="text-center">
+                    <b>
+                      <div class="badge badge-warning" id="<%=data._id%>">
+
+                        <%= data.status %>
+                      </div>
+                    </b>
+                  </td>
+                  <td>
+
+                    <div class="btn-group dropleft">
+                      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"></button>
+                      <div class="dropdown-menu">
+                        <a href="" onclick="updateOrderStatus('<%=data._id%>','Shipping')"
+                          class="dropdown-item">Shipping</a>
+                        <a href="" onclick="updateOrderStatus('<%=data._id%>','Delivered')"
+                          class="dropdown-item">Delivered</a>
+
+                      </div>
+                      <a href="/admin/adminCancel-order?id=<%= data._id%>"><button
+                          class="btn btn-danger">Cancel<br>Order</button></a>
+                    </div>
+
+                  </td>
+                </tr>
+
+                <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateOrderStatus(id, status) {
+      event.preventDefault()
+      $.ajax({
+        method: 'patch',
+        url: '/admin/order-shipped',
+        data: ({
+          id,
+          status
+        }),
+        success: function (response) {
+          var element = document.getElementById(id);
+          if (response.status) {
+            element.innerHTML = 'Shipping',
+              Swal.fire(
+                'confirm!',
+                'order shipping !',
+                'success'
+              )
+          } else {
+            element.innerHTML = 'Delivered',
+              Swal.fire(
+                'confirm!',
+                'order Delivered!',
+                'success'
+              )
+          }
+        }
+      })
+    }
+  </script>
+
+  <%- include('../admin/partials/afooter.ejs') %>

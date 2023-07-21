@@ -1,0 +1,79 @@
+<%-include('../admin/partials/aheader.ejs') %>
+
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-dark  border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">Add category</h6>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="container p-2 ms-5" style="width:100%; height: 25px;">
+              <%if(typeof message !=='undefined' ){%>
+                <p><b>
+                    <%= message %>
+                  </b></p>
+                <%}%>
+            </div>
+            <div class="container p-2 ms-5" style="width:100%; height: 25px;"></div>
+            <div class="col-lg-10 order-2 me-auto">
+              <div class="container mt-3">
+                <div class="justify-content-center bg-light">
+                  <div class="col-lg-10 m-5">
+                    <p class="text-danger text-center">
+
+                    </p>
+                    <form action="/admin/add-category" class="row g-3 needs-validation p-3" id="addCategory"
+                      name="categoryForm" method="post">
+                      <div class="col-md-3">
+                        <label for="categoryName" class="form-label text-dark text-bold h5">Category Name</label>
+                        <input type="text" class="form-control mb-5 ml-3" id="categoryName" name="name"
+                          placeholder="category name" value="">
+
+                      </div>
+
+                      <div class="col-12">
+                        <input class="bg-info btn btn-info" type="submit" value="Submit" onclick="addCategory()">
+                      </div>
+                      <div class="row ">
+                        <div class="col-md-12">
+                          <a href="/admin/category-list" class="btn btn-primary">BACK</a>
+                        </div>
+                      </div>
+                      <b class="text-dange fw-3" id="addcategory"></b>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </main>
+  <script>
+    function addCategory() {
+      const addCategory = document.getElementById('addCategory');
+      addCategory.addEventListener('submit', event => {
+        event.preventDefault()
+        const categoryName = document.getElementById('categoryName').value.trim();
+        if (!categoryName) {
+          console.log('working')
+          Swal.fire(
+            'please check form!',
+            'You selected invalid entry!',
+            'error')
+        } else {
+          addCategory.submit()
+        }
+      })
+    }
+  </script>
+
+  <%-include('../admin/partials/afooter.ejs') %>

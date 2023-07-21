@@ -1,0 +1,127 @@
+<%- include('../user/partials/header2.ejs'); %>
+
+
+    <!-- Single Product Main Area Start -->
+    <div class="single-product-main-area mb-5">
+        <div class="container container-default custom-area">
+            <div class="row">
+                <% productData.forEach(data=> {%>
+                    <div class="col-lg-5 offset-lg-0 col-md-8 offset-md-2 col-custom">
+                        <div class="product-details-img">
+                            <div class="single-product-img swiper-container gallery-top popup-gallery">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <a class="w-100" href="/images/<%=data.images[0] %>">
+                                            <img class="w-100" src="/images/<%=data.images[0] %>" alt="Product">
+                                        </a>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <a class="w-100" href="/images/<%=data.images[1] %>">
+                                            <img class="w-100" src="/images/<%=data.images[1] %>" alt="Product">
+                                        </a>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <a class="w-100" href="/images/<%=data.images[2] %>">
+                                            <img class="w-100" src="/images/<%=data.images[2] %>" alt="Product">
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="single-product-thumb swiper-container gallery-thumbs">
+                                <div class="swiper-wrapper ml-5">
+                                    <div class="swiper-slide">
+                                        <img src="/images/<%=data.images[0] %>" alt="Product">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="/images/<%=data.images[1] %>" alt="Product">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="/images/<%=data.images[2] %>" alt="Product">
+                                    </div>
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="swiper-button-next swiper-button-white"><i class="lnr lnr-arrow-right"></i>
+                                </div>
+                                <div class="swiper-button-prev swiper-button-white"><i class="lnr lnr-arrow-left"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-custom">
+                        <div class="product-summery position-relative">
+                            <div class="product-head mb-3">
+                                <h2 class="product-title">
+                                    <%= data.productName %>
+                                </h2>
+                            </div>
+                            <div class="price-box mb-2">
+                                <span class="regular-price"><i class="bi bi-currency-rupee"></i><%= data.price * data.discount / 100 %></span>
+                                <span class="old-price"><del><%= data.price %></del></span>
+                            </div>
+                            <div class="sku mb-3">
+                                <span>discount: -<%= data.discount %>%</span>
+                            </div>
+                            <p class="desc-content mb-5">
+                                <%= data.description %>
+                            </p>
+                            <div class="quantity-with_btn mb-5">
+                                <div class="add-to_cart">
+                                    <a class="btn product-cart button-icon flosun-button dark-btn" href="/add-to-cart?id=<%= data._id %>">Add
+                                        to cart</a>
+                                    <a class="btn flosun-button secondary-btn secondary-border rounded-0"
+                                        href="wishlist.html">Add to wishlist</a>
+                                </div>
+                            </div>
+                            <div class="social-share mb-4">
+                                <span>Share :</span>
+                                <a href="#"><i class="fa fa-facebook-square facebook-color"></i></a>
+                                <a href="#"><i class="fa fa-twitter-square twitter-color"></i></a>
+                                <a href="#"><i class="fa fa-linkedin-square linkedin-color"></i></a>
+                                <a href="#"><i class="fa fa-pinterest-square pinterest-color"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <%})%>
+            </div>
+        </div>
+    </div>
+
+    <section class="shop_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>
+                    Other Collections
+                </h2>
+            </div>
+            <div class="row">
+                <% if(typeof products!=='undefined' ){ %>
+                    <% products.forEach(data=> {%>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="box">
+                                <a href="/single-product?id=<%=data._id%>">
+                                    <div class="img-box">
+                                        <img src="/images/<%=data.images[0]%>" alt="">
+                                    </div>
+                                    <div class="detail-box">
+                                        <h6 class="mr-1">
+                                            <%=data.productName%>
+                                        </h6>
+                                        <h6>
+                                            Price:
+                                            <span>
+                                                <i class="bi bi-currency-rupee"></i><%= data.price * data.discount / 100 %>
+                                            </span>
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } %>
+            </div>
+        </div>
+    </section>
+
+
+    <%- include('../user/partials/footer2.ejs'); %>
