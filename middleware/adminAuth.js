@@ -11,6 +11,7 @@ const verify_admin = (req, res, next) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({error:true,message:'internal sever error'})
     }
 }
 
@@ -29,6 +30,7 @@ const logout_admin = (req, res, next) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({error:true,message:'internal sever error'})
     }
 }
 

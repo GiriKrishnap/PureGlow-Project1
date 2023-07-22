@@ -55,6 +55,7 @@ const addToCart = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
@@ -77,6 +78,7 @@ const loadCart = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
@@ -99,6 +101,7 @@ const removeProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +127,8 @@ const incrementQuantity = async (req, res) => {
             res.redirect('/login')
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 
@@ -149,7 +153,8 @@ const decrementQuantity = async (req, res) => {
             res.redirect('/login')
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 

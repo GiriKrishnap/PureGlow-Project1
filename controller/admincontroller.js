@@ -16,6 +16,7 @@ const loadLogin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------
@@ -51,6 +52,7 @@ const verifyLogin = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 
@@ -65,6 +67,7 @@ const loadDashboard = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 
@@ -80,6 +83,7 @@ const loadUsers = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------
@@ -95,6 +99,7 @@ const blockUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------
@@ -110,7 +115,8 @@ const unblockUser = async (req, res) => {
 
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ///////////////////ADMIN_LOGOUT/////////////////////////////////////////////////////////////////////
@@ -120,6 +126,7 @@ const logout = async (req, res) => {
         res.redirect('/admin');
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 

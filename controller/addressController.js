@@ -16,6 +16,7 @@ const addAddress = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
@@ -51,6 +52,7 @@ const insertAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 
@@ -70,7 +72,7 @@ const deleteAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.render('error');
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
@@ -87,6 +89,7 @@ const editAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
@@ -117,7 +120,7 @@ const updateAddress = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error');
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 
 }

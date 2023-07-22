@@ -6,16 +6,6 @@ const Order = require('../models/orderModel');
 const Address = require('../models/addressModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-const load404 = async (req, res) => {
-    try {
-        res.render('/404page');
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 ///////////////////////////////////////////////////////////////////////////////////////////////
 const securePassword = async (password) => {
     try {
@@ -23,6 +13,7 @@ const securePassword = async (password) => {
         return passwordHash;
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // signUp //////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +22,7 @@ const loadSignup = async (req, res) => {
         res.render('signup')
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -64,6 +56,7 @@ const insertUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -75,6 +68,7 @@ const loadOtpVerifier = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -89,6 +83,7 @@ const verifyOtp = async (req, res) => {
                 const updateInfo = await Users.updateOne({ _id: user }, { $set: { is_verified: 1 } });
                 res.render('login', { message: 'SignUp was successful' });
                 delete req.session.user;
+                delete req.session.Otp
             } else {
                 res.render('verify-otp', { message: 'Wrong Answer' });
             }
@@ -97,6 +92,7 @@ const verifyOtp = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -130,6 +126,7 @@ const sendVerifyMail = async (name, email, user_id, otp) => {
         })
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 
@@ -139,13 +136,13 @@ const loadLogin = async (req, res) => {
         res.render('login');
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
 const verifyLogin = async (req, res) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body
         const userData = await Users.findOne({ email: email });
         if (userData) {
 
@@ -171,6 +168,101 @@ const verifyLogin = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+// forgetPassword ///////////////////////////////////////////////////////////////////////////////////
+const loadEnterEmail = async (req, res) => {
+    try {
+        res.render('enter-email');
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+// postEmailAndVerify ///////////////////////////////////////////////////////////////////////////////
+const verifyEmailForFP = async (req, res) => {
+    try {
+        const { email } = req.body
+        const emailExist = await Users.findOne({ email: email, status: true, is_verified: 1 });
+        if (emailExist) {
+            const { email, name } = emailExist
+            console.log(`${email},${name} is here hello 200`);
+            const user_id = emailExist._id;
+            sendForgetPassword(name, email, user_id);
+            res.render('login', { message: 'Check Your Email' });
+        } else {
+            res.render('enter-email', { message: 'This feature is not available for this Email' });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+// sentForgotPasswordToEmail -----------------------------------------------------------------------
+const sendForgetPassword = async (name, email, user_id) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: process.env.HOST_STRING,
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: process.env.MAIL_STRING,
+                pass: process.env.MAIL_PASSWORD
+            }
+        });
+        const mailOptions = {
+            from: 'yt4smallgames@gmail',
+            to: email,
+            subject: 'PureGlow Forgot password',
+            html: `<P> Hello ${name},<br><br>
+            <h4>Click the link below to Change Your Password</h4><br><br>
+            <h3>--><a href='http://localhost:3000/new-password?id=${user_id}'>Click here</a><--</h3><br><br>
+            Thanks for the visit ! - <h3>The pureGlow team ☺</h3></P>`
+        }
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("email has been send:- ", info.response);
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+// new-password ------------------------------------------------------------------------------------
+const loadNewPassword = async (req, res) => {
+    try {
+        req.session.newP = req.query.id;
+        if (req.session.newP) {
+            res.render('new-password');
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' });
+    }
+}
+// changeToNewPassword ----------------------------------------------------------------------------
+const PostChangePassword = async (req, res) => {
+    try {
+        const userId = req.session.newP;
+        console.log(`${userId} userId is here postChangePassword`);
+        if (userId) {
+            const spassword = await securePassword(req.body.password);
+            await Users.findOneAndUpdate({ _id: userId }, { $set: { password: spassword } });
+            res.redirect('/login');
+            delete req.session.newP;
+        } else {
+            res.status(404);
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' });
     }
 }
 /////// pages //////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +277,8 @@ const loadHome = async (req, res) => {
             res.render('home', { productData });
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -194,6 +287,7 @@ const loadAbout = async (req, res) => {
         res.render('about');
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -202,6 +296,7 @@ const loadContact = async (req, res) => {
         res.render('contact');
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // ---------------------------------------------------------------------------------------------
@@ -219,6 +314,7 @@ const loadUserDetails = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 // logout //////////////////////////////////////////////////////////////////////////////////////////
@@ -250,5 +346,9 @@ module.exports = {
     verifyOtp,
     Logout,
     loadUserDetails,
+    loadEnterEmail,
+    verifyEmailForFP,
+    loadNewPassword,
+    PostChangePassword,
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////

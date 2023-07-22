@@ -21,6 +21,11 @@ router.post('/login', auth.logout_user, userController.verifyLogin);
 //emailVerify-------------------------------------------------------------
 router.get('/verify-otp', userController.loadOtpVerifier);
 router.post('/verify-otp', userController.verifyOtp);
+//ForgetPassword-------------------------------------------------------------
+router.get('/enter-email', auth.logout_user, userController.loadEnterEmail);
+router.post('/enter-email', auth.logout_user, userController.verifyEmailForFP);
+router.get('/new-password', auth.logout_user, userController.loadNewPassword);
+router.post('/new-password', auth.logout_user, userController.PostChangePassword);
 //home---------------------------------------------------------------------
 router.get('/', userController.loadHome);
 router.get('/home', userController.loadHome);

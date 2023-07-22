@@ -4,16 +4,15 @@ const router = express();
 const auth = require('../middleware/adminAuth');
 const multerConfig = require('../config/multer');
 const upload = multerConfig.upload;
-//-------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 const adminController = require('../controller/admincontroller');
 const productController = require('../controller/prodController');
 const orderController = require('../controller/orderController');
 const categoryController = require('../controller/categoryController');
-//--------------------------------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//views--------------------------------------------------
+//views---------------------------------------------------------------------------------------------
 router.set('views', './views/admin');
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //AdminLogin---------------------------------------------------------------
 router.get('/admin-login', auth.logout_admin, adminController.loadLogin);
@@ -42,14 +41,14 @@ router.get('/update-category', auth.verify_admin, categoryController.loadEditCat
 router.post('/update-category', auth.verify_admin, categoryController.updateCategory);
 router.get('/list-category', auth.verify_admin, categoryController.listCategory);
 router.get('/unList-category', auth.verify_admin, categoryController.unListCategory);
-//AdminOrderManagements---------------------------------------------------------------
+//AdminOrderManagements----------------------------------------------------------
 router.get('/order-management', auth.verify_admin, orderController.loadOrderManagement);
 router.patch('/order-shipped', auth.verify_admin, orderController.orderShipped);
 router.get('/adminCancel-order', auth.verify_admin, orderController.AdminCancelOrder);
-//AdminBannerManagements--------------------------------------------------------------
-//AdminCouponsManagements-------------------------------------------------------------
-//AdminLogout-------------------------------------------------------------------------
+//AdminCouponsManagements----------------------------------------------------------
+//AdminBannerManagements-----------------------------------------------------------
+//AdminLogout----------------------------------------------------------------------
 router.get('/admin-logout', auth.verify_admin, adminController.logout);
-//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////
 module.exports = router;

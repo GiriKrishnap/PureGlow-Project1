@@ -14,6 +14,7 @@ const loadCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 };
 //--------------------------------------------------------------
@@ -27,6 +28,7 @@ const loadAddCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 };
 //--------------------------------------------------------------
@@ -62,6 +64,7 @@ const insertCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------
@@ -78,6 +81,7 @@ const loadEditCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 };
 //--------------------------------------------------------------
@@ -107,6 +111,7 @@ const updateCategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------
@@ -123,6 +128,7 @@ const unListCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 };
 //---------------------------------------------
@@ -139,6 +145,7 @@ const listCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 };
 //////////////////////////////////////////////////////////////////////

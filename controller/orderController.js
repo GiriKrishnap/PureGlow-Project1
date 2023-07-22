@@ -21,6 +21,7 @@ const loadCheckout = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------------------------------------------------------------------
@@ -70,6 +71,7 @@ const placedOrder = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------------------------------------------------------------------
@@ -85,6 +87,7 @@ const cancelOrder = async (req, res) => {
     } catch (error) {
         console.log(error.message)
         res.render('error');
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 ///////////////////A-D-M-I-N-S-I-D-E///////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +98,7 @@ const loadOrderManagement = async (req, res) => {
         res.render('order-management', { successOrders });
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------------------------------------------------------------------
@@ -122,7 +126,7 @@ const orderShipped = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
-        res.render('error');
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------------------------------------------------------------------
@@ -136,8 +140,8 @@ const AdminCancelOrder = async (req, res) => {
             res.redirect('/admin/order-management');
         }
     } catch (error) {
-        console.log(error.message)
-        res.render('error');
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

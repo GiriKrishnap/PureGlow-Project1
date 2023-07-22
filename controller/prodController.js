@@ -20,6 +20,7 @@ const loadAdminProductlist = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -34,6 +35,7 @@ const loadAddProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //--------------------------------------------------------------------------------------------------------
@@ -74,6 +76,7 @@ const insertProduct = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -93,7 +96,8 @@ const loadEditProduct = async (req, res) => {
             res.redirect('/admin/admin-login')
         }
     } catch (error) {
-        res.render('error')
+        console.log(error.message)
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -129,7 +133,7 @@ const updateEditProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
-        res.render("error")
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -151,7 +155,7 @@ const deleteimgInEditProducts = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render("error");
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 };
 //------------------------------------------------------------------------------------------------------------------
@@ -164,6 +168,7 @@ const productlist = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -176,6 +181,7 @@ const productUnList = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //////////////////////////////+-U_S_E_R-S_I_D_E-+///////////////////////////////////////////////////////////////////
@@ -196,6 +202,7 @@ const loadUserProducts = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -209,7 +216,8 @@ const loadSingleProduct = async (req, res) => {
         res.render('single-product', { productData, user, category, products: productsData });
 
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
 //------------------------------------------------------------------------------------------------------------------

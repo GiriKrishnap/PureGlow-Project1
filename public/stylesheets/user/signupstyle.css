@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-*{
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-body{
+
+body {
   background: #4D78D6 !important;
 }
-.wrapper{
+
+.wrapper {
   width: 330px;
   padding: 1.9rem 0 1.9rem 0 !important;
   margin: 50px auto;
@@ -18,19 +21,24 @@ body{
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
   transition: 1s;
 }
-.wrapper:hover{
+
+.wrapper:hover {
   box-shadow: rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px;
 }
 
-h1{
+h1 {
   font-size: 2rem;
   color: #07001f;
   font-weight: 600 !important;
+  user-select: none;
+  cursor: default;
 }
-p{
+
+p {
   margin-bottom: 1.7rem;
 }
-form input{
+
+form input {
   width: 85%;
   outline: none;
   border: none;
@@ -39,16 +47,19 @@ form input{
   margin-bottom: 10px;
   border-radius: 10px;
 }
-.recover{
+
+.recover {
   text-align: right;
   font-size: 0.8rem;
   margin: 0.2rem 1.7rem 0 0;
 }
-.recover a{
+
+.recover a {
   text-decoration: none;
   color: #07001f;
 }
-button{
+
+button {
   font-size: 1.1rem !important;
   margin-top: 1rem !important;
   padding: 8px 0;
@@ -60,21 +71,31 @@ button{
   color: #fff;
   cursor: pointer;
 }
-button:hover{
+
+button:hover {
   background: rgba(122, 30, 30, 0.767);
 }
-.or{
+
+.or {
   font-size: 0.8rem;
   margin-top: 1.5rem;
 }
-.not-member{
+
+.not-member {
   font-size: 0.8rem;
   margin-top: 1.4rem;
 }
-.not-member a{
+
+.not-member a {
   color: tomato;
   text-decoration: none;
 }
-a:hover{
+
+a:hover {
   text-decoration: underline;
+}
+
+.toggle-password {
+  cursor: pointer;
+  user-select: none;
 }
