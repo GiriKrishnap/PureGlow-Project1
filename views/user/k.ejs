@@ -1,77 +1,299 @@
-<% if(orderData ){ %>
-    <% orderData.forEach((data,index)=> { %>
-        <tbody>
-            <tr>
-                <td>
-                    <%= index+1 %>
-                </td>
-                <td>
-                    <% for (let i=0; i < data.products.length; i++) { %>
-                        <%= data.products[i].product_id.productName %> x <%= data.products[i].quantity %>
-                                <% } %>
-                </td>
-                <td>
-                    <%= data.orderDate.toDateString() %>
-                </td>
-                <td>
-                    <%= data.deliveryDate.toDateString() %>
-                </td>
-                <td>
-                    <%= data.status %>
-                </td>
-                <td><i class="bi bi-currency-rupee"></i>
-                    <%= data.totalPrice %>
-                </td>
-                <td>
-                    <% if (data.status==='delivered' ) { %><button href=""
-                            class="btn flosun-button secondary-btn theme-color  rounded-0">delivered</button>
-                        <% } else { %>
-                            <a href="/cancel-order?id=<%=data._id%>"
-                                class="btn flosun-button secondary-btn theme-color  rounded-0">Cancel</a>
-                            <% } %>
-                </td>
-            </tr>
-        </tbody>
-        <% }); %>
+<%- include('../user/partials/header.ejs'); %>
 
-            <% } %>
+  <!-- slider section -->
+  
+  <section class="slider_section ">
+    <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="container-fluid ">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="detail-box ">
+                  <h1>
+                    Glow with Us
+                  </h1>
+                  <p>
+                    "Unlock the radiance within, with skin and hair products<br>that reveal your true beauty."
+                  </p>
+                  <div class="btn-box">
+                    <a href="#about_page" class="btn1">
+                      About Us
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="img-box">
+                  <img src="/images/user/slider-img.png" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% if (typeof bannerData !=='undefined') { %>
+          <% bannerData.forEach((data) => { %>
 
-
-
-
-            <button type="button" class="btn-primary p-2" data-toggle="modal" data-target="#exampleModalCenter">
-                View More
-              </button>
-              
-              <!-- Modal -->
-              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+            <div class="carousel-item ">
+              <div class="container-fluid ">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="detail-box">
+                      <h1>
+                        <%=data.title  %>
+                      </h1>
+                      <p>
+                        "<%=data.description %>"
+                      </p>
+                      <div class="btn-box">
+                        <a href="/products" class="btn1">
+                          Buy Now
+                        </a>
+                      </div>
                     </div>
-                    <div class="modal-body">
-                        <h3>Product Id</h3>
-                        <div class="mt-3"><P><%= data.products[i].product_id._id %></P></div>
-                        <h3>Address</h3>
-                        <strong>Name: </strong><%= data.address_id.name%> <br>
-                        <strong>Phone: </strong><%= data.address_id.phone%> <br>
-                        <strong>Email: </strong><%= data.address_id.email%> <br>
-                        <strong>Address: </strong><%= data.address_id.address%> <br>
-                        <strong>State: </strong><%= data.address_id.state%> <br>
-                        <strong>District: </strong><%= data.address_id.district%> <br>
-                        <strong>City: </strong><%= data.address_id.city%> <br>
-                        <strong>landMark: </strong><%= data.address_id.landMark%> <br>
-                        <strong>Pincode: </strong><%= data.address_id.pincode%> <br>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn-secondary p-2" data-dismiss="modal">Close</button>
-                      <% if(data.status !== 'delivered'){%> <button type="button" class="btn-danger p-2">Cancel</button><%} %>
-                       
+                  </div>
+                  <div class="col-md-6">
+                    <div class="img-box">
+                      <img src="/images/<%=data.image[0] %>" alt="">
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+    
+          <% }) %>
+          
+        <% } %>
+      </div>
+      <ol class="carousel-indicators">
+        <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+        <li data-target="#customCarousel1" data-slide-to="1"></li>
+        <li data-target="#customCarousel1" data-slide-to="2"></li>
+      </ol>
+    </div>
+
+  </section>
+  <!-- end slider section -->
+  </div>
+
+  <!-- shop section -->
+
+  <section class="shop_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Latest Collections
+        </h2>
+      </div>
+      <div class="row d-flex justify-content-center">
+        <% if (productData.length> 0) { %>
+          <% if(typeof productData !=='undefined' ){ %>
+            <% productData.forEach(data=> {%>
+              <div class="col-sm-6 col-xl-3">
+                <div class="box">
+                  <a href="/single-product?id=<%=data._id%>">
+                    <div class="img-box">
+                      <img src="/images/<%=data.images[0]%>" alt="">
+                    </div>
+                    <div class="detail-box">
+                      <h6 class="mr-1">
+                        <%=data.productName%>
+                      </h6>
+                      <h6>
+                        Price:
+                        <span>
+                          <i class="bi bi-currency-rupee"></i>
+                          <%=data.price * data.discount / 100 %>
+                        </span>
+                      </h6>
+                    </div>
+                    <div class="new">
+                      <span>
+                        New
+                      </span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <% }); %>
+                <% } %>
+                  <% } else { %>
+                    <h3 class="text-center text-light mb-5 font-monospace bg-danger text-wrap">
+                      Sorry There Is No Collections</h3>
+                    <% } %>
+
+      </div>
+      <% if (productData.length > 0) { %>
+        <div class="btn-box">
+          <a href="/products">
+            View All
+          </a>
+        </div>
+      <% } %>
+      
+    </div>
+  </section>
+
+  <!-- end shop section -->
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding" id="about_page">
+    <div class="container  ">
+      <div class="row">
+        <div class="col-md-6 col-lg-5 ">
+          <div class="img-box">
+            <img src="/images/user/about-img.png" alt="">
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-7">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                About Us
+              </h2>
+            </div>
+            <p>
+
+              Indulge in the exquisite care of our skin and hair products, meticulously crafted to nourish and
+              rejuvenate. We believe that true beauty lies in self-care and embracing the uniqueness of every
+              individual. Our range of exceptional products is designed to unlock the radiance within, offering a
+              transformative experience that goes beyond mere appearance. With the finest ingredients and advanced
+              formulations, we strive to nurture your skin and hair, unlocking their true potential.
+            </p>
+            <a href="#contact_section">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+
+  <!-- feature section -->
+
+  <section class="feature_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Features Of Products
+        </h2>
+        <p>
+          These Are The Secrets Of Our Success
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="/images/user/f1.png" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Pure Face
+              </h5>
+              <p>
+                Our Product Build By Give More Priority To You Face
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="/images/user/f2.png" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Pure Hair
+              </h5>
+              <p>
+                Our Products Make Your Hair Into The Real Art
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="/images/user/f3.png" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Pure Skin
+              </h5>
+              <p>
+                Our Products Help To Build Your Dream Skin
+              </p>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="/images/user/f4.png" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Pure Tissue
+              </h5>
+              <p>
+                Our Products Make Your Tissue Clean and Good
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end feature section -->
+
+  <!-- contact section -->
+
+  <section class="contact_section mb-5" id="contact_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container">
+            <div class="heading_container">
+              <h2>
+                Contact Us
+              </h2>
+            </div>
+            <form action="">
+              <div>
+                <input type="text" placeholder="Full Name " />
+              </div>
+              <div>
+                <input type="email" placeholder="Email" />
+              </div>
+              <div>
+                <input type="text" placeholder="Phone number" />
+              </div>
+              <div>
+                <input type="text" class="message-box" placeholder="Message" />
+              </div>
+              <div class="d-flex ">
+                <button>
+                  SEND
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="img-box">
+            <img src="/images/user/contact-img.jpg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end contact section -->
+
+  <%- include('../user/partials/footer.ejs'); %>

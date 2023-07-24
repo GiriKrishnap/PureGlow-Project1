@@ -1,14 +1,15 @@
 <%- include('../user/partials/header.ejs'); %>
 
   <!-- slider section -->
-  <section class="slider_section ">
+
+  <section class="slider_section pl-5">
     <div id="customCarousel1" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <div class="container-fluid ">
             <div class="row">
               <div class="col-md-6">
-                <div class="detail-box ">
+                <div class="detail-box ml-5">
                   <h1>
                     Glow with Us
                   </h1>
@@ -22,45 +23,58 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="img-box">
-                  <img src="/images/user/slider-img.png" alt="">
+              <div class="col-md-6 d-flex justify-content-end">
+                <div class="img-box mr-5">
+                  <img src="/images/user/slider-img.png" alt="" style="width: 350px">
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="carousel-item ">
-          <div class="container-fluid ">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="detail-box">
-                  <h1>
-                    PureGlow
-                  </h1>
-                  <p>
-                    "Nurture your skin and hair, and let your natural beauty shine with the transformative power of
-                    our exceptional products."
-                  </p>
-                  <div class="btn-box">
-                    <a href="" class="btn1">
-                      Contact Us
-                    </a>
+        
+        <% if (typeof bannerData !=='undefined' ) { %>
+          <% bannerData.forEach((data)=> { %>
+
+            <div class="carousel-item ">
+              <div class="container-fluid ">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="detail-box ml-5">
+                      <h1>
+                        <%=data.title %>
+                      </h1>
+                      <p>
+                        "<%=data.description %>"
+                      </p>
+                      <div class="btn-box">
+                        <a href="/products" class="btn1">
+                          Buy Now
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 d-flex justify-content-end">
+                    <div class="img-box mr-5">
+                      <img src="/images/<%=data.image[0] %>" alt="img" style="width: 350px; border-radius: 10px;">
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="img-box">
-                  <img src="/images/user/slider-img.png" alt="">
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
+
+            <% }) %>
+
+              <% } %>
       </div>
+
       <ol class="carousel-indicators">
         <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-        <li data-target="#customCarousel1" data-slide-to="1"></li>
+        <% if (typeof bannerData !=='undefined' ) { %>
+          <% bannerData.forEach((data,index)=> { %>
+            <li data-target="#customCarousel1" data-slide-to="<%=index+1  %>"></li>
+            <% }) %>
+
+              <% } %>
       </ol>
     </div>
 
@@ -115,14 +129,14 @@
                     <% } %>
 
       </div>
-      <% if (productData.length > 0) { %>
+      <% if (productData.length> 0) { %>
         <div class="btn-box">
           <a href="/products">
             View All
           </a>
         </div>
-      <% } %>
-      
+        <% } %>
+
     </div>
   </section>
 

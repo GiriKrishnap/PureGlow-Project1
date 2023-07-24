@@ -1,0 +1,58 @@
+<%-include('../admin/partials/aheader.ejs') %>
+
+    <div class="col-xl-12 p-4">
+        <h4>Edit Banner</h4>
+    </div>
+    <% if(bannerData){%>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <form action="/admin/edit-banner" id="banner-form" method="post" enctype="multipart/form-data">
+                <div class="row w-40 p-3">
+                    <div class="col ">
+                        <input type="text" class="form-control bg-white text-center" id="banner-title1" name="title"
+                            value="<%= bannerData.title%>" placeholder="banner title " aria-label="banner title">
+                    </div>
+                </div>
+                <div class="col mt-3 m-1 row w-40 p-3">
+                    <textarea name="description" placeholder="description" id="banner-title2" cols="30" rows="9"
+                        class="form-control bg-white p-5"><%= bannerData.description %></textarea>
+                </div>
+                <div class="col mt-3 m-2">
+                    <div class="mb-3">
+                        <label for="imageMultiple" class="form-label"></label>
+                        <img src="/images/<%=bannerData.image[0] %>" alt="" style="height: 5rem; width: 5rem;">
+                        <input class="form-control bg-light" type="file" id="imageMultiple" name="images" multiple
+                            onchange="previewImages(event)">
+                        <div id="preview"></div>
+                    </div>
+                </div>
+                <div class="col mt-3 m-2">
+                    <input type="hidden" name="bannerId" value="<%=bannerData._id%>">
+                    <input type="submit" class="btn btn-primary">
+                    <a href="/admin/banner-list" class="btn btn-dark">banners</a>
+                </div>
+            </form>
+        </div>
+        <% } %>
+            <script>
+                function previewImages(event) {
+                    var preview = document.getElementById('preview');
+                    preview.innerHTML = '';
+
+                    var files = event.target.files;
+                    for (var i = 0; i < files.length; i++) {
+                        var reader = new FileReader();
+                        reader.onload = (function (file) {
+                            return function (e) {
+                                var image = new Image();
+                                image.src = e.target.result;
+                                image.className = 'preview-image';
+                                preview.appendChild(image);
+                            };
+                        })(files[i]);
+                        reader.readAsDataURL(files[i]);
+                    }
+                }
+            </script>
+
+
+            <%-include('../admin/partials/afooter.ejs') %>

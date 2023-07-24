@@ -9,6 +9,7 @@ const adminController = require('../controller/admincontroller');
 const productController = require('../controller/prodController');
 const orderController = require('../controller/orderController');
 const categoryController = require('../controller/categoryController');
+const bannerController = require('../controller/bannerController');
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //views---------------------------------------------------------------------------------------------
 router.set('views', './views/admin');
@@ -32,7 +33,7 @@ router.get('/edit-product', auth.verify_admin, productController.loadEditProduct
 router.post('/edit-product', auth.verify_admin, upload.array('images', 5), productController.updateEditProduct);
 router.get('/list-product', auth.verify_admin, productController.productlist);
 router.get('/unList-product', auth.verify_admin, productController.productUnList);
-router.delete('/delete-edit-productimages', auth.verify_admin, productController.deleteimgInEditProducts);
+router.delete('/delete-edit-productimages', auth.verify_admin, productController.deleteImgInEditProducts);
 //AdminCategoryManagements----------------------------------------------------
 router.get('/category-list', auth.verify_admin, categoryController.loadCategory);
 router.get('/add-category', auth.verify_admin, categoryController.loadAddCategory);
@@ -45,8 +46,16 @@ router.get('/unList-category', auth.verify_admin, categoryController.unListCateg
 router.get('/order-management', auth.verify_admin, orderController.loadOrderManagement);
 router.patch('/order-shipped', auth.verify_admin, orderController.orderShipped);
 router.get('/adminCancel-order', auth.verify_admin, orderController.AdminCancelOrder);
-//AdminCouponsManagements----------------------------------------------------------
 //AdminBannerManagements-----------------------------------------------------------
+router.get('/banner-list', auth.verify_admin, bannerController.loadBannerList);
+router.get('/add-banner', auth.verify_admin, bannerController.loadAddBanner);
+router.post('/add-banner', auth.verify_admin, upload.array('images', 5), bannerController.insertBanner);
+router.get('/edit-banner', auth.verify_admin, bannerController.loadEditBanner);
+router.post('/edit-banner', auth.verify_admin, upload.array('images', 5), bannerController.insertEditedBanner);
+router.get('/delete-banner', auth.verify_admin, bannerController.deleteBanner);
+router.get('/banner-unlistBanner', auth.verify_admin, bannerController.unListBanner)
+router.get('/banner-listBanner', auth.verify_admin, bannerController.listBanner)
+//AdminCouponsManagements----------------------------------------------------------
 //AdminLogout----------------------------------------------------------------------
 router.get('/admin-logout', auth.verify_admin, adminController.logout);
 //---------------------------------------------------------------------------------

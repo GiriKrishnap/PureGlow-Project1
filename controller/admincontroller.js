@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 const loadLogin = async (req, res) => {
     try {
         const admin = req.session.adminId;
-        console.log(admin + '<-----ADMIN IN  ADMIN LOGIN------');
         if (admin) {
             res.render('dashboard');
         } else {

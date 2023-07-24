@@ -21,7 +21,7 @@ const upload = multer({
         if (mimetype && extname) {
             return cb(null, true);
         }
-        cb('Error: JPEG or PNG images only!'); f
+        cb('Error: JPEG or PNG images only!');
     }
 })
 //----------------------------------------------------------------------------------

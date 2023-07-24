@@ -137,7 +137,7 @@ const updateEditProduct = async (req, res) => {
     }
 }
 //------------------------------------------------------------------------------------------------------------------
-const deleteimgInEditProducts = async (req, res) => {
+const deleteImgInEditProducts = async (req, res) => {
     try {
         const admin = req.session.isAdminLoggedIn;
         if (admin) {
@@ -230,7 +230,7 @@ module.exports = {
     updateEditProduct,
     loadEditProduct,
     loadSingleProduct,
-    deleteimgInEditProducts,
+    deleteImgInEditProducts,
     productlist,
     productUnList,
     loadUserProducts

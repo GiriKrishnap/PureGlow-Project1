@@ -4,6 +4,7 @@ const Users = require('../models/userModels');
 const Products = require('../models/productModel');
 const Order = require('../models/orderModel');
 const Address = require('../models/addressModel');
+const Banner = require('../models/bannerModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,6 +158,7 @@ const verifyLogin = async (req, res) => {
                     } else {
                         req.session.isLoggedIn = true;
                         req.session.userId = userData._id;
+                        req.session.userName = userData.name;
                         res.redirect('/');
                     }
                 }
@@ -217,8 +219,8 @@ const sendForgetPassword = async (name, email, user_id) => {
             to: email,
             subject: 'PureGlow Forgot password',
             html: `<P> Hello ${name},<br><br>
-            <h4>Click the link below to Change Your Password</h4><br><br>
-            <h3>--><a href='http://localhost:3000/new-password?id=${user_id}'>Click here</a><--</h3><br><br>
+            <h4>Click the link below to Change Your Password</h4><br>
+            <h3>--><a href='http://localhost:3000/new-password?id=${user_id}'>Click here</a><--</h3><br>
             Thanks for the visit ! - <h3>The pureGlow team ☺</h3></P>`
         }
         transporter.sendMail(mailOptions, (error, info) => {
@@ -268,14 +270,11 @@ const PostChangePassword = async (req, res) => {
 /////// pages //////////////////////////////////////////////////////////////////////////////////////
 const loadHome = async (req, res) => {
     try {
-        if (req.session.userId) {
-            const userData = await Users.findById({ _id: req.session.userId });
-            const productData = await Products.find({ list: true }).limit(4)
-            res.render('home', { productData: productData, user: userData });
-        } else {
-            const productData = await Products.find({ list: true }).limit(4)
-            res.render('home', { productData });
-        }
+        const userName = req.session.userName;
+        const productData = await Products.find({ list: true }).limit(4)
+        const bannerData = await Banner.find({ list: true });
+        res.render('home', { productData, userName, bannerData });
+
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
