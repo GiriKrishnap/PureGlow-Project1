@@ -57,23 +57,37 @@
   </div>
   </div>
   </main>
+
   <script>
     function addCategory() {
-      const addCategory = document.getElementById('addCategory');
-      addCategory.addEventListener('submit', event => {
-        event.preventDefault()
-        const categoryName = document.getElementById('categoryName').value.trim();
-        if (!categoryName) {
-          console.log('working')
-          Swal.fire(
-            'please check form!',
-            'You selected invalid entry!',
-            'error')
-        } else {
-          addCategory.submit()
+      var name = document.getElementById('categoryName').value;
+      console.log(name);
+      event.preventDefault()
+      $.ajax({
+        method: "post",
+        url: '/admin/add-category',
+        data:({
+          name
+        }),
+        success: function (response) {
+          if (response.status) {
+            Swal.fire(
+              'confirm!',
+              response.message,
+              'success'
+            )
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: response.message,
+
+            })
+          }
         }
       })
     }
   </script>
+
 
   <%-include('../admin/partials/afooter.ejs') %>
