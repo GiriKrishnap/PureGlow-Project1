@@ -1,0 +1,128 @@
+<%-include('../admin/partials/aheader.ejs')%>
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 text-center">
+          <div class="bg-dark  border-radius-lg pt-4 pb-3">
+            <h5 class="text-white text-capitalize ps-3">Add Category</h5>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <div class="container-fluid mt-2">
+              <div class="row">
+                <div class="col-md-12 text-center p-3">
+
+                  <form action="/admin/create-coupon" id="create-coupon" class="mt-4">
+                    <div class="col-xl-12"><input type="text" id="couponCodeName" name="couponCodeName"
+                        class="border-white shadow-lg text-center" placeholder="couponName"></div>
+                    <div class="col-xl-12"><input type="number" id="discount" name="discount"
+                        class="border-white shadow-lg text-center mt-4" placeholder="discount"></div>
+                    <div class="col-xl-12"><input type="number" id="minPrice" name="minPrice"
+                        class="border-white shadow-lg text-center mt-4" placeholder="Min Purchase Amount"></div>
+                    <div class="col-xl-12"><input type="number" id="maxPrice" name="maxPrice"
+                        class="border-white shadow-lg text-center mt-4" placeholder="Max Purchase Amount"></div>
+                    <div class="col-xl-12"><input type="Date" id="expire-date" name="endDate"
+                        class="border-white shadow-lg text-center mt-4" placeholder="coupon end date"></div>
+                    <div class="col-xl-12"><button class="btn btn bg-gradient-dark mt-4" onclick="createCoupon()">Add
+                        coupon</button></div>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3 p-5 text-center">
+    <h3>Available Coupon</h3>
+    <table class="table table-dark p-2">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Name</th>
+          <th scope="col">Date</th>
+          <th scope="col">Discount</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% couponData.forEach((data,index)=> { %>
+          <tr>
+            <td scope="row">
+              <%= index+1 %>
+            </td>
+            <td>
+              <%=data.name %>
+            </td>
+            <td>
+              <%= data.expiry.toDateString()%>
+            </td>
+            <td>
+              <%=data.discount%> %
+            </td>
+            <td>
+              <% if(data.status==false ){%>
+                <b>unlist</b>
+                <%}else{%>
+                  <b>list</b>
+                  <%}%>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function createCoupon() {
+      const createCoupon = document.querySelector('#create-coupon');
+      createCoupon.addEventListener('submit', event => {
+        event.preventDefault()
+        const couponCodeName = document.getElementById('couponCodeName').value.trim();
+        const discount = document.getElementById('discount').value.trim();
+        const expireDate = document.getElementById('expire-date').value.trim();
+        const minPrice = document.getElementById('minPrice').value.trim();
+        const maxPrice = document.getElementById('maxPrice').value.trim();
+
+        console.log(expireDate)
+
+        $.ajax({
+          method: "post",
+          url: "/admin/create-coupon",
+          data: ({
+            couponCodeName,
+            discount,
+            expireDate,
+            minPrice,
+            maxPrice
+          }),
+          success: function (response) {
+            if (response.status) {
+              Swal.fire(
+                'confirm!',
+                response.message,
+                'success'
+              ).then(() => {
+                window.location.reload();
+              })
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: response.message,
+
+              })
+            }
+
+          }
+        })
+
+      })
+    }
+
+  </script>
+
+  <%-include('../admin/partials/afooter.ejs') %>

@@ -30,19 +30,16 @@ const addToCart = async (req, res) => {
                         res.redirect('/cart');
 
                     } else {
-                        console.log('there is no product exist here -------');
 
                         await Cart.updateOne({ user_id: userId }, { $push: { products: { product_id: productId, quantity: 1, price: salePrice, totalPrice: salePrice } } })
                         res.redirect('/cart');
                     }
                 } else {
-                    console.log('there is no cart exist here --------');
 
                     const saveCart = new Cart({
                         products: [product],
                         user_id: userId
                     })
-                    console.log(saveCart + 'this i saveCart=======');
 
                     await saveCart.save();
                     res.redirect('/cart');
@@ -64,14 +61,15 @@ const loadCart = async (req, res) => {
         const user = req.session.isLoggedIn;
         if (user) {
             const userId = req.session.userId
+            const userName = req.session.userName;
             const cartData = await Cart.findOne({ user_id: userId }).populate('products.product_id');
             if (cartData) {
                 const carts = await Cart.findOne({ user_id: userId });
                 const subTotalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
 
-                res.render('cart', { cartData, subTotalPrice });
+                res.render('cart', { cartData, subTotalPrice, userName });
             } else {
-                res.render('cart', { cartData, subTotalPrice: ' ' }); console.log('here----');
+                res.render('cart', { cartData, subTotalPrice: ' ', userName }); console.log('here----');
             }
         } else {
             res.redirect('/login');

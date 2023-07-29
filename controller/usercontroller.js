@@ -29,31 +29,31 @@ const loadSignup = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 const insertUser = async (req, res) => {
     try {
-        const spassword = await securePassword(req.body.password);
-        const user = new Users({
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            password: spassword,
-            is_admin: 0
-        });
-        const password = req.body.password;
-        const confirmPassword = req.body.confirmPassword;
-        const phone = req.body.phone.toString();
+        const { name, email, phone } = req.body
+        const emailExist = await Users.findOne({ email: email })
 
-        if (password !== confirmPassword || phone.length !== 10 || typeof user.phone !== 'number') {
-            res.render('signup', { message: 'Fill It Correctly!.' });
+        if (emailExist) {
+            res.json({ status: false, message: 'Email Already Exist 😨' })
+
         } else {
-            const userData = await user.save();
-            if (userData) {
-                const otp = Math.floor(100000 + Math.random() * 900000);
-                req.session.Otp = otp;
-                sendVerifyMail(req.body.name, req.body.email, userData._id, otp);
-                req.session.user = userData._id;
-                res.redirect('/verify-otp');
-            } else {
-                res.render('signup', { message: 'Signup Failed' });
-            }
+
+            const spassword = await securePassword(req.body.password);
+            const user = new Users({
+                name: name,
+                email: email,
+                phone: phone,
+                password: spassword,
+                is_admin: 0
+            });
+
+            const userData = await user.save()
+
+            const otp = Math.floor(100000 + Math.random() * 900000);
+            req.session.Otp = otp;
+            sendVerifyMail(req.body.name, req.body.email, userData._id, otp);
+            req.session.user = userData._id;
+            res.json({ status: true })
+
         }
     } catch (error) {
         console.log(error.message);
@@ -78,15 +78,16 @@ const verifyOtp = async (req, res) => {
         const user = req.session.user
         if (user) {
             const { v1, v2, v3, v4, v5, v6 } = req.body
+            console.log(v1, v2, v3 + "here is otp")
             const realOtp = v1 + v2 + v3 + v4 + v5 + v6
             const userOtp = req.session.Otp
             if (realOtp == userOtp) {
-                const updateInfo = await Users.updateOne({ _id: user }, { $set: { is_verified: 1 } });
-                res.render('login', { message: 'SignUp was successful' });
+                await Users.updateOne({ _id: user }, { $set: { is_verified: 1 } });
+                res.render('login', { message: 'verified 😎' });
                 delete req.session.user;
                 delete req.session.Otp
             } else {
-                res.render('verify-otp', { message: 'Wrong Answer' });
+                res.render('verify-otp', { message: 'Wrong...!😴' });
             }
         } else {
             res.redirect('/signup');
@@ -283,7 +284,8 @@ const loadHome = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 const loadAbout = async (req, res) => {
     try {
-        res.render('about');
+        const userName = req.session.userName;
+        res.render('about', { userName });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
@@ -292,7 +294,8 @@ const loadAbout = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 const loadContact = async (req, res) => {
     try {
-        res.render('contact');
+        const userName = req.session.userName;
+        res.render('contact', { userName });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
@@ -303,11 +306,10 @@ const loadUserDetails = async (req, res) => {
     try {
         const userId = req.session.userId;
         if (userId) {
-
+            const userName = req.session.userName;
             const orderData = (await Order.find({ user_id: userId }).populate('products.product_id').populate('address_id')).reverse();
-
             const addressData = await Address.find({ user_id: userId, list: true });
-            res.render('profile', { orderData, addressData });
+            res.render('profile', { orderData, addressData, userName });
         } else {
             res.render('profile');
         }
@@ -323,6 +325,7 @@ const Logout = async (req, res) => {
         if (user) {
             delete req.session.userId
             delete req.session.isLoggedIn
+            delete req.session.userName
             res.redirect('/');
         } else {
             res.redirect('/');

@@ -18,7 +18,7 @@
     + Color Functions Mixins
   * Core Styles
     + Reset Styles
-    + Fonts
+  ../public/admin Fonts
     + Functions
     + Backgrounds
     + Typography
@@ -10371,30 +10371,8 @@ input:focus {
   border-color: transparent;
   outline: none; }
 
-/* Fonts */
-@font-face {
-  font-family: 'nunito-light';
-  src: url("../fonts/Nunito/Nunito-Light.eot");
-  /* IE9 Compat Modes */
-  src: url("../fonts/Nunito/Nunito-Light.woff2") format("woff2"), url("../fonts/Nunito/Nunito-Light.woff") format("woff"), url("../fonts/Nunito/Nunito-Light.ttf") format("truetype"); }
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
 
-@font-face {
-  font-family: 'nunito-regular';
-  src: url("../fonts/Nunito/Nunito-Regular.eot");
-  /* IE9 Compat Modes */
-  src: url("../fonts/Nunito/Nunito-Regular.woff2") format("woff2"), url("../fonts/Nunito/Nunito-Regular.woff") format("woff"), url("../fonts/Nunito/Nunito-Regular.ttf") format("truetype"); }
-
-@font-face {
-  font-family: 'nunito-medium';
-  src: url("../fonts/Nunito/Nunito-SemiBold.eot");
-  /* IE9 Compat Modes */
-  src: url("../fonts/Nunito/Nunito-SemiBold.woff2") format("woff2"), url("../fonts/Nunito/Nunito-SemiBold.woff") format("woff"), url("../fonts/Nunito/Nunito-SemiBold.ttf") format("truetype"); }
-
-@font-face {
-  font-family: 'nunito-bold';
-  src: url("../fonts/Nunito/Nunito-Bold.eot");
-  /* IE9 Compat Modes */
-  src: url("../fonts/Nunito/Nunito-Bold.woff2") format("woff2"), url("../fonts/Nunito/Nunito-Bold.woff") format("woff"), url("../fonts/Nunito/Nunito-Bold.ttf") format("truetype"); }
 
 .text-twitter {
   color: #2caae1; }
@@ -10499,14 +10477,14 @@ input:focus {
 /* Typography */
 body {
   font-size: 1rem;
-  font-family: "nunito-regular", sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-weight: initial;
   line-height: normal;
   -webkit-font-smoothing: antialiased; }
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "nunito-regular", sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-weight: 600; }
 
 p {
@@ -10648,7 +10626,7 @@ pre {
 code {
   padding: 5px;
   color: #fc5a5a;
-  font-family: "nunito-light", sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 0.875rem;
   border-radius: 4px; }
 
@@ -10685,7 +10663,7 @@ code {
   -webkit-transition: all 0.25s ease;
   -ms-transition: all 0.25s ease;
   font-size: 0.875rem;
-  font-family: "nunito-regular", sans-serif; }
+  font-family: "Nunito", sans-serif; }
   .footer .footer-inner-wraper {
     width: 100%;
     padding-right: 9px;
@@ -10790,16 +10768,16 @@ code {
   flex-grow: 1; }
 
 .font-weight-light {
-  font-family: "nunito-light", sans-serif; }
+font-family: 'Nunito', sans-serif;}
 
 .font-weight-bold {
-  font-family: "nunito-bold", sans-serif; }
+  font-family: 'Nunito', sans-serif;}
 
 .font-weight-normal {
-  font-family: "nunito-regular", sans-serif; }
+  font-family: 'Nunito', sans-serif;}
 
 .font-weight-medium {
-  font-family: "nunito-medium", sans-serif; }
+ font-family: 'Nunito', sans-serif;}
 
 .absolute-center {
   position: absolute;
@@ -11947,13 +11925,13 @@ code {
     font-size: 1.125rem;
     font-weight: 600; }
   .card .card-subtitle {
-    font-family: "nunito-regular", sans-serif;
+    font-family: 'Nunito', sans-serif;;
     margin-top: 0.625rem;
     margin-bottom: 0.625rem; }
   .card .card-description {
     color: #76838f;
     margin-bottom: 1.5rem;
-    font-family: "nunito-regular", sans-serif; }
+    font-family: 'Nunito', sans-serif; }
   .card.card-outline-success {
     border: 1px solid #44ce42; }
   .card.card-outline-primary {
@@ -12234,7 +12212,7 @@ code {
   .table thead th {
     border-top: 0;
     border-bottom-width: 1px;
-    font-family: "nunito-medium", sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: initial; }
     .table thead th i {
       margin-left: 0.325rem; }
@@ -12509,7 +12487,7 @@ code {
 .tt-query,
 .tt-hint {
   border: 1px solid rgba(151, 151, 151, 0.3);
-  font-family: "nunito-regular", sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 0.8125rem; }
 
 select.form-control, .select2-container--default select.select2-selection--single, .select2-container--default .select2-selection--single select.select2-search__field, select.typeahead,
@@ -12628,7 +12606,7 @@ select.tt-hint {
     -ms-flex-align: center;
     align-items: center;
     padding: 15px 15px;
-    font-family: "nunito-regular", sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 0.875rem; }
     .icons-list > div i {
       display: inline-block;
@@ -12788,7 +12766,7 @@ dl {
     background: transparent;
     border-color: rgba(255, 255, 255, 0.2);
     color: #002766;
-    font-family: "nunito-bold", sans-serif;
+    font-family: 'Nunito', sans-serif;
     padding: 1.75rem; }
     .nav-tabs.nav-tabs-vertical-custom .nav-link.active {
       color: #ffffff;
@@ -13072,13 +13050,13 @@ dl {
 
 /* Navbar */
 .navbar {
-  font-family: "nunito-medium", sans-serif;
+  font-family: 'Nunito', sans-serif;
   background: #ffffff;
   transition: background 0.25s ease;
   -webkit-transition: background 0.25s ease;
   -moz-transition: background 0.25s ease;
   -ms-transition: background 0.25s ease;
-  font-family: "nunito-medium", sans-serif; }
+  font-family: 'Nunito', sans-serif; }
   .navbar .navbar-brand {
     width: 110px; }
   .navbar .navbar-brand-wrapper {
@@ -13155,19 +13133,19 @@ dl {
         .navbar .navbar-menu-wrapper .search-field .input-group input:-ms-input-placeholder {
           font-size: 0.875rem;
           color: #111111;
-          font-family: "nunito-regular", sans-serif; }
+          font-family: 'Nunito', sans-serif;}
         .navbar .navbar-menu-wrapper .search-field .input-group input:-moz-placeholder {
           font-size: 0.875rem;
           color: #111111;
-          font-family: "nunito-regular", sans-serif; }
+          font-family: 'Nunito', sans-serif; }
         .navbar .navbar-menu-wrapper .search-field .input-group input::-moz-placeholder {
           font-size: 0.875rem;
           color: #111111;
-          font-family: "nunito-regular", sans-serif; }
+          font-family: 'Nunito', sans-serif;}
         .navbar .navbar-menu-wrapper .search-field .input-group input::-webkit-input-placeholder {
           font-size: 0.875rem;
           color: #111111;
-          font-family: "nunito-regular", sans-serif; }
+          font-family: 'Nunito', sans-serif; }
       .navbar .navbar-menu-wrapper .search-field .input-group i {
         font-size: 14px;
         margin-right: 0;
@@ -13268,7 +13246,7 @@ dl {
             color: #111111;
             font-size: .875rem;
             font-style: normal;
-            font-family: "nunito-medium", sans-serif; }
+            font-family: 'Nunito', sans-serif; }
             .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown .dropdown-item .badge {
               padding: 2px 6px;
               font-size: 10px; }
@@ -13489,7 +13467,7 @@ dl {
 .sidebar {
   min-height: calc(100vh - 64px);
   background: #181824;
-  font-family: "nunito-medium", sans-serif;
+  font-family: 'Nunito', sans-serif;
   padding: 0;
   width: 258px;
   z-index: 11;
@@ -13613,7 +13591,7 @@ dl {
             right: 0; }
         .sidebar .nav .nav-item.active > .nav-link .menu-title {
           color: #44ce42;
-          font-family: "nunito-medium", sans-serif; }
+          font-family: 'Nunito', sans-serif;}
         .sidebar .nav .nav-item.active > .nav-link i {
           color: #44ce42; }
       .sidebar .nav .nav-item:hover {
@@ -13657,7 +13635,7 @@ dl {
         line-height: 16px;
         margin: 25px 0px 10px 0px;
         color: #8e94a9;
-        font-family: "nunito-bold", sans-serif; }
+        font-family: 'Nunito', sans-serif;}
         .sidebar .nav .nav-item.nav-category .nav-link {
           padding: 1.2rem 2rem 0.2rem; }
           .sidebar .nav .nav-item.nav-category .nav-link:hover {

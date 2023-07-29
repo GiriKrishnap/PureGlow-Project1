@@ -254,6 +254,137 @@
             });
         }
 
+
+        $('#checkout-form').submit((e) => {
+            e.preventDefault();
+            $.ajax({
+                url: '/placed-order',
+                method: 'post',
+                data: $('#checkout-form').serialize(),
+                success: (response) => {
+
+                    console.log(response.status);
+                    if (response.codSuccess) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Order placed Successfully',
+                            showConfirmButton: false,
+                            timer: 3000
+                        })
+                        location.href = '/my-orders';
+                    } else if (response.msg) {
+                        Swal.fire(
+                            'please check form!',
+                            response.msg,
+                            'error')
+
+                    } else {
+                        razorpayPayment(response);
+                    }
+                }
+            })
+
+        })
+
+        function razorpayPayment(order) {
+
+            var options = {
+                "key": "rzp_test_qXH0h7SCch7OVM", // Enter the Key ID generated from the Dashboard
+                "amount": order.response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "ShoeCart",
+                "description": "Test Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": order.response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    // console.log("response", response);
+                    // alert(response.razorpay_payment_id);
+                    // alert(response.razorpay_order_id);
+                    // alert(response.razorpay_signature);
+
+                    verifyPayment(response, order);
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+        function verifyPayment(payment, order) {
+            $.ajax({
+                url: '/verify-payment', // replace with your server endpoint
+                method: 'post',
+                data: {
+                    payment,
+                    order,
+                },
+                success: function (response) {
+                    if (response.status) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Order placed Successfully',
+                            showConfirmButton: false,
+                            timer: 3000
+                        })
+                        window.location.href = '/user-details';
+
+                    } else {
+                        alert("payment failed");
+                        window.location.href('/');
+                    }
+
+                }
+            });
+        }
+
+        function applyCoupon() {
+            var couponCode = document.getElementById("getCoupon").value;
+            $.ajax({
+                method: "post",
+                url: '/apply-coupon',
+                data: ({
+                    couponCode,
+                }),
+                success: function (response) {
+                    if (response.status) { 
+                        const inputBox = document.getElementById('subTtle');
+                        console.log("Input field value before update:", inputBox.value);
+                        inputBox.value = response.getDiscount;
+                        console.log("Input field value after update:", inputBox.value);
+                        console.log(response.getDiscount)
+                        const subTotal = document.getElementById('gtd');
+                        document.getElementById('gtd').innerHTML = response.getDiscount;
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.msg,
+
+                        })
+                    }
+
+                }
+
+
+            })
+
+        }
+
+
     </script>
 
     <%- include('../user/partials/footer.ejs'); %>

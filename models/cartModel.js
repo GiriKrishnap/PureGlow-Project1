@@ -21,6 +21,10 @@ const cartSchema = new mongoose.Schema({
     user_id: {
         type: ObjectId,
         ref: 'Users'
+    },
+    couponId: {
+        type: ObjectId,
+        ref: 'Coupon',
     }
 })
 

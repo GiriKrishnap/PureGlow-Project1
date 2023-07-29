@@ -113,13 +113,12 @@
         const quantity = document.getElementById('quantity').value.trim();
         const description = document.getElementById('description').value.trim();
         const imageMultiple = document.getElementById('imageMultiple').value
-        console.log(category)
         if (!productName || !price || !discount || !quantity || !description || !imageMultiple) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'make unique card and its name atleast 5 character max 13.....!',
-            // footer: '<a href="">Why do I have this issue?</a>'
+            text: 'make unique card and its name at least 5 character !',
+         
           })
 
         } else {

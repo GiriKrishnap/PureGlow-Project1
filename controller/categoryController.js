@@ -37,9 +37,10 @@ const insertCategory = async (req, res) => {
         const admin = req.session.isAdminLoggedIn;
         if (admin) {
             const name = req.body.name;
+            console.log(name+'name is here hello ');
 
             if (!name) {
-                res.render('add-category', { message: 'incorrect value' });
+                res.json({ status: false, message: 'fill the Field' });
             } else {
                 const exist = await Category.findOne({ name: name });
 
@@ -48,15 +49,10 @@ const insertCategory = async (req, res) => {
                     const category = new Category({
                         name: name,
                     });
-
-                    const categoryData = await category.save();
-                    if (categoryData) {
-                        res.redirect('/admin/category-list');
-                    } else {
-                        res.render('add-category', { message: 'Category already exist' });
-                    }
+                    await category.save();
+                    res.json({ status: true, message: 'Added Successfully' });
                 } else {
-                    res.render('add-category', { message: 'Already exist try another one' });
+                    res.json({ status: false, message: 'Already exist try another one' });
                 }
             }
         } else {

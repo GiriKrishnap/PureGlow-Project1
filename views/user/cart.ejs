@@ -69,13 +69,6 @@
                             </div>
                             <!-- Cart Update Option -->
                             <div class="cart-update-option d-block d-md-flex justify-content-between">
-                                <div class="apply-coupon-wrapper">
-                                    <form action="#" method="post" class=" d-block d-md-flex">
-                                        <input type="text" placeholder="Enter Your Coupon Code" required />
-                                        <button class="btn flosun-button primary-btn rounded-0 black-btn">Apply
-                                            Coupon</button>
-                                    </form>
-                                </div>
                                 <div class="cart-update mt-sm-16">
                                     <a href="/products" class="btn flosun-button primary-btn rounded-0 black-btn">Update
                                         Cart</a>
@@ -96,10 +89,6 @@
                                                 <td><i class="bi bi-currency-rupee"></i>
                                                     <%= subTotalPrice%>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Coupon OFF</td>
-                                                <td>-<i class="bi bi-currency-rupee"></i>0</td>
                                             </tr>
                                             <tr class="total">
                                                 <td>Total</td>
@@ -136,7 +125,7 @@
                                 // Show the SweetAlert confirmation dialog
                                 swal({
                                     title: 'Are you sure?',
-                                    text: 'Are you sure you want to visit this link?',
+                                    text: 'Are you sure you want to remove this from Cart?',
                                     icon: 'warning',
                                     buttons: ['Cancel', 'OK'],
                                 }).then((value) => {

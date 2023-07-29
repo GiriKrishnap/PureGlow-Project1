@@ -1,22 +1,22 @@
-// modules //////////////////////////////////////////////////////////////////////////////////////////
+// modules //----------------------------
 const _404 = require('./middleware/404');
 const errorHandler = require('./middleware/error-handler');
 const express = require('express');
 const app = express();
 const path = require('path');
+const noCache = require('nocache')
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const nocache = require('nocache');
 const mongoose = require('mongoose');
 const sessionMiddleWare = require('./middleware/session');
 require('dotenv/config');
-////////////////////////////////////////////////////////////////////////////////////////////////////
 // mongoDB-----------------------------------------------------------------------------------------
 mongoose.connect(process.env.CONNECTION_STRING);
 
 // Router-import------------------------------------------------------------------------------------
 const adminRouter = require('./routes/adminRoute');
 const userRouter = require('./routes/userRoute');
+const nocache = require('nocache');
 
 // view engine setup--------------------------------------------------------------------------------
 app.set('views', path.join(__dirname, 'views'));
@@ -28,8 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(nocache());
 app.use(sessionMiddleWare);
+app.use(nocache())
 // router--------------------------------------------------------------------------------------------
 app.use('/admin', adminRouter);
 app.use('/', userRouter);
@@ -40,5 +40,5 @@ app.use(_404);
 // error handler------------------------------------------------------------------------------------
 app.use(errorHandler);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//----------------------------
 module.exports = app;

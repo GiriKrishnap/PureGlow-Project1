@@ -16,23 +16,23 @@
   <div class="wrapper p-4">
     <h1 class="text-white bg-primary t-wraptex">VerifyBro!</h1>
     <p>~ Check Your Email ~<br>Enter the Otp!</p>
-    <form method="post" action="/verify-otp">
+    <form method="post" action="/verify-otp" id="verify-otp">
       <div class="mb-3 d-flex justify-content-center p-2 ">
-        <input type="text" class="form-control mx-1 text-center digit-input" name="v1" maxlength="1" autocomplete="off"
-          required>
-        <input type="text" class="form-control mx-1 text-center digit-input" name="v2" maxlength="1" autocomplete="off"
-          required>
-        <input type="text" class="form-control mx-1 text-center digit-input" name="v3" maxlength="1" autocomplete="off"
-          required>
-        <input type="text" class="form-control mx-1 text-center digit-input" name="v4" maxlength="1" autocomplete="off"
-          required>
-        <input type="text" class="form-control mx-1 text-center digit-input" name="v5" maxlength="1" autocomplete="off"
-          required>
-        <input type="text" class="form-control mx-1 text-center digit-input" name="v6" maxlength="1" autocomplete="off"
-          required>
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v1" id="v1" maxlength="1"
+          autocomplete="off" >
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v2" id="v2" maxlength="1"
+          autocomplete="off" >
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v3" id="v3" maxlength="1"
+          autocomplete="off" >
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v4" id="v4" maxlength="1"
+          autocomplete="off" >
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v5" id="v5" maxlength="1"
+          autocomplete="off" >
+        <input type="text" class="form-control mx-1 text-center digit-input" name="v6" id="v6" maxlength="1"
+          autocomplete="off" >
       </div>
       <div class="text-center">
-        <button type="submit" class="btn btn-primary w-100" onclick="verifyOtp()">Verify</button>
+        <button type="submit" onclick="verifyOtp()" class="btn btn-primary w-100">Verify</button>
       </div>
     </form>
     <% if(typeof message !=='undefined' ){ %>
@@ -40,13 +40,14 @@
         <%= message %>
       </p>
       <% } %>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
           crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
-
           const digitInputs = document.querySelectorAll('.digit-input');
-
           digitInputs.forEach(function (input, index) {
             input.addEventListener('input', function () {
               if (input.value.length === 1 && index < digitInputs.length - 1) {
@@ -56,22 +57,27 @@
           });
 
           function verifyOtp() {
-            const verifyOtp = document.querySelector('#verifyOtp');
+            const verifyOtp = document.getElementById('verify-otp');
             verifyOtp.addEventListener('submit', event => {
-              event.preventDefault()
-              const otp = document.getElementById('otp').value.trim()
-              if (!otp || otp.length < 6 || otp.length > 6) {
+              event.preventDefault();
+              const v1 = document.getElementById('v1').value
+              const v2 = document.getElementById('v2').value
+              const v3 = document.getElementById('v3').value
+              const v4 = document.getElementById('v4').value
+              const v5 = document.getElementById('v5').value
+              const v6 = document.getElementById('v6').value
+              console.log(v1, v2, v3, v4, v5, v6)
+              if (!v1 || !v2 || !v3 || !v4 || !v5 || !v6) {
                 Swal.fire({
                   icon: 'error',
                   title: 'Oops...',
-                  text: 'Something went wrong!',
-                  footer: '<a href="">Why do I have this issue?</a>'
-                })
+                  text: 'Fill It...!😼',
 
+                })
               } else {
                 verifyOtp.submit()
-              }
 
+              }
             })
           }
         </script>

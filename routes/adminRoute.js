@@ -10,6 +10,7 @@ const productController = require('../controller/prodController');
 const orderController = require('../controller/orderController');
 const categoryController = require('../controller/categoryController');
 const bannerController = require('../controller/bannerController');
+const couponController = require('../controller/couponController');
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //views---------------------------------------------------------------------------------------------
 router.set('views', './views/admin');
@@ -56,6 +57,8 @@ router.get('/delete-banner', auth.verify_admin, bannerController.deleteBanner);
 router.get('/banner-unlistBanner', auth.verify_admin, bannerController.unListBanner)
 router.get('/banner-listBanner', auth.verify_admin, bannerController.listBanner)
 //AdminCouponsManagements----------------------------------------------------------
+router.get('/create-coupon', auth.verify_admin, couponController.loadCreateCouponPage);
+router.post('/create-coupon', auth.verify_admin, couponController.insertCoupon);
 //AdminLogout----------------------------------------------------------------------
 router.get('/admin-logout', auth.verify_admin, adminController.logout);
 //---------------------------------------------------------------------------------

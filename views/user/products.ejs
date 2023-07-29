@@ -5,7 +5,8 @@
         <div class="container container-default custom-area">
             <div class="row flex-row-reverse">
                 <div class="col-12 col-custom mt-2">
-                    <!--shop toolbar start-->
+
+
                     <div class="shop_toolbar_wrapper mb-30">
                         <div class="shop_toolbar_btn">
                             <button data-role="grid_4" type="button" class="active btn-grid-4" title="Grid-4"><i
@@ -16,18 +17,23 @@
                                     class="fa fa-th-list"></i></button>
                         </div>
                         <div class="text-center mt-2">
-                            <h3 class="font-style-giri">Shopping Products</h3>
+                            <h3 class="">Shopping Products</h3>
                         </div>
                         <div class="">
-                            <input type="search" class="form-control text-center" placeholder="Search Products">
+
+                            <form>
+                                <input type="text" onkeyup="search()" id="search-item" class="form-control text-center"
+                                    placeholder="Search Products">
+                            </form>
+
                         </div>
                         <div class="shop-select">
                             <form class="d-flex flex-column w-100" action="#">
                                 <div class="form-group">
                                     <select class="form-control mt-2 nice-select w-100">
-                                        <option selected value="1">SHOW ALL PRODUCTS</option>
+                                        <option selected value="0">SHOW ALL PRODUCTS</option>
                                         <% category.forEach((data,index)=> { %>
-                                            <option value="index">
+                                            <option value="index+1">
                                                 <%=data.name%>
                                             </option>
                                             <% }); %>
@@ -38,10 +44,11 @@
                     </div>
                     <!--shop toolbar end-->
                     <!-- Shop Wrapper Start -->
-                    <div class="row shop_wrapper grid_4">
-                        <% if (productData.length > 0) { %>
+                    <div class="row shop_wrapper grid_4 product-list" id="product-list">
+                        <% if (productData.length> 0) { %>
                             <% productData.forEach(data=> { %>
-                                <div class="col-lg-3 col-md-6 col-sm-6  col-custom product-area">
+                                <div class="col-lg-3 col-md-6 col-sm-6  col-custom product-area product" id="product"
+                                    style="display: flex;">
                                     <div class="product-item">
                                         <div class="single-product position-relative mr-0 ml-0">
                                             <div class="product-image">
@@ -56,7 +63,7 @@
                                                         <i class="lnr lnr-sync" data-toggle="tooltip"
                                                             data-placement="left" title="Compare"></i>
                                                     </a>
-                                                    <a href="wishlist.html" title="Add To Wishlist">
+                                                    <a onclick="addWishlist('<%= data._id %>')" title="Add To Wishlist">
                                                         <i class="lnr lnr-heart" data-toggle="tooltip"
                                                             data-placement="left" title="Wishlist"></i>
                                                     </a>
@@ -64,9 +71,9 @@
                                             </div>
                                             <div class="product-content">
                                                 <div class="product-title">
-                                                    <h4 class="title-2"> <a href="/single-product?id=<%=data._id%>">
-                                                            <%=data.productName%>
-                                                        </a></h4>
+                                                    <h4 class="title-2" id="productName">
+                                                        <%=data.productName%>
+                                                    </h4>
                                                 </div>
                                                 <div class="price-box">
                                                     <span class="regular-price "><i class="bi bi-currency-rupee"></i>
@@ -105,7 +112,8 @@
                                                         <i class="lnr lnr-sync" data-toggle="tooltip"
                                                             data-placement="top" title="Compare"></i>
                                                     </a>
-                                                    <a class="list-icon" href="wishlist.html" title="Add To Wishlist">
+                                                    <a class="list-icon" onclick="addWishlist('<%= data._id %>')"
+                                                        title="Add To Wishlist">
                                                         <i class="lnr lnr-heart" data-toggle="tooltip"
                                                             data-placement="top" title="Wishlist"></i>
                                                     </a>
@@ -119,10 +127,8 @@
                                         <h3 class="text-center text-light mb-5 font-monospace bg-danger text-wrap ">
                                             Sorry Product Is Empty</h3>
                                         <% } %>
-
                     </div>
-                    <!-- Shop Wrapper End -->
-                    <!-- Bottom Toolbar Start -->
+
                     <div class="row mb-5">
                         <div class="col-sm-12 col-custom">
                             <div class="toolbar-bottom">
@@ -139,11 +145,66 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Bottom Toolbar End -->
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addWishlist(productId) {
+            event.preventDefault()
+            $.ajax({
+
+                method: "POST",
+                url: `/add-to-wishlist?id=${productId}`,
+                success: function (response) {
+                    if (response.status) {
+                        Swal.fire({
+
+                            icon: 'success',
+                            title: 'Added',
+                            showConfirmButton: false,
+                            timer: 1300
+                        })
+                    } else {
+                        Swal.fire({
+
+                            icon: 'success',
+                            title: 'Removed',
+                            showConfirmButton: false,
+                            timer: 1300
+                        })
+                    }
+                }
+            })
+        }
+
+        const search = () => {
+            const searchbox = document.getElementById('search-item').value.toUpperCase()
+            const storeItems = document.getElementById('product-list');
+            const product = document.querySelectorAll('.product');
+            const productName = storeItems.getElementsByTagName('h4');
+
+            for (let i = 0; i < productName.length; i++) {
+                let match = product[i].getElementsByTagName('h4')[0];
+
+                if (match) {
+                    let textValue = match.textContent || match.innerHTML
+
+                    if (textValue.toUpperCase().indexOf(searchbox) > -1) {
+                        product[i].style.display = '';
+                    } else {
+                        product[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+
+
+    </script>
     <!-- Shop Main Area End Here -->
 
     <%- include('../user/partials/footer2.ejs'); %>

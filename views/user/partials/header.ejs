@@ -64,14 +64,20 @@
             </li>
           </ul>
           <div class="user_option-box">
+            
             <% if(typeof userName !=='undefined' ){ %>
               <p class="mt-3 font-weight-bold">
-                <%= userName %>
+                  <%= userName%>
               </p>
               <% } %>
                 <a href="/profile">
                   <i class="bi bi-person-circle" aria-hidden="true"></i>
                 </a>
+                <% if(typeof userName !=='undefined' ){ %>
+                <a href="/wishlist">
+                  <i class="bi bi-bag-heart-fill" aria-hidden="true"></i>
+                </a>
+                <% } %>
                 <a href="/cart">
                   <i class="bi bi-cart-plus" aria-hidden="true"></i>
                 </a>

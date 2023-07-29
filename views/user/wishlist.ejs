@@ -1,0 +1,131 @@
+<%- include('../user/partials/header2.ejs'); %>
+
+    <!-- Shop Main Area Start Here -->
+    <div class="shop-main-area">
+        <div class="container container-default custom-area">
+            <div class="row flex-row-reverse">
+                <div class="col-12 col-custom mt-2">
+                    <!--shop toolbar start-->
+                    <div class="shop_toolbar_wrapper mb-30">
+
+                        <div class="text-center mt-2">
+                            <h3 class=" ml-4">Wishlist</h3>
+                        </div>
+                        <div class="">
+                            <input type="search" class="form-control text-center" placeholder="Search Products">
+                        </div>
+                    </div>
+                    <!--shop toolbar end-->
+                    <!-- Shop Wrapper Start -->
+                    <div class="row shop_wrapper grid_4">
+                        <% if (typeof wishlistData==='undefined' || wishlistData===null ) { %>
+                            <h3 class="text-center text-light mb-5 font-monospace bg-danger text-wrap ">
+                                No Products Added</h3>
+                            <%}else{%>
+                                <% if (wishlistData.products.length> 0) { %>
+                                    <% wishlistData.products.forEach(data=> { %>
+                                        <div class="col-lg-3 col-md-6 col-sm-6  col-custom product-area">
+                                            <div class="product-item">
+                                                <div class="single-product position-relative mr-0 ml-0">
+                                                    <div class="product-image">
+                                                        <a class="d-block"
+                                                            href="/single-product?id=<%=data.product_id._id%>">
+                                                            <img src="/images/<%=data.product_id.images[0]%>" alt=""
+                                                                class="product-image-1 w-100">
+                                                        </a>
+                                                        <div class="add-action d-flex flex-column position-absolute">
+
+                                                            <a onclick="addWishlist('<%= data._id %>')" title="Add To Wishlist">
+                                                                <i class="lnr lnr-heart" data-toggle="tooltip"
+                                                                    data-placement="left" title="Wishlist"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content">
+                                                        <div class="product-title">
+                                                            <h4 class="title-2"> <a
+                                                                    href="/single-product?id=<%=data.product_id._id%>">
+                                                                    <%=data.product_id.productName%>
+                                                                </a></h4>
+                                                        </div>
+                                                        <div class="price-box">
+                                                            <span class="regular-price "><i
+                                                                    class="bi bi-currency-rupee"></i>
+                                                                <%=data.product_id.price * data.product_id.discount /
+                                                                    100 %>
+                                                            </span>
+                                                            <span class="old-price"><del>
+                                                                    <%=data.product_id.price%>
+                                                                </del></span>
+                                                        </div>
+                                                        <a href="/add-to-cart?id=<%= data.product_id._id %>"
+                                                            class="btn product-cart">Add
+                                                            to Cart</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <h3
+                                                    class="text-center text-light mb-5 font-monospace bg-danger text-wrap ">
+                                                    No Products Added</h3>
+                                                <% } %>
+                                                    <%}%>
+
+                    </div>
+                    <!-- Shop Wrapper End -->
+                    <!-- Bottom Toolbar Start -->
+                    <div class="row mb-5">
+                        <div class="col-sm-12 col-custom">
+                            <div class="toolbar-bottom">
+                                <div class="pagination">
+                                    <ul>
+                                        <li class="current">1</li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li class="next"><a href="#">next</a></li>
+                                        <li><a href="#">&gt;&gt;</a></li>
+                                    </ul>
+                                </div>
+                                <p class="desc-content text-center text-sm-right mb-0">Showing 1 - 12 of 34 result</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addWishlist(productId) {
+            const wishlistText = document.getElementById('wishlistText')
+            event.preventDefault()
+            $.ajax({
+
+                method: "POST",
+                url: `/add-to-wishlist?id=${productId}`,
+                success: function (response) {
+                    if (response.status) {
+                        
+                    } else {
+                        Swal.fire({
+
+                            icon: 'success',
+                            title: 'Removed',
+                            showConfirmButton: false,
+                            timer: 1300
+                        }).then(() => {
+                            
+                        })
+                    }
+                }
+            })
+        }
+
+    </script>
+
+
+    <%- include('../user/partials/footer2.ejs'); %>

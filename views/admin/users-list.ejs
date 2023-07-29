@@ -1,116 +1,69 @@
 <%-include('../admin/partials/aheader.ejs') %>
 
-<div class="container-fluid mt-2 text-center" >
-<div class="col-md-12">
-    <div class="card mb-3 card">
-      <div class="bg-dark  border-radius-lg pt-4 pb-3">
-        <h6 class="text-white text-capitalize ps-3">USER LIST</h6>
-      </div>
-        <div class="table-responsive p-4">
-            <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-setting">
-                <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Mobile</th>
-                  <th>status</th>
-                  <th>actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                  
-
-                  <% userData.forEach((data,index)=> { %>
-
-                      <tr>
-                        <td class="text-center text-muted"><%= index+1 %></td>
-                       
-                        <td>
-                        <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-3">
-                                        <div class="widget-content-left">
-                                            
-                                        </div>
-                                    </div>
-                                    <%= data.name %>
-                                </div>
-                        </div>
-                        </td>
-    
-                        <td class="text-center">
-                          <%= data.email %>
-                        </td>
-
-                        <td class="text-center">
-                          <%= data.phone %>
-                        </td>
-                        
-                        <td>
-                          <% if(data.status===true){%>
-                            <p class="border-radius-lg text-success"><b>  Active</b></p>
-                            <%}else{%>
-                              <p class="border-radius-lg text-danger"><b>Dactive</b></p>
-
-                              <% } %>
-                        </td>
-
-                        <td>
-                          <% if(data.status===false){%>
-                            <a href="/admin/unblock-user?id=<%= data._id %>"
-                              class="btn btn-dark shadow-primary">UNBLOCK</a>
-                            <%}else{%>
-                              <a href="/admin/block-user?id=<%= data._id %>"
-                                class="btn btn-dark shadow-primary">BLOCK</a>
-                              <%} %>
-                        </td>
-                       
-                    </tr>
-                      
-                  <%  }); %>
-                    
-               
-                 
-                </tbody>
-            </table>
+  <div class="container-fluid mt-2 text-center">
+    <div class="col-md-12">
+      <div class="card mb-3 card">
+        <div class="bg-dark  border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">USER LIST</h6>
         </div>
+        <div class="table-responsive p-4">
+          <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-setting">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>status</th>
+                <th>actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% userData.forEach((data,index)=> { %>
+                <tr>
+                  <td class="text-center text-muted">
+                    <%= index+1 %>
+                  </td>
+                  <td>
+                    <div class="widget-content p-0">
+                      <div class="widget-content-wrapper">
+                        <div class="widget-content-left mr-3">
+                          <div class="widget-content-left">
+
+                          </div>
+                        </div>
+                        <%= data.name %>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <%= data.email %>
+                  </td>
+                  <td class="text-center">
+                    <%= data.phone %>
+                  </td>
+                  <td>
+                    <% if(data.status===true){%>
+                      <p class="border-radius-lg text-success"><b> Active</b></p>
+                      <%}else{%>
+                        <p class="border-radius-lg text-danger"><b>Dactive</b></p>
+
+                        <% } %>
+                  </td>
+                  <td>
+                    <% if(data.status===false){%>
+                      <a href="/admin/unblock-user?id=<%= data._id %>" class="btn btn-dark shadow-primary">UNBLOCK</a>
+                      <%}else{%>
+                        <a href="/admin/block-user?id=<%= data._id %>" class="btn btn-dark shadow-primary">BLOCK</a>
+                        <%} %>
+                  </td>
+                </tr>
+                <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
-</div>
+  </div>
 
-
-
-<%-include('../admin/partials/afooter.ejs') %>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <%-include('../admin/partials/afooter.ejs') %>

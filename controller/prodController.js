@@ -190,16 +190,9 @@ const loadUserProducts = async (req, res) => {
     try {
         const productData = await Product.find({ list: true });
         const categoryData = await Category.find();
-        if (req.session.userId) {
-            const userData = await Users.findOne({ _id: req.session.userId });
-            if (userData) {
-                res.render('products', { productData, category: categoryData, user: userData });
-            } else {
-                res.render('products', { productData, category: categoryData, user: 'login' });
-            }
-        } else {
-            res.render('products', { productData, category: categoryData, user: 'login' });
-        }
+        const userName = req.session.userName;
+        res.render('products', { productData, category: categoryData, userName });
+
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
@@ -210,10 +203,10 @@ const loadSingleProduct = async (req, res) => {
     try {
         const category = await Category.find();
         const productId = req.query.id;
-        const user = req.session.isLoggedIn;
+        const userName = req.session.userName;
         const productData = await Product.find({ _id: productId }).populate('category');
         const productsData = await Product.find({ list: true, _id: { $ne: productId } }).populate('category').limit(4)
-        res.render('single-product', { productData, user, category, products: productsData });
+        res.render('single-product', { productData, userName, category, products: productsData });
 
     } catch (error) {
         console.log(error.message);

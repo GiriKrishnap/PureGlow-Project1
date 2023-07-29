@@ -1,46 +1,107 @@
 <%- include('../user/partials/header.ejs'); %>
 
-<head>
-  <meta charset="UTF-8">
-  <title>pureGlow | by Giri</title>
-  <link rel="shortcut icon" href="/images/user/favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="/stylesheets/user/signupstyle.css">
-  <!-- Font Awesome Cdn Link -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <title>pureGlow | by Giri</title>
+    <link rel="shortcut icon" href="/images/user/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/user/signupstyle.css">
+    <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  </head>
 
-<body>
-  <div class="wrapper">
-    <h1>Hello</h1>
-    <p>Welcome To<br> Our Family</p>
-    <form action="/signup" method="post">
-      <input type="text" placeholder="Fullname" name="name" required>
-      <input type="email" placeholder="Email" required name="email">
-      <input type="text" placeholder="PhoneNumber" name="phone" required>
-      <input type="password" placeholder="Password" name="password" id="password" required>
-      <input type="password" placeholder="ConfirmPassword" id="confirmPassword" name="confirmPassword" required>
+  <body>
+    <div class="wrapper">
+      <h1>Hello</h1>
+      <p>Welcome To<br> Our Family</p>
+      <form action="/signup" method="post">
+        <input type="text" placeholder="FullName" name="name" id="name" required>
+        <input type="email" placeholder="Email" name="email" id="email" required>
+        <input type="text" placeholder="PhoneNumber" name="phone" id="phone" required>
+        <input type="password" placeholder="Password" name="password" id="password" required>
+        <input type="password" placeholder="ConfirmPassword" id="confirmPassword" name="confirmPassword" required>
 
-      <% if(typeof message !=='undefined' ){ %>
-        <p style="color: rgb(247, 0, 0);font-size: 19px; margin-top: 10px;">
-          <%= message %>
-        </p>
-        <% } %>
+        <% if(typeof message !=='undefined' ){ %>
+          <p style="color: rgb(247, 0, 0);font-size: 19px; margin-top: 10px;">
+            <%= message %>
+          </p>
+          <% } %>
 
-          <button type="submit" value="signup">Sign up</button>
-    </form>
+            <button type="submit" value="signup" onclick="insertUser()">Sign up</button>
+      </form>
 
-    <div class="not-member">
-      Already In Our Family? <a href="/login">Login Now</a>
+      <div class="not-member">
+        Already In Our Family? <a href="/login">Login Now</a>
+      </div>
     </div>
-  </div>
-  <script src="/javascripts/user/signupValidation.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function insertUser() {
+        event.preventDefault()
+        const name = document.getElementById('name').value.trim()
+        const email = document.getElementById('email').value.trim()
+        const phone = document.getElementById('phone').value.trim()
+        const password = document.getElementById('password').value.trim()
+        const confirmPassword = document.getElementById('confirmPassword').value.trim()
+
+        if (password != confirmPassword) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Password Not Same! 😢',
+
+          })
+
+        } else if (phone.length !== 10 || !name || !email || !password || !confirmPassword) {
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'There Are Mistakes🤥, Check Again',
+
+          })
+        } else {
+
+          $.ajax({
+            method: "post",
+            url: '/signup',
+            data: ({
+              name,
+              email,
+              phone,
+              password
+            }),
+            success: function (response) {
+              if (response.status == false) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: response.message,
+
+                })
+              } else {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Check Your Mail And Verify',
+                  showConfirmButton: false,
+                  timer: 1500
+                }).then(() => {
+                  window.location.href = '/verify-otp'
+                })
+              }
+            }
+          })
+
+        }
+      }
+    </script>
+
+  </body>
 
 
-<%- include('../user/partials/footer.ejs'); %>
+  <%- include('../user/partials/footer.ejs'); %>

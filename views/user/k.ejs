@@ -1,299 +1,125 @@
-<%- include('../user/partials/header.ejs'); %>
-
-  <!-- slider section -->
-  
-  <section class="slider_section ">
-    <div id="customCarousel1" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="container-fluid ">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="detail-box ">
-                  <h1>
-                    Glow with Us
-                  </h1>
-                  <p>
-                    "Unlock the radiance within, with skin and hair products<br>that reveal your true beauty."
-                  </p>
-                  <div class="btn-box">
-                    <a href="#about_page" class="btn1">
-                      About Us
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="img-box">
-                  <img src="/images/user/slider-img.png" alt="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <% if (typeof bannerData !=='undefined') { %>
-          <% bannerData.forEach((data) => { %>
-
-            <div class="carousel-item ">
-              <div class="container-fluid ">
+<%-include('../layout/header.ejs') %>
+  <style>
+    body{background-color: #f3e9e9}.card{border:none}.product{background-color: #eee}.brand{font-size: 13px}.act-price{color:red;font-weight: 700}.dis-price{text-decoration: line-through}.about{font-size: 14px}.color{margin-bottom:10px}label.radio{cursor: pointer}label.radio input{position: absolute;top: 0;left: 0;visibility: hidden;pointer-events: none}label.radio span{padding: 2px 9px;border: 2px solid #ff0000;display: inline-block;color: #ff0000;border-radius: 3px;text-transform: uppercase}label.radio input:checked+span{border-color: #ff0000;background-color: #ff0000;color: #fff}.btn-danger{background-color: #ff0000 !important;border-color: #ff0000 !important}.btn-danger:hover{background-color: #da0606 !important;border-color: #da0606 !important}.btn-danger:focus{box-shadow: none}
+  </style>
+  <div class="row mt-5 p-5" ></div>
+  <div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="detail-box">
-                      <h1>
-                        <%=data.title  %>
-                      </h1>
-                      <p>
-                        "<%=data.description %>"
-                      </p>
-                      <div class="btn-box">
-                        <a href="/products" class="btn1">
-                          Buy Now
-                        </a>
-                      </div>
+                    <div class="col-md-6">
+                        <div class="images p-3">
+                            <% productData.forEach((data,index) => {%>
+                                <div class=""><% if(user){ %>
+                                    <a href="" type="submit" id="<%= data._id %>" onclick="addWishlist('<%= data._id %>')">
+                                        <i class="bi bi-heart mt-3 ms-3 fs-4" style="color: black;"></i>
+                                    </a>
+                                <% } %></div>
+                                <div class="text-center p-4"> 
+                                    <img id="main-image" class="" src="/images/<%=data.images[0] %>" data-zoom-image="/images/<%=data.images[0] %>" width="250" />
+                                   
+                                 </div>
+                            <div class="thumbnail text-center">
+                                 <img onclick="change_image(this)" src="/images/<%=data.images[0]%>" width="70">
+                                 <img onclick="change_image(this)" src="/images/<%=data.images[1]%>" width="70">
+                                 <img onclick="change_image(this)" src="/images/<%=data.images[2]%>" width="70">
+                                 <img onclick="change_image(this)" src="/images/<%=data.images[3]%>" width="70">
+                                 
+                                
+                                </div>
+
+                           <% }); %>
+                                                </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="img-box">
-                      <img src="/images/<%=data.image[0] %>" alt="">
+                    <% productData.forEach(data => {%>
+                    <div class="col-md-6">
+                        <div class="product p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center"> <span class="ml-1"></span> </div>
+                            </div>
+                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">product details</span>
+                                <h5 class="text-uppercase"><%= data.productName %></h5>
+                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">₹<%=data.salePrice%></span>
+                                    <div class="ml-2"> <small class="dis-price">₹<%=data.price%></small> <span><%= data.discount %>% OFF</span> </div>
+                                </div>
+                            </div>
+                            <p class="about"><%= data.description %></p>
+                            <div class="sizes mt-5">
+                                <h6 class="text-uppercase">Size</h6> <label class="radio"> <input type="radio" name="size" value="S" checked> <span>S</span> </label> <label class="radio"> <input type="radio" name="size" value="M"> <span>M</span> </label> <label class="radio"> <input type="radio" name="size" value="L"> <span>L</span> </label> <label class="radio"> <input type="radio" name="size" value="XL"> <span>XL</span> </label> <label class="radio"> <input type="radio" name="size" value="XXL"> <span>XXL</span> </label>
+                            </div>
+                            <div class="cart mt-4 align-items-center"> <a href="/add-cart?id=<%= data._id %>" class="btn btn-danger text-uppercase mr-2 px-4">add to cart</a></div>
+                        </div>
                     </div>
-                  </div>
+                   <%})%>
                 </div>
-              </div>
             </div>
-    
-          <% }) %>
-          
-        <% } %>
-      </div>
-      <ol class="carousel-indicators">
-        <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-        <li data-target="#customCarousel1" data-slide-to="1"></li>
-        <li data-target="#customCarousel1" data-slide-to="2"></li>
-      </ol>
+        </div>
     </div>
+</div>
+<script>
+    function change_image(image){
 
-  </section>
-  <!-- end slider section -->
-  </div>
+var container = document.getElementById("main-image");
 
-  <!-- shop section -->
+container.src = image.src;
+}
 
-  <section class="shop_section layout_padding">
-    <div class="container">
-      <div class="heading_container heading_center">
-        <h2>
-          Latest Collections
-        </h2>
-      </div>
-      <div class="row d-flex justify-content-center">
-        <% if (productData.length> 0) { %>
-          <% if(typeof productData !=='undefined' ){ %>
-            <% productData.forEach(data=> {%>
-              <div class="col-sm-6 col-xl-3">
-                <div class="box">
-                  <a href="/single-product?id=<%=data._id%>">
-                    <div class="img-box">
-                      <img src="/images/<%=data.images[0]%>" alt="">
-                    </div>
-                    <div class="detail-box">
-                      <h6 class="mr-1">
-                        <%=data.productName%>
-                      </h6>
-                      <h6>
-                        Price:
-                        <span>
-                          <i class="bi bi-currency-rupee"></i>
-                          <%=data.price * data.discount / 100 %>
-                        </span>
-                      </h6>
-                    </div>
-                    <div class="new">
-                      <span>
-                        New
-                      </span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <% }); %>
-                <% } %>
-                  <% } else { %>
-                    <h3 class="text-center text-light mb-5 font-monospace bg-danger text-wrap">
-                      Sorry There Is No Collections</h3>
-                    <% } %>
 
-      </div>
-      <% if (productData.length > 0) { %>
-        <div class="btn-box">
-          <a href="/products">
-            View All
-          </a>
-        </div>
-      <% } %>
-      
-    </div>
-  </section>
 
-  <!-- end shop section -->
+document.addEventListener("DOMContentLoaded", function(event) {
 
-  <!-- about section -->
 
-  <section class="about_section layout_padding" id="about_page">
-    <div class="container  ">
-      <div class="row">
-        <div class="col-md-6 col-lg-5 ">
-          <div class="img-box">
-            <img src="/images/user/about-img.png" alt="">
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-7">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2>
-                About Us
-              </h2>
-            </div>
-            <p>
 
-              Indulge in the exquisite care of our skin and hair products, meticulously crafted to nourish and
-              rejuvenate. We believe that true beauty lies in self-care and embracing the uniqueness of every
-              individual. Our range of exceptional products is designed to unlock the radiance within, offering a
-              transformative experience that goes beyond mere appearance. With the finest ingredients and advanced
-              formulations, we strive to nurture your skin and hair, unlocking their true potential.
-            </p>
-            <a href="#contact_section">
-              Contact Us
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- end about section -->
 
-  <!-- feature section -->
 
-  <section class="feature_section layout_padding">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          Features Of Products
-        </h2>
-        <p>
-          These Are The Secrets Of Our Success
-        </p>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-lg-3">
-          <div class="box">
-            <div class="img-box">
-              <img src="/images/user/f1.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Pure Face
-              </h5>
-              <p>
-                Our Product Build By Give More Priority To You Face
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="box">
-            <div class="img-box">
-              <img src="/images/user/f2.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Pure Hair
-              </h5>
-              <p>
-                Our Products Make Your Hair Into The Real Art
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="box">
-            <div class="img-box">
-              <img src="/images/user/f3.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Pure Skin
-              </h5>
-              <p>
-                Our Products Help To Build Your Dream Skin
-              </p>
 
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="box">
-            <div class="img-box">
-              <img src="/images/user/f4.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Pure Tissue
-              </h5>
-              <p>
-                Our Products Make Your Tissue Clean and Good
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+});
+</script>
+<script>
+   window.onload = function() {
+    $("#main-image").elevateZoom();
+};
+;
+</script>
 
-  <!-- end feature section -->
+<script>
 
-  <!-- contact section -->
 
-  <section class="contact_section mb-5" id="contact_section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form_container">
-            <div class="heading_container">
-              <h2>
-                Contact Us
-              </h2>
-            </div>
-            <form action="">
-              <div>
-                <input type="text" placeholder="Full Name " />
-              </div>
-              <div>
-                <input type="email" placeholder="Email" />
-              </div>
-              <div>
-                <input type="text" placeholder="Phone number" />
-              </div>
-              <div>
-                <input type="text" class="message-box" placeholder="Message" />
-              </div>
-              <div class="d-flex ">
-                <button>
-                  SEND
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="img-box">
-            <img src="/images/user/contact-img.jpg" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    function addWishlist(product) {
+        $.ajax({
+            url: '/add-to-wishList',
+            method: 'post',
+            data: {
+                product
+            },
+            success: function (response) {
+                if (response.status) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'product add to wishlist',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    //	$('a#' + product + ' i').removeClass('bi-heart-fill').addClass('bi-heart');
+                } else {
 
-  <!-- end contact section -->
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'product remove from wishlist',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    //	$('a#' + product + ' i').removeClass('bi-heart').addClass('bi-heart-fill');
+                }
 
-  <%- include('../user/partials/footer.ejs'); %>
+            }
+        })
+
+
+    }
+</script>           
+    <%- include('../layout/footer.ejs') %>

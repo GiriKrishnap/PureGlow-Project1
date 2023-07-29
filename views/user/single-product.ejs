@@ -6,7 +6,7 @@
         <div class="container container-default custom-area">
             <div class="row">
                 <% productData.forEach(data=> {%>
-                    <div class="col-lg-5 offset-lg-0 col-md-8 offset-md-2 col-custom">
+                    <div class="col-lg-5 offset-lg-0 col-md-8 offset-md-2 col-custom" id="<%=data._id %>">
                         <div class="product-details-img">
                             <div class="single-product-img swiper-container gallery-top popup-gallery">
                                 <div class="swiper-wrapper">
@@ -56,8 +56,12 @@
                                 </h2>
                             </div>
                             <div class="price-box mb-2">
-                                <span class="regular-price"><i class="bi bi-currency-rupee"></i><%= data.price * data.discount / 100 %></span>
-                                <span class="old-price"><del><%= data.price %></del></span>
+                                <span class="regular-price"><i class="bi bi-currency-rupee"></i>
+                                    <%= data.price * data.discount / 100 %>
+                                </span>
+                                <span class="old-price"><del>
+                                        <%= data.price %>
+                                    </del></span>
                             </div>
                             <div class="sku mb-3">
                                 <span>discount: -<%= data.discount %>%</span>
@@ -67,10 +71,21 @@
                             </p>
                             <div class="quantity-with_btn mb-5">
                                 <div class="add-to_cart">
-                                    <a class="btn product-cart button-icon flosun-button dark-btn" href="/add-to-cart?id=<%= data._id %>">Add
+                                    <a class="btn product-cart button-icon flosun-button dark-btn"
+                                        href="/add-to-cart?id=<%= data._id %>">Add
                                         to cart</a>
-                                    <a class="btn flosun-button secondary-btn secondary-border rounded-0"
-                                        href="wishlist.html">Add to wishlist</a>
+
+                                    <% if (typeof userName !=='undefined') { %>
+                                        <a class="btn flosun-button secondary-btn secondary-border rounded-0"
+                                            onclick="addWishlist('<%= data._id %>')">
+                                            <p id="wishlistText">wishlist</p>
+                                        </a>
+                                        <% } else {%>
+                                            <a class="btn flosun-button secondary-btn secondary-border rounded-0"
+                                                href="/login">
+                                                <p id="wishlistText">wishlist</p>
+                                            </a>
+                                            <%}%>
                                 </div>
                             </div>
                             <div class="social-share mb-4">
@@ -110,7 +125,8 @@
                                         <h6>
                                             Price:
                                             <span>
-                                                <i class="bi bi-currency-rupee"></i><%= data.price * data.discount / 100 %>
+                                                <i class="bi bi-currency-rupee"></i>
+                                                <%= data.price * data.discount / 100 %>
                                             </span>
                                         </h6>
                                     </div>
@@ -123,5 +139,42 @@
         </div>
     </section>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addWishlist(productId) {
+            const wishlistText = document.getElementById('wishlistText')
+            event.preventDefault()
+            $.ajax({
+
+                method: "POST",
+                url: `/add-to-wishlist?id=${productId}`,
+                success: function (response) {
+                    if (response.status) {
+                        Swal.fire({
+
+                            icon: 'success',
+                            title: 'Added',
+                            showConfirmButton: false,
+                            timer: 1300
+                        }).then(() => {
+                            wishlistText.textContent = 'Remove to wishlist'
+                        })
+                    } else {
+                        Swal.fire({
+
+                            icon: 'success',
+                            title: 'Removed',
+                            showConfirmButton: false,
+                            timer: 1300
+                        }).then(() => {
+                            wishlistText.textContent = 'Add to wishlist'
+                        })
+                    }
+                }
+            })
+        }
+
+    </script>
 
     <%- include('../user/partials/footer2.ejs'); %>

@@ -21,7 +21,6 @@ const loadLogin = async (req, res) => {
 //--------------------------------------------------------------
 const verifyLogin = async (req, res) => {
     try {
-
         const email = req.body.email;
         const password = req.body.password;
 

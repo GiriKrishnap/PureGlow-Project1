@@ -4,17 +4,24 @@ const Products = require('../models/productModel');
 const Cart = require('../models/cartModel');
 const Address = require('../models/addressModel');
 const Order = require('../models/orderModel');
+const Coupon = require('../models/couponModel');
 ///////////// U-S-E-R--S-I-D-E ///////////////////////////////////////////////////////////////////////////////////////////////
 const loadCheckout = async (req, res) => {
     try {
         if (req.session.isLoggedIn) {
             const userId = req.session.userId;
             const address = await Address.find({ user_id: userId, list: true });
-            console.log(address + 'address is here');
             const cartData = await Cart.findOne({ user_id: userId }).populate('products.product_id');
             const carts = await Cart.findOne({ user_id: userId });
+            const couponData = await Coupon.findOne({ _id: carts.couponId });
+
             const subTotalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
-            res.render('checkout', { address, cartData, subTotalPrice, userId });
+            if (couponData) {
+                res.render('checkout', { address, cartData, subTotalPrice, userId, couponData });
+                await Coupon.updateOne({ _id: carts.couponId }, { $set: { status: false } });
+            } else {
+                res.render('checkout', { address, cartData, subTotalPrice, userId, couponData: null });
+            }
 
         } else {
             res.redirect('/login');
@@ -35,23 +42,19 @@ const placedOrder = async (req, res) => {
                 const cartData = await Cart.findOne({ user_id: userId }).populate('products.product_id');
                 if (cartData) {
                     const cartOrders = cartData.products
-                    const subTotalPrice = cartData ? cartData.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
                     const totalQuantity = cartData ? cartData.products.reduce((acc, cur) => acc + cur.quantity, 0) : 0;
 
                     const days = 7;
                     const newDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
                     const recentDate = new Date();
                     const deliveredDate = newDate;
-                    if (req.body.subTotalPrice) {
-                        subTotalPrice = req.body.subTotalPrice;
-                    };
                     if (cartOrders) {
                         const orderSave = new Order({
                             products: cartData.products,
                             user_id: userId,
                             address_id: req.body.flexRadioDefault,
                             quantity: totalQuantity,
-                            totalPrice: subTotalPrice,
+                            totalPrice: req.body.totalPrice,
                             orderDate: recentDate,
                             deliveryDate: deliveredDate,
                             paymentMethod: req.body.selector,
@@ -86,7 +89,6 @@ const cancelOrder = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
-        res.render('error');
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
@@ -94,7 +96,6 @@ const cancelOrder = async (req, res) => {
 const loadOrderManagement = async (req, res) => {
     try {
         const successOrders = await Order.find().populate('address_id').populate('products.product_id');
-        console.log(successOrders.products);
         res.render('order-management', { successOrders });
     } catch (error) {
         console.log(error.message);
