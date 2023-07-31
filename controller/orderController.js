@@ -64,7 +64,14 @@ const placedOrder = async (req, res) => {
                             status: 'pending',
                         });
                         await orderSave.save()
+                        cartData.products.forEach(async (data) => {
+                            const product = await Products.updateOne({ _id: data.product_id }, { $inc: { quantity: - data.quantity } });
+                            if (product.quantity <= 0) {
+                                await Products.updateOne({ _id: product._id }, { $set: { list: false } });
+                            }
+                        })
                         await Cart.deleteOne({ user_id: userId });
+
                         res.redirect('/profile');
                     }
                 }
@@ -142,7 +149,7 @@ const AdminCancelOrder = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ error: true, message: 'internal sever error' })
+        res.status(500).json({ error: true, message: 'internal sever error' });
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,4 +161,4 @@ module.exports = {
     cancelOrder,
     AdminCancelOrder,
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

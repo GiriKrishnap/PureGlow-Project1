@@ -82,7 +82,8 @@
                                                                                     class="text-success font-weight-bold">
                                                                                     Delivered on </p>
                                                                                 <%= data.deliveryDate.toDateString() %>
-                                                                                    <% } else if(data.status==='cancelled' ){
+                                                                                    <% } else
+                                                                                        if(data.status==='cancelled' ){
                                                                                         %>
                                                                                         <p
                                                                                             class="text-danger font-weight-bold">
@@ -262,75 +263,60 @@
                                     <!-- Single Tab Content End -->
 
                                     <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade" id="account-info" role="tabpanel">
-                                        <div class="myaccount-content">
-                                            <h3>Account Details</h3>
-                                            <div class="account-details-form">
-                                                <form action="#">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-custom">
-                                                            <div class="single-input-item mb-3">
-                                                                <label for="first-name" class="required mb-1">First
-                                                                    Name</label>
-                                                                <input type="text" id="first-name"
-                                                                    placeholder="First Name" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-custom">
-                                                            <div class="single-input-item mb-3">
-                                                                <label for="last-name" class="required mb-1">Last
-                                                                    Name</label>
-                                                                <input type="text" id="last-name"
-                                                                    placeholder="Last Name" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-input-item mb-3">
-                                                        <label for="display-name" class="required mb-1">Display
-                                                            Name</label>
-                                                        <input type="text" id="display-name"
-                                                            placeholder="Display Name" />
-                                                    </div>
-                                                    <div class="single-input-item mb-3">
-                                                        <label for="email" class="required mb-1">Email Addres</label>
-                                                        <input type="email" id="email" placeholder="Email Address" />
-                                                    </div>
-                                                    <fieldset>
-                                                        <legend>Password change</legend>
+
+                                    <% if(typeof userData !=='undefined' ){ %>
+
+
+
+
+                                        <div class="tab-pane fade" id="account-info" role="tabpanel">
+                                            <div class="myaccount-content">
+                                                <h3>Account Details</h3>
+                                                <div class="account-details-form">
+                                                    <form action="#">
+
                                                         <div class="single-input-item mb-3">
-                                                            <label for="current-pwd" class="required mb-1">Current
-                                                                Password</label>
-                                                            <input type="password" id="current-pwd"
-                                                                placeholder="Current Password" />
+                                                            <label for="display-name" class="required mb-1">Full
+                                                                Name</label>
+                                                            <input type="text" id="display-name" placeholder="Full Name"
+                                                                value="<%= userData.name%>" readonly />
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-6 col-custom">
-                                                                <div class="single-input-item mb-3">
-                                                                    <label for="new-pwd" class="required mb-1">New
-                                                                        Password</label>
-                                                                    <input type="password" id="new-pwd"
-                                                                        placeholder="New Password" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-6 col-custom">
-                                                                <div class="single-input-item mb-3">
-                                                                    <label for="confirm-pwd"
-                                                                        class="required mb-1">Confirm Password</label>
-                                                                    <input type="password" id="confirm-pwd"
-                                                                        placeholder="Confirm Password" />
-                                                                </div>
-                                                            </div>
+
+                                                        <div class="single-input-item mb-3">
+                                                            <label for="display-name"
+                                                                class="required mb-1">Phone</label>
+                                                            <input type="text" id="display-name" placeholder="Phone"
+                                                                value="<%= userData.phone%>" readonly />
                                                         </div>
-                                                    </fieldset>
-                                                    <div class="single-input-item single-item-button">
-                                                        <button
-                                                            class="btn flosun-button secondary-btn theme-color  rounded-0">Save
-                                                            Changes</button>
-                                                    </div>
-                                                </form>
+
+                                                        <div class="single-input-item mb-3">
+                                                            <label for="email" class="required mb-1">Email
+                                                                Address</label>
+                                                            <input type="email" id="email" placeholder="Email Address"
+                                                                value="<%= userData.email%>" readonly />
+                                                        </div>
+                                                        <a href="/edit-details"
+                                                            class="btn flosun-button secondary-btn rounded-0">EDIT DATA
+                                                        </a>
+                                                        <fieldset>
+                                                            <legend>Password change</legend>
+                                                            <div class="single-input-item mb-3">
+                                                                <label for="current-pwd" class="required mb-1">Want to
+                                                                    Change Password ?</label>
+                                                            </div>
+
+                                                        </fieldset>
+                                                        <div class="single-input-item single-item-button">
+                                                            <a href="/enter-email"
+                                                                class="btn flosun-button secondary-btn rounded-0">CHANGE
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div> <!-- Single Tab Content End -->
+                                        </div> <!-- Single Tab Content End -->
+
+                                        <% } %>
                                 </div>
                             </div> <!-- My Account Tab Content End -->
                         </div>

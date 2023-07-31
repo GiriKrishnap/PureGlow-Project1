@@ -63,10 +63,7 @@ const insertUser = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 const loadOtpVerifier = async (req, res) => {
     try {
-        const user = req.session.user
-        if (user) {
-            res.render('verify-otp')
-        }
+        res.render('verify-otp');
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
@@ -76,22 +73,31 @@ const loadOtpVerifier = async (req, res) => {
 const verifyOtp = async (req, res) => {
     try {
         const user = req.session.user
-        if (user) {
-            const { v1, v2, v3, v4, v5, v6 } = req.body
-            console.log(v1, v2, v3 + "here is otp")
-            const realOtp = v1 + v2 + v3 + v4 + v5 + v6
-            const userOtp = req.session.Otp
-            if (realOtp == userOtp) {
+        console.log(req.session.newEmail + 'here is new email');
+
+        const { v1, v2, v3, v4, v5, v6 } = req.body
+        const realOtp = v1 + v2 + v3 + v4 + v5 + v6
+        const userOtp = req.session.Otp
+        if (realOtp == userOtp) {
+            if (typeof req.session.newEmail !== 'undefined') {
+                console.log('iam here 🤗🤗😎 wrong ')
+                await Users.updateOne({ _id: req.session.userId }, { $set: { email: req.session.newEmail } });
+                delete req.session.newEmail;
+                delete req.session.Otp;
+                res.redirect('/profile');
+
+            } else {
+
                 await Users.updateOne({ _id: user }, { $set: { is_verified: 1 } });
                 res.render('login', { message: 'verified 😎' });
                 delete req.session.user;
-                delete req.session.Otp
-            } else {
-                res.render('verify-otp', { message: 'Wrong...!😴' });
+                delete req.session.Otp;
             }
+
         } else {
-            res.redirect('/signup');
+            res.render('verify-otp', { message: 'Wrong...!😴' });
         }
+
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
@@ -240,6 +246,7 @@ const sendForgetPassword = async (name, email, user_id) => {
 const loadNewPassword = async (req, res) => {
     try {
         req.session.newP = req.query.id;
+        console.log(req.session.newP + '++++249 🚀🚀')
         if (req.session.newP) {
             res.render('new-password');
         } else {
@@ -258,6 +265,9 @@ const PostChangePassword = async (req, res) => {
         if (userId) {
             const spassword = await securePassword(req.body.password);
             await Users.findOneAndUpdate({ _id: userId }, { $set: { password: spassword } });
+            delete req.session.userId
+            delete req.session.isLoggedIn
+            delete req.session.userName
             res.redirect('/login');
             delete req.session.newP;
         } else {
@@ -306,15 +316,74 @@ const loadUserDetails = async (req, res) => {
     try {
         const userId = req.session.userId;
         if (userId) {
+            const userData = await Users.findOne({ _id: userId });
             const userName = req.session.userName;
             const orderData = (await Order.find({ user_id: userId }).populate('products.product_id').populate('address_id')).reverse();
             const addressData = await Address.find({ user_id: userId, list: true });
-            res.render('profile', { orderData, addressData, userName });
+            res.render('profile', { orderData, addressData, userName, userData });
         } else {
             res.render('profile');
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+// Edit-Details /////////////////////////////////////////////////////////////////////////////////////
+// load-edit-details-----------------------------------------------------------------------
+const loadUserEdit = async (req, res) => {
+    try {
+        if (req.session.isLoggedIn) {
+
+            const userData = await Users.findOne({ _id: req.session.userId });
+            res.render('edit-details', { userData });
+        } else {
+            res.render('/login')
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+//post-edited-details----------------------------------------------------------------------------
+const insertEditedDetails = async (req, res) => {
+    try {
+        if (req.session.isLoggedIn) {
+            const { name, email, phone } = req.body;
+            const emailExist = await Users.findOne({ email: email });
+            console.log(emailExist);
+            if (emailExist !== null) {
+                console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+                await Users.updateOne({ _id: req.session.userId }, {
+                    $set: {
+                        name: name,
+                        phone: phone
+                    }
+                });
+                res.json({ status: true, message: 'Your Details are Changed' });
+            } else {
+                console.log('🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗')
+                await Users.updateOne({ _id: req.session.userId }, {
+                    $set: {
+                        name: name,
+                        phone: phone
+                    }
+                });
+
+                const otp = Math.floor(100000 + Math.random() * 900000);
+                req.session.Otp = otp;
+                req.session.newEmail = email;
+                console.log(email + req.session.newEmail + "blasd adiuahdaufa")
+                sendVerifyMail(name, email, req.session.userId, otp).then(() => {
+                    res.json({ status: false });
+                })
+            }
+
+        } else {
+            res.render('/login')
+        }
+    } catch (error) {
+        console.log(error.message)
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
@@ -352,5 +421,7 @@ module.exports = {
     verifyEmailForFP,
     loadNewPassword,
     PostChangePassword,
+    loadUserEdit,
+    insertEditedDetails,
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ const insertCoupon = async (req, res) => {
 
         } else if (exist) {
             res.json({ status: false, message: 'Already Exist!' });
-            
+
         } else {
             const saveCoupon = new Coupon({
                 name: couponCodeName,
@@ -57,7 +57,9 @@ const activeCoupon = async (req, res) => {
         const couponExist = await Coupon.findOne({ name: code });
         if (couponExist) {
             const cartId = req.query.id;
+            console.log("🚀 here is cartID " + cartId);
             const carts = await Cart.findOne({ _id: cartId });
+            console.log("🚀 here is carts " + carts);
             const totalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
             const couponDate = new Date(couponExist.expiry);
             const currentDate = new Date();

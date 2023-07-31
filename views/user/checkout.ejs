@@ -99,8 +99,9 @@
                                                             <%= data.quantity %>
                                                         </td>
                                                         <td>
-                                                            <i class="bi bi-currency-rupee"></i><%= data.totalPrice %>
-                                                            
+                                                            <i class="bi bi-currency-rupee"></i>
+                                                            <%= data.totalPrice %>
+
                                                         </td>
 
                                                     </tr>
@@ -223,7 +224,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/couponAct?id=<%=cartData._id %>" method="post">
+                    <form action="/activeCoupon?id=<%=cartData._id %>" method="post">
                         <input type="text" placeholder="Enter coupon code" id="getCoupon" name="CouponName"
                             class="border-5 col-lg-12">
                         <button type="submit" class="btn btn-primary mt-3 m-1 col-lg-12">Apply</button>
@@ -359,7 +360,7 @@
                     couponCode,
                 }),
                 success: function (response) {
-                    if (response.status) { 
+                    if (response.status) {
                         const inputBox = document.getElementById('subTtle');
                         console.log("Input field value before update:", inputBox.value);
                         inputBox.value = response.getDiscount;
