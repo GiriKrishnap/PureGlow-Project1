@@ -7,8 +7,8 @@
                 <div class="col-12 col-custom mt-2">
 
 
-                    <div class="shop_toolbar_wrapper mb-30">
-                        <div class="shop_toolbar_btn">
+                    <div class="shop_toolbar_wrapper mb-2">
+                        <div class="shop_toolbar_btn col-4">
                             <button data-role="grid_4" type="button" class="active btn-grid-4" title="Grid-4"><i
                                     class="fa fa-th"></i></button>
                             <button data-role="grid_3" type="button" class="btn-grid-3" title="Grid-3"> <i
@@ -16,10 +16,10 @@
                             <button data-role="grid_list" type="button" class="btn-list" title="List"><i
                                     class="fa fa-th-list"></i></button>
                         </div>
-                        <div class="text-center mt-2">
+                        <div class="text-center mt-2 col-4">
                             <h3 class="">Shopping Products</h3>
                         </div>
-                        <div class="">
+                        <div class="col-4">
 
                             <form>
                                 <input type="text" onkeyup="search()" id="search-item" class="form-control text-center"
@@ -27,20 +27,39 @@
                             </form>
 
                         </div>
-                        <div class="shop-select">
-                            <form class="d-flex flex-column w-100" action="#">
-                                <div class="form-group">
-                                    <select class="form-control mt-2 nice-select w-100">
-                                        <option selected value="0">SHOW ALL PRODUCTS</option>
-                                        <% category.forEach((data,index)=> { %>
-                                            <option value="index+1">
-                                                <%=data.name%>
-                                            </option>
-                                            <% }); %>
-                                    </select>
-                                </div>
-                            </form>
+                    </div>
+                    <button data-toggle="collapse" class="d-flex justify-content-end ml-auto btn btn-info p-1 rounded-0" data-target="#demo">
+                        Filter<i class="bi bi-funnel-fill"></i>
+                    </button>
+
+                    <div id="demo" class="collapse mb-4">
+                        <div class="row">
+                        <div class="shop_toolbar_wrapper col-4 m-2 rounded">
+                            <select class="form-control mt-2 nice-select w-100" id="categorySelect"
+                                onchange="category()">
+                                <option selected value="1">SHOW ALL</option>
+                                <% category.forEach((data,index)=> { %>
+                                    <option value="index+2">
+                                        <%=data.name%>
+                                    </option>
+                                    <% }); %>
+                            </select>
                         </div>
+                        <div class="shop_toolbar_wrapper col-4 m-2">
+                            <select class="form-control mt-2 nice-select w-100" id="categorySelect"
+                                onchange="category()">
+                                <option selected value="1">SHOW ALL</option>
+                                <% category.forEach((data,index)=> { %>
+                                    <option value="index+2">
+                                        <%=data.name%>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+                        </div>
+
+                        
+
                     </div>
                     <!--shop toolbar end-->
                     <!-- Shop Wrapper Start -->
@@ -74,10 +93,14 @@
                                                     <h4 class="title-2" id="productName">
                                                         <%=data.productName%>
                                                     </h4>
+                                                    <h2>
+                                                        <%= data.category.name%>
+                                                    </h2>
                                                 </div>
                                                 <div class="price-box">
                                                     <span class="regular-price "><i class="bi bi-currency-rupee"></i>
-                                                        <%=data.price * data.discount / 100 %>
+                                                        <%= Math.round(data.price - (data.price * data.discount / 100))
+                                                            %>
                                                     </span>
                                                     <span class="old-price"><del>
                                                             <%=data.price%>
@@ -201,6 +224,10 @@
                 }
             }
         }
+
+
+
+
 
 
 
