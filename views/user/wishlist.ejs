@@ -33,13 +33,6 @@
                                                             <img src="/images/<%=data.product_id.images[0]%>" alt=""
                                                                 class="product-image-1 w-100">
                                                         </a>
-                                                        <div class="add-action d-flex flex-column position-absolute">
-
-                                                            <a onclick="addWishlist('<%= data._id %>')" title="Add To Wishlist">
-                                                                <i class="lnr lnr-heart" data-toggle="tooltip"
-                                                                    data-placement="left" title="Wishlist"></i>
-                                                            </a>
-                                                        </div>
                                                     </div>
                                                     <div class="product-content">
                                                         <div class="product-title">
@@ -51,8 +44,9 @@
                                                         <div class="price-box">
                                                             <span class="regular-price "><i
                                                                     class="bi bi-currency-rupee"></i>
-                                                                <%=data.product_id.price * data.product_id.discount /
-                                                                    100 %>
+                                                                <%= Math.round(data.product_id.price -
+                                                                    (data.product_id.price * data.product_id.discount /
+                                                                    100)) %>
                                                             </span>
                                                             <span class="old-price"><del>
                                                                     <%=data.product_id.price%>
@@ -109,7 +103,7 @@
                 url: `/add-to-wishlist?id=${productId}`,
                 success: function (response) {
                     if (response.status) {
-                        
+
                     } else {
                         Swal.fire({
 
@@ -118,7 +112,7 @@
                             showConfirmButton: false,
                             timer: 1300
                         }).then(() => {
-                            
+
                         })
                     }
                 }

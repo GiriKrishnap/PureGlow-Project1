@@ -1,125 +1,281 @@
-<%-include('../layout/header.ejs') %>
-  <style>
-    body{background-color: #f3e9e9}.card{border:none}.product{background-color: #eee}.brand{font-size: 13px}.act-price{color:red;font-weight: 700}.dis-price{text-decoration: line-through}.about{font-size: 14px}.color{margin-bottom:10px}label.radio{cursor: pointer}label.radio input{position: absolute;top: 0;left: 0;visibility: hidden;pointer-events: none}label.radio span{padding: 2px 9px;border: 2px solid #ff0000;display: inline-block;color: #ff0000;border-radius: 3px;text-transform: uppercase}label.radio input:checked+span{border-color: #ff0000;background-color: #ff0000;color: #fff}.btn-danger{background-color: #ff0000 !important;border-color: #ff0000 !important}.btn-danger:hover{background-color: #da0606 !important;border-color: #da0606 !important}.btn-danger:focus{box-shadow: none}
-  </style>
-  <div class="row mt-5 p-5" ></div>
-  <div class="container mt-5 mb-5">
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-10">
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="images p-3">
-                            <% productData.forEach((data,index) => {%>
-                                <div class=""><% if(user){ %>
-                                    <a href="" type="submit" id="<%= data._id %>" onclick="addWishlist('<%= data._id %>')">
-                                        <i class="bi bi-heart mt-3 ms-3 fs-4" style="color: black;"></i>
-                                    </a>
-                                <% } %></div>
-                                <div class="text-center p-4"> 
-                                    <img id="main-image" class="" src="/images/<%=data.images[0] %>" data-zoom-image="/images/<%=data.images[0] %>" width="250" />
-                                   
-                                 </div>
-                            <div class="thumbnail text-center">
-                                 <img onclick="change_image(this)" src="/images/<%=data.images[0]%>" width="70">
-                                 <img onclick="change_image(this)" src="/images/<%=data.images[1]%>" width="70">
-                                 <img onclick="change_image(this)" src="/images/<%=data.images[2]%>" width="70">
-                                 <img onclick="change_image(this)" src="/images/<%=data.images[3]%>" width="70">
-                                 
-                                
-                                </div>
+<%- include('../user/partials/header2.ejs'); %>
+    <style>
+        .show {
+            display: none !important;
+        }
 
-                           <% }); %>
-                                                </div>
-                    </div>
-                    <% productData.forEach(data => {%>
-                    <div class="col-md-6">
-                        <div class="product p-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center"> <span class="ml-1"></span> </div>
-                            </div>
-                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">product details</span>
-                                <h5 class="text-uppercase"><%= data.productName %></h5>
-                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">₹<%=data.salePrice%></span>
-                                    <div class="ml-2"> <small class="dis-price">₹<%=data.price%></small> <span><%= data.discount %>% OFF</span> </div>
-                                </div>
-                            </div>
-                            <p class="about"><%= data.description %></p>
-                            <div class="sizes mt-5">
-                                <h6 class="text-uppercase">Size</h6> <label class="radio"> <input type="radio" name="size" value="S" checked> <span>S</span> </label> <label class="radio"> <input type="radio" name="size" value="M"> <span>M</span> </label> <label class="radio"> <input type="radio" name="size" value="L"> <span>L</span> </label> <label class="radio"> <input type="radio" name="size" value="XL"> <span>XL</span> </label> <label class="radio"> <input type="radio" name="size" value="XXL"> <span>XXL</span> </label>
-                            </div>
-                            <div class="cart mt-4 align-items-center"> <a href="/add-cart?id=<%= data._id %>" class="btn btn-danger text-uppercase mr-2 px-4">add to cart</a></div>
+        .product{
+            display: flex;
+        }
+    </style>
+    <!-- Shop Main Area Start Here -->
+    <div class="shop-main-area">
+        <div class="container container-default custom-area">
+            <div class="row flex-row-reverse">
+                <div class="col-12 col-custom mt-2">
+
+
+                    <div class="shop_toolbar_wrapper mb-2">
+                        <div class="shop_toolbar_btn col-4">
+                            <button data-role="grid_4" type="button" class="active btn-grid-4" title="Grid-4"><i
+                                    class="fa fa-th"></i></button>
+                            <button data-role="grid_3" type="button" class="btn-grid-3" title="Grid-3"> <i
+                                    class="fa fa-th-large"></i></button>
+                            <button data-role="grid_list" type="button" class="btn-list" title="List"><i
+                                    class="fa fa-th-list"></i></button>
+                        </div>
+                        <div class="text-center mt-2 col-4">
+                            <h3 class="">Shopping Products</h3>
+                        </div>
+                        <div class="col-4">
+
+                            <form>
+                                <input type="text" onkeyup="search()" id="search-item" class="form-control text-center"
+                                    placeholder="Search Products">
+                            </form>
+
                         </div>
                     </div>
-                   <%})%>
+                    <button data-toggle="collapse" class="d-flex justify-content-end ml-auto btn btn-info p-1 rounded-0"
+                        data-target="#demo">
+                        Filter<i class="bi bi-funnel-fill"></i>
+                    </button>
+
+                   
+                        <div class="row">
+                            <div class="shop_toolbar_wrapper col-4 m-2">
+                                <select class="form-control mt-2 nice-select w-100">
+                                    <option selected value="0" onclick="filterSelection('all')">SHOW ALL</option>
+                                    <% category.forEach((data,index)=> { %>
+                                        <option value="index+1" onclick="filterSelection('<%=data.name %>')">
+                                            <%=data.name%>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                                <button class="btn btn-info" onclick="filterSelection('<%=category[0].name %>')">
+                                    <%=category[0].name %>
+                                </button>
+                                <button class="btn btn-info" onclick="filterSelection('all')">
+                                    ALL
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--shop toolbar end-->
+                    <!-- Shop Wrapper Start -->
+                    <div class="row shop_wrapper grid_4 product-list" id="product-list">
+                        <% if (productData.length> 0) { %>
+                            <% productData.forEach(data=> { %>
+
+                                    <div class="col-lg-3 col-md-6 col-sm-6 col-custom product-area product <%= data.category.name%>"
+                                        id="product">
+                                        <div class="product-item">
+                                            <div class="single-product position-relative mr-0 ml-0">
+                                                <div class="product-image">
+                                                    <a class="d-block" href="/single-product?id=<%=data._id%>">
+                                                        <img src="/images/<%=data.images[0]%>" alt=""
+                                                            class="product-image-1 w-100">
+                                                        <img src="/images/<%=data.images[1]%>" alt=""
+                                                            class="product-image-2 position-absolute w-100">
+                                                    </a>
+                                                    <div class="add-action d-flex flex-column position-absolute">
+                                                        <a href="compare.html" title="Compare">
+                                                            <i class="lnr lnr-sync" data-toggle="tooltip"
+                                                                data-placement="left" title="Compare"></i>
+                                                        </a>
+                                                        <a onclick="addWishlist('<%= data._id %>')"
+                                                            title="Add To Wishlist">
+                                                            <i class="lnr lnr-heart" data-toggle="tooltip"
+                                                                data-placement="left" title="Wishlist"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content">
+                                                    <div class="product-title">
+                                                        <h4 class="title-2" id="productName">
+                                                            <%=data.productName%>
+                                                        </h4>
+                                                    </div>
+                                                    <div class="price-box">
+                                                        <span class="regular-price "><i
+                                                                class="bi bi-currency-rupee"></i>
+                                                            <%= Math.round(data.price - (data.price * data.discount /
+                                                                100)) %>
+                                                        </span>
+                                                        <span class="old-price"><del>
+                                                                <%=data.price%>
+                                                            </del></span>
+                                                    </div>
+                                                    <a href="/add-to-cart?id=<%= data._id %>"
+                                                        class="btn product-cart">Add
+                                                        to Cart</a>
+                                                </div>
+                                                <div class="product-content-listview">
+                                                    <div class="product-title">
+                                                        <h4 class="title-2"> <a href="/single-product?id=<%=data._id%>">
+                                                                <%=data.productName%>
+                                                            </a></h4>
+                                                    </div>
+                                                    <div class="price-box">
+                                                        <span class="regular-price "><i
+                                                                class="bi bi-currency-rupee"></i>
+                                                            <%=data.price * data.discount / 100 %>
+                                                        </span>
+                                                        <span class="old-price"><del>
+                                                                <%=data.price%>
+                                                            </del></span>
+                                                    </div>
+                                                    <p class="desc-content">
+                                                        <%=data.description%>
+                                                    </p>
+                                                    <div class="button-listview">
+                                                        <a href="/add-to-cart?id=<%= data._id %>"
+                                                            class="btn product-cart button-icon flosun-button dark-btn"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Add to Cart">
+                                                            <span>Add to Cart</span> </a>
+                                                        <a class="list-icon" href="compare.html" title="Compare">
+                                                            <i class="lnr lnr-sync" data-toggle="tooltip"
+                                                                data-placement="top" title="Compare"></i>
+                                                        </a>
+                                                        <a class="list-icon" onclick="addWishlist('<%= data._id %>')"
+                                                            title="Add To Wishlist">
+                                                            <i class="lnr lnr-heart" data-toggle="tooltip"
+                                                                data-placement="top" title="Wishlist"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                <% }); %>
+                                    <% } else { %>
+                                        <h3 class="text-center text-light mb-5 font-monospace bg-danger text-wrap ">
+                                            Sorry Product Is Empty</h3>
+                                        <% } %>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-sm-12 col-custom">
+                            <div class="toolbar-bottom">
+                                <div class="pagination">
+                                    <ul>
+                                        <li class="current">1</li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li class="next"><a href="#">next</a></li>
+                                        <li><a href="#">&gt;&gt;</a></li>
+                                    </ul>
+                                </div>
+                                <p class="desc-content text-center text-sm-right mb-0">Showing 1 - 12 of 34 result</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    function change_image(image){
 
-var container = document.getElementById("main-image");
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addWishlist(productId) {
+            event.preventDefault()
+            $.ajax({
 
-container.src = image.src;
-}
+                method: "POST",
+                url: `/add-to-wishlist?id=${productId}`,
+                success: function (response) {
+                    if (response.status) {
+                        Swal.fire({
 
+                            icon: 'success',
+                            title: 'Added',
+                            showConfirmButton: false,
+                            timer: 1300
+                        })
+                    } else {
+                        Swal.fire({
 
-
-document.addEventListener("DOMContentLoaded", function(event) {
-
-
-
-
-
-
-
-});
-</script>
-<script>
-   window.onload = function() {
-    $("#main-image").elevateZoom();
-};
-;
-</script>
-
-<script>
-
-
-    function addWishlist(product) {
-        $.ajax({
-            url: '/add-to-wishList',
-            method: 'post',
-            data: {
-                product
-            },
-            success: function (response) {
-                if (response.status) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'product add to wishlist',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    //	$('a#' + product + ' i').removeClass('bi-heart-fill').addClass('bi-heart');
-                } else {
-
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'product remove from wishlist',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    //	$('a#' + product + ' i').removeClass('bi-heart').addClass('bi-heart-fill');
+                            icon: 'success',
+                            title: 'Removed',
+                            showConfirmButton: false,
+                            timer: 1300
+                        })
+                    }
                 }
+            })
+        }
 
+        const search = () => {
+            const searchbox = document.getElementById('search-item').value.toUpperCase()
+            const storeItems = document.getElementById('product-list');
+            const product = document.querySelectorAll('.product');
+            const productName = storeItems.getElementsByTagName('h4');
+
+            for (let i = 0; i < productName.length; i++) {
+                let match = product[i].getElementsByTagName('h4')[0];
+
+                if (match) {
+                    let textValue = match.textContent || match.innerHTML
+
+                    if (textValue.toUpperCase().indexOf(searchbox) > -1) {
+                        product[i].style.display = '';
+                    } else {
+                        product[i].style.display = 'none';
+                    }
+                }
             }
-        })
+        }
 
 
-    }
-</script>           
-    <%- include('../layout/footer.ejs') %>
+        //-----------------------------------------------------------------------------------------
+
+        filterSelection("all")
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("product");
+            if (c == "all") c = "";
+            // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+            for (i = 0; i < x.length; i++) {
+                w3AddClass(x[i], "show");
+                if (x[i].className.indexOf(c) > -1) w3RemoveClass(x[i], "show");
+            }
+        }
+
+        // Show filtered elements
+        function w3AddClass(element, name) {
+            var i, arr1, arr2;
+            arr1 = element.className.split(" ");
+            arr2 = name.split(" ");
+            for (i = 0; i < arr2.length; i++) {
+                if (arr1.indexOf(arr2[i]) == -1) {
+                    element.className += " " + arr2[i];
+                }
+            }
+        }
+
+        // Hide elements that are not selected
+        function w3RemoveClass(element, name) {
+            var i, arr1, arr2;
+            arr1 = element.className.split(" ");
+            arr2 = name.split(" ");
+            for (i = 0; i < arr2.length; i++) {
+                while (arr1.indexOf(arr2[i]) > -1) {
+                    arr1.splice(arr1.indexOf(arr2[i]), 1);
+                }
+            }
+            element.className = arr1.join(" ");
+        }
+
+
+
+
+
+    </script>
+    <!-- Shop Main Area End Here -->
+
+    <%- include('../user/partials/footer2.ejs'); %>

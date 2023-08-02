@@ -109,7 +109,7 @@
                         Price:
                         <span>
                           <i class="bi bi-currency-rupee"></i>
-                          <%=data.price * data.discount / 100 %>
+                          <%= Math.round(data.price - (data.price * data.discount / 100)) %>
                         </span>
                       </h6>
                     </div>

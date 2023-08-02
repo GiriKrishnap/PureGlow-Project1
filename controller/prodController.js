@@ -188,7 +188,7 @@ const productUnList = async (req, res) => {
 //------------------------------------------------------------------------------------------------------------------
 const loadUserProducts = async (req, res) => {
     try {
-        const productData = await Product.find({ list: true });
+        const productData = await Product.find({ list: true }).populate("category");
         const categoryData = await Category.find();
         const userName = req.session.userName;
         res.render('products', { productData, category: categoryData, userName });

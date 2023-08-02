@@ -73,14 +73,14 @@ const loadOtpVerifier = async (req, res) => {
 const verifyOtp = async (req, res) => {
     try {
         const user = req.session.user
-        console.log(req.session.newEmail + 'here is new email');
+
 
         const { v1, v2, v3, v4, v5, v6 } = req.body
         const realOtp = v1 + v2 + v3 + v4 + v5 + v6
         const userOtp = req.session.Otp
         if (realOtp == userOtp) {
             if (typeof req.session.newEmail !== 'undefined') {
-                console.log('iam here 🤗🤗😎 wrong ')
+
                 await Users.updateOne({ _id: req.session.userId }, { $set: { email: req.session.newEmail } });
                 delete req.session.newEmail;
                 delete req.session.Otp;
@@ -196,7 +196,7 @@ const verifyEmailForFP = async (req, res) => {
         const emailExist = await Users.findOne({ email: email, status: true, is_verified: 1 });
         if (emailExist) {
             const { email, name } = emailExist
-            console.log(`${email},${name} is here hello 200`);
+
             const user_id = emailExist._id;
             sendForgetPassword(name, email, user_id);
             res.render('login', { message: 'Check Your Email' });
@@ -246,7 +246,7 @@ const sendForgetPassword = async (name, email, user_id) => {
 const loadNewPassword = async (req, res) => {
     try {
         req.session.newP = req.query.id;
-        console.log(req.session.newP + '++++249 🚀🚀')
+
         if (req.session.newP) {
             res.render('new-password');
         } else {
@@ -261,7 +261,7 @@ const loadNewPassword = async (req, res) => {
 const PostChangePassword = async (req, res) => {
     try {
         const userId = req.session.newP;
-        console.log(`${userId} userId is here postChangePassword`);
+
         if (userId) {
             const spassword = await securePassword(req.body.password);
             await Users.findOneAndUpdate({ _id: userId }, { $set: { password: spassword } });
@@ -351,9 +351,9 @@ const insertEditedDetails = async (req, res) => {
         if (req.session.isLoggedIn) {
             const { name, email, phone } = req.body;
             const emailExist = await Users.findOne({ email: email });
-            console.log(emailExist);
+
             if (emailExist !== null) {
-                console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+
                 await Users.updateOne({ _id: req.session.userId }, {
                     $set: {
                         name: name,
@@ -362,7 +362,7 @@ const insertEditedDetails = async (req, res) => {
                 });
                 res.json({ status: true, message: 'Your Details are Changed' });
             } else {
-                console.log('🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗🤗')
+
                 await Users.updateOne({ _id: req.session.userId }, {
                     $set: {
                         name: name,
@@ -373,7 +373,7 @@ const insertEditedDetails = async (req, res) => {
                 const otp = Math.floor(100000 + Math.random() * 900000);
                 req.session.Otp = otp;
                 req.session.newEmail = email;
-                console.log(email + req.session.newEmail + "blasd adiuahdaufa")
+
                 sendVerifyMail(name, email, req.session.userId, otp).then(() => {
                     res.json({ status: false });
                 })
