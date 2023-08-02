@@ -5,6 +5,14 @@ const Cart = require('../models/cartModel');
 const Address = require('../models/addressModel');
 const Order = require('../models/orderModel');
 const Coupon = require('../models/couponModel');
+const Wallet = require('../models/walletModel');
+//---------------------------------------------------------
+const Razorpay = require('razorpay');
+require('dotenv/config');
+var instance = new Razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET,
+});
 ///////////// U-S-E-R--S-I-D-E ///////////////////////////////////////////////////////////////////////////////////////////////
 const loadCheckout = async (req, res) => {
     try {
@@ -43,7 +51,9 @@ const placedOrder = async (req, res) => {
                 if (cartData) {
                     const cartOrders = cartData.products
                     const totalQuantity = cartData ? cartData.products.reduce((acc, cur) => acc + cur.quantity, 0) : 0;
-
+                    const orderPrice = req.body.totalPrice;
+                    const paymentMethod = req.body.selector;
+                    console.log("🚀 paymentMethod - " + paymentMethod);
                     const days = 7;
                     const newDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
                     const recentDate = new Date();
@@ -54,25 +64,49 @@ const placedOrder = async (req, res) => {
                             user_id: userId,
                             address_id: req.body.flexRadioDefault,
                             quantity: totalQuantity,
-                            totalPrice: req.body.totalPrice,
+                            totalPrice: orderPrice,
                             orderDate: recentDate,
                             deliveryDate: deliveredDate,
-                            paymentMethod: req.body.selector,
-                            orderStatus: '',
-                            userStatus: '',
+                            paymentMethod: paymentMethod,
                             paymentStatus: 'pending',
-                            status: 'pending',
+                            status: 'success',
                         });
-                        await orderSave.save()
-                        cartData.products.forEach(async (data) => {
-                            const product = await Products.updateOne({ _id: data.product_id }, { $inc: { quantity: - data.quantity } });
-                            if (product.quantity <= 0) {
-                                await Products.updateOne({ _id: product._id }, { $set: { list: false } });
-                            }
-                        })
-                        await Cart.deleteOne({ user_id: userId });
+                        await orderSave.save().then(async (response) => {
+                            const orderId = response._id;
+                            if (paymentMethod === "COD") {
+                                console.log("🚀 CASH ON DELIVERY");
+                                res.json({ codSuccess: true });
+                             
+                                cartData.products.forEach(async (data) => {
+                                    const product = await Products.updateOne({ _id: data.product_id }, { $inc: { quantity: - data.quantity } });
+                                    if (product.quantity <= 0) {
+                                        await Products.updateOne({ _id: product._id }, { $set: { list: false } });
+                                    }
+                                })
 
-                        res.redirect('/profile');
+                            } else if (paymentMethod === "wallet") {
+                                console.log("🚀 Wallet");
+                                const walletAmount = await Wallet.findOne({ user_id: userId });
+                                if (walletAmount.amount < orderPrice) {
+                                    res.json({ msg: 'wallet amount is less for this purchase' });
+                                } else {
+
+                                    await Order.updateOne({ _id: orderId, user_id: userId }, { $set: { status: 'success', paymentStatus: "paid" } })
+                                    res.json({ codSuccess: true });
+                                    await Wallet.updateOne({ user_id: userId }, { $inc: { amount: - orderPrice } })
+
+                                }
+                            } else if (paymentMethod === 'Razorpay') {
+                                console.log("🚀 Razorpay");
+                                await generateRazorpay(orderId, orderPrice).then((response) => {
+                                    res.json({ response, orderId });
+
+                                })
+                            }
+                        }).then(async () => {
+                            await Cart.deleteOne({ user_id: userId });
+                        })
+
                     }
                 }
             }
@@ -83,6 +117,87 @@ const placedOrder = async (req, res) => {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
+}
+//----------------------------------------
+const generateRazorpay = async (orderId, orderPrice) => {
+    try {
+        console.log("🚀 orderId2 - " + orderId);
+        console.log("🚀 orderPrice - " + orderPrice);
+        const amount = orderPrice * 100; // amount in paisa
+        const currency = 'INR';
+
+        const options = {
+            amount: amount,
+            currency: currency,
+            receipt: orderId,
+        };
+        const response = await instance.orders.create(options);
+        console.log("🚀2 response.Amount - " + response.amount);
+        console.log("🚀2 response.Id - " + response.id);
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+//------------------------------------------------------
+
+const verifyPayment = async (req, res) => {
+    try {
+        const order = req.body.order;
+        console.log("🚀 order - " + order)
+
+        const userId = req.session.userId;
+        console.log('🚀 userId3 - ' + userId);
+        const user = req.session.isLoggedIn;
+        const orderId2 = req.body.orderId
+        const paymentId = req.body.paymentId
+        const razorpay_signature = req.body.razorpay_signature
+        const ORDERID = req.body.ORDERID
+
+        if (user) {
+            checkPayment(orderId2, paymentId, razorpay_signature).then(async () => {
+                console.log("we are here boys 162 🚀🚀")
+                const orders = await Order.updateOne({ user_id: userId, _id: ORDERID }, { $set: { status: 'success', paymentStatus: 'paid' } })
+                console.log(orders);
+                res.json({ status: true })
+
+            }).catch((error) => {
+                console.log(error);
+                res.json({ status: false, errMsg: '' })
+            })
+
+        } else {
+            res.redirect('/');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server Error');
+    }
+};
+//--------------------------------------------------
+const checkPayment = (orderId, paymentId, razorpay_signature) => {
+    console.log("🚀 orderId 6 - " + orderId);
+    console.log("🚀 paymentId 6 - " + paymentId)
+
+    return new Promise((resolve, reject) => {
+
+        const crypto = require('crypto');
+        let hmac = crypto.createHmac('sha256', 'mO9uCY5olfBQmpjGI4ReV4wE');
+        hmac.update(orderId + '|' + paymentId);
+        hmac = hmac.digest('hex');
+        console.log(`HMC = razorpay_signature ${hmac} === ${razorpay_signature}`)
+        if (hmac === razorpay_signature) {
+            resolve()
+            console.log("🔺🔺🔺🔺🔺🔺🔺🔺🔺")
+
+        } else {
+            reject();
+            console.log("🚀🚀🚀🚀🚀🚀")
+
+        }
+
+    })
 }
 //--------------------------------------------------------------------------------------------------------------------------
 const cancelOrder = async (req, res) => {
@@ -160,5 +275,6 @@ module.exports = {
     orderShipped,
     cancelOrder,
     AdminCancelOrder,
+    verifyPayment,
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

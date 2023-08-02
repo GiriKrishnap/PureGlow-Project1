@@ -13,7 +13,7 @@ const addToCart = async (req, res) => {
             const userData = await Users.findOne({ _id: userId });
             const cartData = await Cart.findOne({ user_id: userId });
             const productData = await Products.findOne({ _id: productId });
-            const salePrice = (productData.price * productData.discount) / 100;
+            const salePrice = Math.round(productData.price - (productData.price * productData.discount) / 100)
 
             const product = {
                 product_id: productId,
@@ -112,7 +112,7 @@ const incrementQuantity = async (req, res) => {
             const userId = req.session.userId;
             const cartData = await Cart.findOne({ user_id: userId });
             const productData = await Products.findOne({ _id: productId });
-            const salePrice = (productData.price * productData.discount) / 100;
+            const salePrice = Math.round(productData.price - (productData.price * productData.discount) / 100)
 
             if (cartData && cartQuantity < productData.quantity) {
                 await Cart.findOneAndUpdate({ user_id: userId, "products.product_id": productId }, { $inc: { "products.$.quantity": 1, "products.$.totalPrice": salePrice } });
@@ -138,7 +138,7 @@ const decrementQuantity = async (req, res) => {
             const userId = req.session.userId;
             const cartData = await Cart.findOne({ user_id: userId });
             const productData = await Products.findOne({ _id: productId });
-            const salePrice = (productData.price * productData.discount) / 100;
+            const salePrice = Math.round(productData.price - (productData.price * productData.discount) / 100)
 
             if (cartData && cartQuantity > 1) {
 

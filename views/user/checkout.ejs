@@ -204,6 +204,7 @@
 
                                                         <input type="hidden" name="subTotalPrice" id="subTtle" value="">
                                                         <a href="/placed-order"><button type="submit"
+                                                                onclick="orderPlace()"
                                                                 class="btn btn-primary col-lg-12">Submit</button></a>
                             </div>
                         </div>
@@ -225,9 +226,10 @@
                 </div>
                 <div class="modal-body">
                     <form action="/activeCoupon?id=<%=cartData._id %>" method="post">
-                        <input type="text" placeholder="Enter coupon code" id="getCoupon" name="CouponName"
+                        <input type="text" placeholder="Enter coupon code" id="couponCodes" name="CouponName"
                             class="border-5 col-lg-12">
-                        <button type="submit" class="btn btn-primary mt-3 m-1 col-lg-12">Apply</button>
+                        <button type="submit" onclick="applyCoupon('<%= cartData._id%>')"
+                            class="btn btn-primary mt-3 m-1 col-lg-12">Apply</button>
                     </form>
                 </div>
             </div>
@@ -236,6 +238,11 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         function confirmAlert(event, linkUrl) {
             // Prevent the default link behavior
@@ -256,24 +263,23 @@
         }
 
 
-        $('#checkout-form').submit((e) => {
-            e.preventDefault();
+        function orderPlace() {
+
+            event.preventDefault();
             $.ajax({
                 url: '/placed-order',
                 method: 'post',
                 data: $('#checkout-form').serialize(),
                 success: (response) => {
 
-                    console.log(response.status);
                     if (response.codSuccess) {
                         Swal.fire({
-                            position: 'top-end',
                             icon: 'success',
                             title: 'Order placed Successfully',
                             showConfirmButton: false,
-                            timer: 3000
-                        })
-                        location.href = '/my-orders';
+                            timer: 2000
+                        }).then(() => { location.href = '/profile' });
+
                     } else if (response.msg) {
                         Swal.fire(
                             'please check form!',
@@ -281,20 +287,22 @@
                             'error')
 
                     } else {
-                        razorpayPayment(response);
+                        razorpayPayment(response, response.orderId);
+                        // alert("🚀🚀🚀" + response.orderId)
+
                     }
                 }
             })
 
-        })
+        }
 
-        function razorpayPayment(order) {
+        function razorpayPayment(order, ORDERID) {
 
             var options = {
-                "key": "rzp_test_qXH0h7SCch7OVM", // Enter the Key ID generated from the Dashboard
+                "key": "rzp_test_wPInQUVGHQPOT6", // Enter the Key ID generated from the Dashboard
                 "amount": order.response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                 "currency": "INR",
-                "name": "ShoeCart",
+                "name": "PureGlow",
                 "description": "Test Transaction",
                 "image": "https://example.com/your_logo",
                 "order_id": order.response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -304,7 +312,12 @@
                     // alert(response.razorpay_order_id);
                     // alert(response.razorpay_signature);
 
-                    verifyPayment(response, order);
+                    verifyPayment(response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature, order.response.id, ORDERID);
+                    // alert("this is id from here " + order.response.id)
+                    // alert('this is payment details' + response.razorpay_order_id + response.razorpay_payment_id)
+                    // alert("this is signature" + response.razorpay_signature)
+                    // alert("🔺🔺🚀🚀🚀" + order.response._id);
+
                 },
                 "prefill": {
                     "name": "Gaurav Kumar",
@@ -323,68 +336,80 @@
             rzp1.open();
         }
 
-        function verifyPayment(payment, order) {
+        function verifyPayment(orderId, paymentId, razorpay_signature, order, ORDERID) {
             $.ajax({
                 url: '/verify-payment', // replace with your server endpoint
                 method: 'post',
                 data: {
-                    payment,
                     order,
+                    paymentId,
+                    orderId,
+                    razorpay_signature,
+                    ORDERID
                 },
                 success: function (response) {
-                    if (response.status) {
+                    if (response.status === true) {
                         Swal.fire({
-                            position: 'top-end',
                             icon: 'success',
                             title: 'Order placed Successfully',
                             showConfirmButton: false,
                             timer: 3000
-                        })
-                        window.location.href = '/user-details';
+                        }).then(() => { window.location.href = '/profile' })
 
                     } else {
-                        alert("payment failed");
-                        window.location.href('/');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order placed Successfully',
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(() => window.location.href('/'))
+
                     }
 
                 }
             });
         }
 
-        function applyCoupon() {
-            var couponCode = document.getElementById("getCoupon").value;
+        function applyCoupon(cartId) {
+            event.preventDefault()
+            const couponCode = document.getElementById('couponCodes').value.trim();
+            if (!couponCode) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Not filled',
+
+                })
+            }
             $.ajax({
                 method: "post",
-                url: '/apply-coupon',
+                url: '/activeCoupon',
                 data: ({
                     couponCode,
+                    cartId
                 }),
                 success: function (response) {
-                    if (response.status) {
-                        const inputBox = document.getElementById('subTtle');
-                        console.log("Input field value before update:", inputBox.value);
-                        inputBox.value = response.getDiscount;
-                        console.log("Input field value after update:", inputBox.value);
-                        console.log(response.getDiscount)
-                        const subTotal = document.getElementById('gtd');
-                        document.getElementById('gtd').innerHTML = response.getDiscount;
-
+                    if (response.status == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = '/checkout'
+                        })
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: response.msg,
-
+                            text: response.message,
                         })
                     }
 
                 }
 
-
             })
-
         }
-
 
     </script>
 

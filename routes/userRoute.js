@@ -48,6 +48,7 @@ router.post('/edit-address', auth.verify_user, addressController.updateAddress);
 //Checkout -------------------------------------------------------------------
 router.get('/checkout', auth.verify_user, orderController.loadCheckout);
 router.post('/placed-order', auth.verify_user, orderController.placedOrder);
+router.post('/verify-payment', auth.verify_user, orderController.verifyPayment);
 //UserDetails -----------------------------------------------------------------
 router.get('/profile', auth.verify_user, userController.loadUserDetails);
 router.get('/cancel-order', auth.verify_user, orderController.cancelOrder);

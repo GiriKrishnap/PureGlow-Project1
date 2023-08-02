@@ -41,7 +41,8 @@
                                                         <%= data.product_id.productName%>
                                                     </a></td>
                                                 <td class="pro-price"><span><i class="bi bi-currency-rupee"></i>
-                                                        <%= (data.product_id.price * data.product_id.discount / 100 )%>
+                                                        <%= Math.round(data.product_id.price - (data.product_id.price * data.product_id.discount / 100))
+                                                            %>
                                                     </span></td>
                                                 <td class="pro-quantity">
                                                     <div class="quantity">
@@ -61,7 +62,9 @@
                                                         <%= data.totalPrice%>
                                                     </span></td>
                                                 <td class="pro-remove"><a href="/remove-product?id=<%= data._id%>"><i
-                                                            class="lnr lnr-trash" onclick="return confirmAlert(event, '/remove-product?id=<%= data._id%>')"></i></a></td>
+                                                            class="lnr lnr-trash"
+                                                            onclick="return confirmAlert(event, '/remove-product?id=<%= data._id%>')"></i></a>
+                                                </td>
                                             </tr>
                                             <%})%>
                                     </tbody>
@@ -118,7 +121,7 @@
                         <script
                             src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
                         <script>
-                            function confirmAlert(event ,linkUrl) {
+                            function confirmAlert(event, linkUrl) {
                                 // Prevent the default link behavior
                                 event.preventDefault();
 

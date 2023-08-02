@@ -44,9 +44,6 @@ const orderSchema = new mongoose.Schema({
     paymentStatus: {
         type: String,
     },
-    orderStatus: {
-        type: String,
-    },
     status: {
         type: String,
     },

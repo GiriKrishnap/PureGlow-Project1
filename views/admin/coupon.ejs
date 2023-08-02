@@ -100,7 +100,7 @@
             maxPrice
           }),
           success: function (response) {
-            if (response.status) {
+            if (response.status == true) {
               Swal.fire(
                 'confirm!',
                 response.message,

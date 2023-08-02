@@ -53,27 +53,35 @@ const insertCoupon = async (req, res) => {
 //--------------------------------------------------------------------------------------
 const activeCoupon = async (req, res) => {
     try {
-        const code = req.body.CouponName
+        const code = req.body.couponCode
         const couponExist = await Coupon.findOne({ name: code });
         if (couponExist) {
-            const cartId = req.query.id;
+            const cartId = req.body.cartId;
             console.log("🚀 here is cartID " + cartId);
             const carts = await Cart.findOne({ _id: cartId });
             console.log("🚀 here is carts " + carts);
             const totalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
             const couponDate = new Date(couponExist.expiry);
             const currentDate = new Date();
-            if (couponExist.minPrice <= totalPrice || couponDate > currentDate || couponExist.status === true) {
 
-                await Cart.updateOne({ _id: cartId }, { $set: { couponId: couponExist._id } });
+            if (couponExist.status !== true) {
+                res.json({ status: false, message: "This Coupon is not Available" });
+
+            } else if (couponDate < currentDate) {
+                res.json({ status: false, message: "Coupon Expired" });
+
+            } else if (couponExist.minPrice >= totalPrice) {
+                res.json({ status: false, message: "Minimum price is not reached" });
 
             } else {
-                res.redirect('/checkout');
+                await Cart.updateOne({ _id: cartId }, { $set: { couponId: couponExist._id } });
+                res.json({ status: true });
             }
-            res.redirect('/checkout')
+
         } else {
-            res.redirect('/checkout')
+            res.json({ status: false, message: 'coupon Not Found' });
         }
+
     } catch (error) {
         console.log(error.message)
     }
