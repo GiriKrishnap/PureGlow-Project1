@@ -1,0 +1,442 @@
+s<%- include('../layout/header.ejs') %>
+
+
+<!-- Start Banner Area -->
+<!-- <section class="banner-area organic-breadcrumb">
+<div class="container">
+    <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        <div class="col-first">
+            <h1>Checkout</h1>
+            <nav class="d-flex align-items-center">
+                <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                <a href="single-product.html">Checkout</a>
+            </nav>
+        </div>
+    </div>
+</div>
+</section> -->
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area section_gap mt-5">
+    <div class="container">
+        <div class="billing_details">
+            <form action="" method="" id="checkout-form">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h3>Address</h3>
+                        <div class=" mt-2 text-end">
+                            <a href="/address">
+                                <h5><b class="text-light btn btn-info">add-address</b></h5>
+                            </a>
+                        </div>
+                        <% if(typeof message !=='undefined' ){%>
+                            <h5 class="text-danger"><b>
+                                    <%= message %>.....!
+                                </b></h5>
+                            <%} %>
+                            <!--user Address-->
+                         
+                            <!--ende userAddress-->
+                                <!--address table start here-->
+                                <% address.forEach(data=> { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="<%= data._id %>" value="<%= data._id %>" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            <label for="" value="name">
+                                                <%= data.userName %>
+                                            </label><br>
+                                            <label for="" value="mobile">
+                                                <%= data.mobile %>
+                                            </label><br>
+                                            <label for="" value="email">
+                                                <%=data.email %>
+                                            </label><br>
+                                            <label for="" value="address">
+                                                <%= data.address %>
+                                            </label><br>
+                                            <label for="" value="state">
+                                                <%= data.state %>
+                                            </label><br>
+                                            <label for="" value="dist">
+                                                <%= data.district %>
+                                            </label><br>
+                                            <label for="" value="city">
+                                                <%= data.city %>
+                                            </label><br>
+                                            <label for="" value="landMark">
+                                                <%= data.landMark %>
+                                            </label><br>
+                                            <label for="" value="">
+                                                <%= data.pincode %>
+                                            </label><br>
+                                        </label>
+                            
+                                            <a href="/delete-address?id=<%= data._id %>" class="btn btn-dark">delete</a>
+                                            <a href="/edit-address?id=<%= data._id %>" class="btn btn-dark">edit</a>
+                                        </td>
+                                        </label>
+                                    </div>
+
+                                    <% }); %>
+                                        <!--address table end here-->
+                    </div>
+
+
+
+
+                    <div class="col-lg-4">
+                        <div class="order_box text-center col-lg-12">
+                            <h2>Your Order</h2>
+                                   <div class="col-lg-12">
+                                        <table class="" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-lg-3">product</th>
+                                                    <th class="col-lg-3">price</th>
+                                                    <th class="col-lg-3">quantity</th>
+                                                    <th class="col-lg-3">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <% if(cartData){%>
+                                            <% cartData.products.forEach(data=> { %>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <%= data.product_id.productName %>
+                                                        </td>
+                                                        <td>
+                                                            <%= data.price %>
+                                                        </td>
+                                                        <td>
+                                                            <%= data.quantity %>
+                                                        </td>
+                                                        <td>
+                                                            <%= data.totalPrice %>
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                </tbody>
+                                                <% }); %>
+                                                <%}else{%>
+    
+                                                    <%}%>
+                                        </table>
+                                    </div>
+                                    
+
+                               
+                             <ul>
+                                <li><input type="text" placeholder="Enter coupon code" id="getCoupon" name="CouponName"
+                                        class="border border-white col-lg-12 mt-3"></li>
+                                <li class="mt-2"><a class="tp_btn" id="coupon" onclick="applyCoupon()">Apply
+                                        Coupon</a></li>
+                            </ul>
+                            <ul class="list list_2">
+                                <hr>
+                                <li><a href="#">Subtotal <span id="gtd">
+                                            <%= subTotalPrice %>
+                                        </span></a></li>
+                                <hr>
+                                <!-- <li><a href="#">Total <span>$2210.00</span></a></li> -->
+                            </ul>
+
+                            <div class="payment_item">
+                                <div class="radion_btn">
+                                    <input type="radio" id="f-option4" name="selector" value="wallet" >
+                                    <label for="f-option4"><div class="row">
+                                        <div class="col-lg-10">wallet</div>
+                                        <div class="col-lg-2"><%= wallet.amount %></div>
+                                    </div></label>
+                                    <div class="check"></div>
+
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="payment_item">
+                                <div class="radion_btn">
+                                    <input type="radio" id="f-option5" name="selector" value="COD" checked>
+                                    <label for="f-option5">Cash on delivery</label>
+                                    <div class="check"></div>
+                                </div>
+                                <p>Please send a check to Store Name, Store Street, Store Town, Store State /
+                                    County,
+                                    Store Postcode.</p>
+                            </div>
+                            <div class="payment_item active">
+                                <div class="radion_btn">
+                                    <input type="radio" id="f-option6" name="selector" value="Razorpay">
+                                    <label for="f-option6">Razor pay </label>
+                                    <div class="check"></div>
+                                </div>
+                                <p>Pay via Razor Pay; you can pay with your upi transaction</p>
+                            </div>
+
+                            <input type="hidden" name="subTotalPrice" id="subTtle" value="">
+                            <input type="submit" class="primary-btn col-lg-12" value="submit"
+                                onclick="paymentMethod()">
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+
+        </div>
+    </div>
+</section>
+<!--================End Checkout Area =================-->
+
+<!-- start footer Area -->
+<footer class="footer-area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3  col-md-6 col-sm-6">
+                <div class="single-footer-widget">
+                    <h6>About Us</h6>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                        ut labore dolore
+                        magna aliqua.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4  col-md-6 col-sm-6">
+                <div class="single-footer-widget">
+                    <h6>Newsletter</h6>
+                    <p>Stay update with our latest</p>
+                    <div class="" id="mc_embed_signup">
+
+                        <form target="_blank" novalidate="true"
+                            action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                            method="get" class="form-inline">
+
+                            <div class="d-flex flex-row">
+
+                                <input class="form-control" name="EMAIL" placeholder="Enter Email"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '"
+                                    required="" type="email">
+
+
+                                <button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right"
+                                        aria-hidden="true"></i></button>
+                                <div style="position: absolute; left: -5000px;">
+                                    <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value=""
+                                        type="text">
+                                </div>
+
+                                <!-- <div class="col-lg-4 col-md-4">
+                                            <button class="bb-btn btn"><span class="lnr lnr-arrow-right"></span></button>
+                                        </div>  -->
+                            </div>
+                            <div class="info"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3  col-md-6 col-sm-6">
+                <div class="single-footer-widget mail-chimp">
+                    <h6 class="mb-20">Instragram Feed</h6>
+                    <ul class="instafeed d-flex flex-wrap">
+                        <li><img src="img/i1.jpg" alt=""></li>
+                        <li><img src="img/i2.jpg" alt=""></li>
+                        <li><img src="img/i3.jpg" alt=""></li>
+                        <li><img src="img/i4.jpg" alt=""></li>
+                        <li><img src="img/i5.jpg" alt=""></li>
+                        <li><img src="img/i6.jpg" alt=""></li>
+                        <li><img src="img/i7.jpg" alt=""></li>
+                        <li><img src="img/i8.jpg" alt=""></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-6">
+                <div class="single-footer-widget">
+                    <h6>Follow Us</h6>
+                    <p>Let us be social</p>
+                    <div class="footer-social d-flex align-items-center">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-dribbble"></i></a>
+                        <a href="#"><i class="fa fa-behance"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
+            <p class="footer-text m-0">
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                    target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+        </div>
+    </div>
+</footer>
+<!-- End footer Area -->
+
+
+<script src="js/vendor/jquery-2.2.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+    integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+    crossorigin="anonymous"></script>
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/jquery.ajaxchimp.min.js"></script>
+<script src="js/jquery.nice-select.min.js"></script>
+<script src="js/jquery.sticky.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<!--gmaps Js-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+<script src="js/gmaps.min.js"></script>
+<script src="js/main.js"></script>
+
+
+
+<script>
+    $('#checkout-form').submit((e) => {
+        e.preventDefault();
+        $.ajax({
+            url: '/placed-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+
+                console.log(response.status);
+                if (response.codSuccess) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Order placed Successfully',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    location.href = '/my-orders';
+                } else if (response.msg) {
+                    Swal.fire(
+                        'please check form!',
+                        response.msg,
+                        'error')
+
+                } else {
+                    razorpayPayment(response);
+                }
+            }
+        })
+
+    })
+
+    function razorpayPayment(order) {
+        // console.log("working 1", order);
+        // console.log(order)
+
+        var options = {
+            "key": "rzp_test_qXH0h7SCch7OVM", // Enter the Key ID generated from the Dashboard
+            "amount": order.response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "ShoeCart",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                // console.log("response", response);
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature);
+
+                verifyPayment(response, order);
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verify-payment', // replace with your server endpoint
+            method: 'post',
+            data: {
+                payment,
+                order,
+            },
+            success: function (response) {
+                if (response.status) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Order placed Successfully',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    window.location.href = '/my-orders';
+
+
+                } else {
+                    alert("payment failed");
+                    window.location.href('/');
+                }
+
+            }
+        });
+    }
+
+
+    function applyCoupon() {
+        var couponCode = document.getElementById("getCoupon").value;
+        $.ajax({
+            method: "post",
+            url: '/apply-coupon',
+            data: ({
+                couponCode,
+
+            }),
+            success: function (response) {
+                if (response.status) {
+                    
+                    const inputBox = document.getElementById('subTtle');
+                    console.log("Input field value before update:", inputBox.value);
+                    inputBox.value = response.getDiscount;
+                    console.log("Input field value after update:", inputBox.value);
+                    console.log(response.getDiscount)
+                    const subTotal = document.getElementById('gtd');
+                    document.getElementById('gtd').innerHTML = response.getDiscount;
+
+
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.msg,
+
+                    })
+                }
+
+            }
+
+
+        })
+
+    }
+
+
+</script>
+
+
+<%-include('../layout/footer.ejs')%>
