@@ -278,11 +278,11 @@
                             title: 'Order placed Successfully',
                             showConfirmButton: false,
                             timer: 2000
-                        }).then(() => { location.href = '/profile' });
+                        }).then(() => { window.location.href = '/profile' });
 
                     } else if (response.msg) {
                         Swal.fire(
-                            'please check form!',
+                            'error!',
                             response.msg,
                             'error')
 

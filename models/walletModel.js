@@ -5,8 +5,7 @@ const walletSchema = mongoose.Schema({
 
     user_id: {
         type: ObjectId,
-        require: true,
-        ref: 'User'
+        ref: 'Users'
     },
     amount: {
         type: Number,

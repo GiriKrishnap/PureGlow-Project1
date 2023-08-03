@@ -69,28 +69,28 @@ const placedOrder = async (req, res) => {
                             deliveryDate: deliveredDate,
                             paymentMethod: paymentMethod,
                             paymentStatus: 'pending',
-                            status: 'success',
+                            status: 'pending',
                         });
                         await orderSave.save().then(async (response) => {
                             const orderId = response._id;
 
                             if (paymentMethod === "COD") {
                                 //----CASH_ON_DELIVERY---------
-                                console.log("🚀 CASH ON DELIVERY");
+                                await Order.updateOne({ _id: orderId, user_id: userId }, { $set: { status: 'success' } });
                                 res.json({ codSuccess: true });
-
                                 cartData.products.forEach(async (data) => {
                                     const product = await Products.updateOne({ _id: data.product_id }, { $inc: { quantity: - data.quantity } });
                                     if (product.quantity <= 0) {
                                         await Products.updateOne({ _id: product._id }, { $set: { list: false } });
                                     }
-                                }).then(async () => {
-                                    await Cart.deleteOne({ user_id: userId });
                                 })
+                                await Cart.deleteOne({ user_id: userId });
+
 
                             } else if (paymentMethod === "wallet") {
                                 //------WALLET-------------
                                 const walletAmount = await Wallet.findOne({ user_id: userId });
+
                                 if (walletAmount.amount < orderPrice) {
                                     res.json({ msg: 'wallet amount is less for this purchase' });
                                 } else {
@@ -103,9 +103,9 @@ const placedOrder = async (req, res) => {
                                         if (product.quantity <= 0) {
                                             await Products.updateOne({ _id: product._id }, { $set: { list: false } });
                                         }
-                                    }).then(async () => {
-                                        await Cart.deleteOne({ user_id: userId });
                                     })
+                                    await Cart.deleteOne({ user_id: userId });
+
 
                                 }
 
@@ -216,6 +216,25 @@ const cancelOrder = async (req, res) => {
             const id = req.query.id;
             const date = new Date();
             await Order.updateOne({ _id: id }, { $set: { status: 'cancelled', deliveryDate: date } });
+            const orderData = await Order.findOne({ _id: id })
+            if (orderData.paymentMethod == "Razorpay" || orderData.paymentMethod == "wallet") {
+                const WalletData = await Wallet.findOne({ user_id: orderData.user_id });
+
+                if (!WalletData) {
+                    const wallet = new Wallet({
+                        amount: orderData.totalPrice,
+                        user_id: orderData.user_id
+                    })
+                    await wallet.save();
+
+                } else {
+                    await Wallet.updateOne({ user_id: orderData.user_id }, { $inc: { amount: orderData.totalPrice } });
+                }
+
+            }
+            orderData.products.forEach(async (data) => {
+                await Products.updateOne({ _id: data.product_id }, { $inc: { quantity: data.quantity }, $set: { list: true } });
+            })
             res.redirect('/profile');
         }
     } catch (error) {
