@@ -42,10 +42,14 @@
                             ALL
                         </button>
                         <% category.forEach((data,index)=> { %>
-                            <button class="btn btn-info p-1 rounded" onclick="filterSelection('<%=data.name %>')">
-                                <%=data.name %>
-                            </button>
-                            <% }); %>
+                            <% if (data.list===true) { %>
+
+                                <button class="btn btn-info p-1 rounded" onclick="filterSelection('<%=data.name %>')">
+                                    <%=data.name %>
+                                </button>
+
+                                <% } %>
+                                    <% }); %>
 
 
 

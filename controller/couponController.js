@@ -57,9 +57,7 @@ const activeCoupon = async (req, res) => {
         const couponExist = await Coupon.findOne({ name: code });
         if (couponExist) {
             const cartId = req.body.cartId;
-            console.log("🚀 here is cartID " + cartId);
             const carts = await Cart.findOne({ _id: cartId });
-            console.log("🚀 here is carts " + carts);
             const totalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
             const couponDate = new Date(couponExist.expiry);
             const currentDate = new Date();
@@ -73,7 +71,10 @@ const activeCoupon = async (req, res) => {
             } else if (couponExist.minPrice >= totalPrice) {
                 res.json({ status: false, message: "Minimum price is not reached" });
 
+            } else if (couponExist.maxPrice < totalPrice) {
+                res.json({ status: false, message: 'maximum price reached' })
             } else {
+                
                 await Cart.updateOne({ _id: cartId }, { $set: { couponId: couponExist._id } });
                 res.json({ status: true });
             }

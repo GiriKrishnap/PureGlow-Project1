@@ -282,7 +282,7 @@ const PostChangePassword = async (req, res) => {
 const loadHome = async (req, res) => {
     try {
         const userName = req.session.userName;
-        const productData = await Products.find({ list: true }).limit(4)
+        const productData = (await Products.find({ list: true }).limit(4)).reverse()
         const bannerData = await Banner.find({ list: true });
         res.render('home', { productData, userName, bannerData });
 

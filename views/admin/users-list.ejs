@@ -52,7 +52,7 @@
                   </td>
                   <td>
                     <% if(data.status===false){%>
-                      <a href="/admin/unblock-user?id=<%= data._id %>" class="btn btn-dark shadow-primary">UNBLOCK</a>
+                      <a href="/admin/unblock-user?id=<%= data._id %>" class="btn btn-danger shadow-primary">UNBLOCK</a>
                       <%}else{%>
                         <a href="/admin/block-user?id=<%= data._id %>" class="btn btn-dark shadow-primary">BLOCK</a>
                         <%} %>

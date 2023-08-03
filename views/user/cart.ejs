@@ -41,8 +41,8 @@
                                                         <%= data.product_id.productName%>
                                                     </a></td>
                                                 <td class="pro-price"><span><i class="bi bi-currency-rupee"></i>
-                                                        <%= Math.round(data.product_id.price - (data.product_id.price * data.product_id.discount / 100))
-                                                            %>
+                                                        <%= Math.round(data.product_id.price - (data.product_id.price *
+                                                            data.product_id.discount / 100)) %>
                                                     </span></td>
                                                 <td class="pro-quantity">
                                                     <div class="quantity">
@@ -116,27 +116,31 @@
                 <h3 class="text-center text-light m-5 font-monospace bg-primary text-wrap ">There is no Products in Cart
                 </h3>
                 <% } %>
-                    <% } %>
-                        <!-- cart main wrapper end -->
-                        <script
-                            src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-                        <script>
-                            function confirmAlert(event, linkUrl) {
-                                // Prevent the default link behavior
-                                event.preventDefault();
+                    <% }else{%>
+                        <h3 class="text-center text-light m-5 font-monospace bg-primary text-wrap ">There is no Products
+                            in Cart
+                        </h3>
+                        <%} %>
+                            <!-- cart main wrapper end -->
+                            <script
+                                src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+                            <script>
+                                function confirmAlert(event, linkUrl) {
+                                    // Prevent the default link behavior
+                                    event.preventDefault();
 
-                                // Show the SweetAlert confirmation dialog
-                                swal({
-                                    title: 'Are you sure?',
-                                    text: 'Are you sure you want to remove this from Cart?',
-                                    icon: 'warning',
-                                    buttons: ['Cancel', 'OK'],
-                                }).then((value) => {
-                                    if (value) {
-                                        // If the user clicks "OK," proceed with following the link
-                                        window.location.href = linkUrl;
-                                    }
-                                });
-                            }
-                        </script>
-                        <%- include('../user/partials/footer2.ejs'); %>
+                                    // Show the SweetAlert confirmation dialog
+                                    swal({
+                                        title: 'Are you sure?',
+                                        text: 'Are you sure you want to remove this from Cart?',
+                                        icon: 'warning',
+                                        buttons: ['Cancel', 'OK'],
+                                    }).then((value) => {
+                                        if (value) {
+                                            // If the user clicks "OK," proceed with following the link
+                                            window.location.href = linkUrl;
+                                        }
+                                    });
+                                }
+                            </script>
+                            <%- include('../user/partials/footer2.ejs'); %>
