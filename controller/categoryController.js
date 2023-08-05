@@ -37,12 +37,11 @@ const insertCategory = async (req, res) => {
         const admin = req.session.isAdminLoggedIn;
         if (admin) {
             const name = req.body.name;
-            console.log(name+'name is here hello ');
 
             if (!name) {
                 res.json({ status: false, message: 'fill the Field' });
             } else {
-                const exist = await Category.findOne({ name: name });
+                const exist = await Category.findOne({ name: new RegExp('^' + name + '$', 'i') });
 
                 if (!exist) {
 
@@ -67,11 +66,12 @@ const insertCategory = async (req, res) => {
 const loadEditCategory = async (req, res) => {
     try {
         const admin = req.session.isAdminLoggedIn;
+
         if (admin) {
             const id = req.query.id;
-            req.session.query = id
             const categoryData = await Category.findOne({ _id: id });
             res.render('edit-category', { categoryData });
+
         } else {
             res.render('/admin/admin-login');
         }
@@ -84,26 +84,22 @@ const loadEditCategory = async (req, res) => {
 const updateCategory = async (req, res) => {
     try {
         const admin = req.session.isAdminLoggedIn;
-        const id = req.session.query;
-        if (admin) {
-            const categoryDatas = await Category.find();
-            const { name } = req.body;
-            if (!name) {
-                res.render('edit-category', { message: 'please fill the form' });
-            } else {
-                const exist = categoryDatas.filter((p) => p.name === name);
-                if (exist.length === 0) {
-                    await Category.findOneAndUpdate({ _id: id }, { $set: { name: name } });
-                    res.redirect('/admin/category-list');
-                } else {
-                    const categoryData = await Category.findOne({ _id: id });
-                    res.render('edit-category', { message: 'already exist please add another name ', categoryData });
-                }
 
+        if (admin) {
+            const name = req.body.categoryName;
+
+            const exist = await Category.findOne({ name: new RegExp('^' + name + '$', 'i') });
+
+            if (!exist) {
+                const id = req.body.categoryId;
+                await Category.updateOne({ _id: id }, { $set: { name: name } });
+                res.json({ status: true, message: 'Successfully Updated' })
+
+            } else {
+                res.json({ status: false, message: 'This Name Already Exist' });
             }
         }
 
-        delete req.session.query;
 
     } catch (error) {
         console.log(error.message);

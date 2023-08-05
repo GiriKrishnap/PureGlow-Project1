@@ -19,7 +19,6 @@
   <script>
     function addCategory() {
       var name = document.getElementById('categoryName').value;
-      console.log(name);
       event.preventDefault()
       $.ajax({
         method: "post",
@@ -40,7 +39,8 @@
               icon: 'error',
               title: 'Oops...',
               text: response.message,
-
+              showConfirmButton: false,
+              timer: 1700
             })
           }
         }
