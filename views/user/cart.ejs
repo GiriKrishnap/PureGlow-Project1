@@ -48,13 +48,20 @@
                                                     <div class="quantity">
                                                         <div class="cart-plus-mnus">
                                                             <a
-                                                                href="/dec?id=<%= data.product_id._id%>&qt=<%= data.quantity%>"><i
+                                                                href="""  onclick="
+                                                                decQuantity('/dec?id=<%=data.product_id._id%>','<%=data.product_id._id %>')"><i
                                                                     class="fa fa-minus mr-2"></i></a>
-                                                            <input class="cart-plus-minus-box w-25"
-                                                                value="<%= data.quantity%>" type="text" disabled>
-                                                            <a
-                                                                href="/inc?id=<%= data.product_id._id%>&qt=<%= data.quantity%>"><i
-                                                                    class="fa fa-plus ml-2 "></i></a>
+                                                            <!-- <input class="cart-plus-minus-box w-25"
+                                                                value="<%= data.quantity%>" type="text" id="<%=data.product_id._id %>" disabled> -->
+
+                                                            <button class="btn-success p-2"
+                                                                id="<%=data.product_id._id %>">
+                                                                <%= data.quantity%>
+                                                            </button>
+                                                            <a href=""" onclick="
+                                                                incQuantity('/inc?id=<%=data.product_id._id%>','<%=data.product_id._id %>')"><i
+                                                                        class="fa fa-plus ml-2 "></i>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -122,25 +129,83 @@
                         </h3>
                         <%} %>
                             <!-- cart main wrapper end -->
-                            <script
-                                src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                             <script>
                                 function confirmAlert(event, linkUrl) {
                                     // Prevent the default link behavior
                                     event.preventDefault();
 
-                                    // Show the SweetAlert confirmation dialog
-                                    swal({
+                                    Swal.fire({
                                         title: 'Are you sure?',
-                                        text: 'Are you sure you want to remove this from Cart?',
+                                        text: "Do You Really Want to Remove it🥺",
                                         icon: 'warning',
-                                        buttons: ['Cancel', 'OK'],
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, Remove it!'
                                     }).then((value) => {
-                                        if (value) {
+                                        if (value.isConfirmed) {
                                             // If the user clicks "OK," proceed with following the link
                                             window.location.href = linkUrl;
                                         }
                                     });
+                                }
+
+                                function incQuantity(link, quaId) {
+                                    event.preventDefault();
+                                    const element = document.getElementById(quaId);
+                                    const quantity = element.innerHTML
+                                    $.ajax({
+                                        method: 'patch',
+                                        url: link,
+                                        data: ({
+                                            quantity
+                                        }),
+                                        success: function (response) {
+
+
+                                            if (response.status == true) {
+                                                element.innerHTML = (parseInt(element.innerHTML) + 1)
+
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: response.message,
+                                                    showConfirmButton: false,
+                                                    timer: 2000
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+
+                                function decQuantity(link, quaId) {
+                                    event.preventDefault();
+                                    const element = document.getElementById(quaId);
+                                    const quantity = element.innerHTML
+                                    $.ajax({
+                                        method: 'patch',
+                                        url: link,
+                                        data: ({
+                                            quantity
+                                        }),
+                                        success: function (response) {
+
+
+                                            if (response.status == true) {
+                                                element.innerHTML = (parseInt(element.innerHTML) - 1)
+
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: response.message,
+                                                    showConfirmButton: false,
+                                                    timer: 2000
+                                                })
+                                            }
+                                        }
+                                    })
                                 }
                             </script>
                             <%- include('../user/partials/footer2.ejs'); %>

@@ -12,7 +12,6 @@ const couponController = require('../controller/couponController');
 const wishlistController = require('../controller/wishlistController');
 //-----------------------------------------------------------------------------
 router.set('views', './views/user');
-
 //signup----------------------------------------------------------------------
 router.get('/signup', auth.logout_user, userController.loadSignup);
 router.post('/signup', auth.logout_user, userController.insertUser);
@@ -37,8 +36,8 @@ router.get('/single-product', productController.loadSingleProduct);
 router.get('/add-to-cart', auth.verify_user, cartController.addToCart);
 router.get('/cart', auth.verify_user, cartController.loadCart);
 router.get('/remove-product', auth.verify_user, cartController.removeProduct);
-router.get('/inc', auth.verify_user, cartController.incrementQuantity);
-router.get('/dec', auth.verify_user, cartController.decrementQuantity);
+router.patch('/inc', auth.verify_user, cartController.incrementQuantity);
+router.patch('/dec', auth.verify_user, cartController.decrementQuantity);
 //Address ---------------------------------------------------------------------
 router.get('/add-address', auth.verify_user, addressController.addAddress);
 router.post('/add-address', auth.verify_user, addressController.insertAddress);

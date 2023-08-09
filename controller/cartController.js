@@ -108,17 +108,18 @@ const incrementQuantity = async (req, res) => {
     try {
         if (req.session.isLoggedIn) {
             const productId = req.query.id;
-            const cartQuantity = req.query.qt;
+            const cartQuantity = (parseInt(req.body.quantity) + 1);
+            console.log("🚀🚀🚀"+cartQuantity)
             const userId = req.session.userId;
             const cartData = await Cart.findOne({ user_id: userId });
             const productData = await Products.findOne({ _id: productId });
             const salePrice = Math.round(productData.price - (productData.price * productData.discount) / 100)
 
-            if (cartData && cartQuantity < productData.quantity) {
+            if (cartData && cartQuantity <= productData.quantity) {
                 await Cart.findOneAndUpdate({ user_id: userId, "products.product_id": productId }, { $inc: { "products.$.quantity": 1, "products.$.totalPrice": salePrice } });
-                res.redirect('/cart');
+                res.json({status:true})
             } else {
-                res.redirect('/cart');
+                res.json({status:false,message:'Maximum Quantity Reached'});
             }
 
         } else {
@@ -134,7 +135,7 @@ const decrementQuantity = async (req, res) => {
     try {
         if (req.session.isLoggedIn) {
             const productId = req.query.id;
-            const cartQuantity = req.query.qt;
+            const cartQuantity = (req.body.quantity);
             const userId = req.session.userId;
             const cartData = await Cart.findOne({ user_id: userId });
             const productData = await Products.findOne({ _id: productId });
@@ -143,9 +144,9 @@ const decrementQuantity = async (req, res) => {
             if (cartData && cartQuantity > 1) {
 
                 await Cart.findOneAndUpdate({ user_id: userId, "products.product_id": productId }, { $inc: { "products.$.quantity": -1, "products.$.totalPrice": -salePrice } });
-                res.redirect('/cart');
+                res.json({status:true})
             } else {
-                res.redirect('/cart');
+                res.json({status:false,message:'Minimum Quantity Reached'});
             }
         } else {
             res.redirect('/login')
