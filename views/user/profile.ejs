@@ -52,243 +52,272 @@
 
                                     <!-- Single Tab Content Start -->
                                     <div class="tab-pane fade" id="orders" role="tabpanel">
-                                        <div class="myaccount-content">
-                                            <h3>Orders</h3>
-                                            <div class="text-center">
-                                                <% if(orderData ){ %>
-                                                    <% orderData.forEach((data,index)=> { %>
-                                                        <div class="card m-3">
-                                                            <div class="card-body">
-                                                                <% for (let i=0; i < data.products.length; i++) { %>
-                                                                    <div
-                                                                        class="d-flex justify-content-start justify-content-between">
-                                                                        <img src="/images/<%= data.products[i].product_id.images[0] %>"
-                                                                            width="60" height="60" class="m-2"
-                                                                            style="border-radius: 3px;"><br>
-                                                                        <div class="mt-3">
-                                                                            <p>
-                                                                                <%= data.products[i].product_id.productName
-                                                                                    %> x <%= data.products[i].quantity
-                                                                                        %>
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="mt-3"><i
-                                                                                class="bi bi-currency-rupee"></i>
-                                                                            <%= data.products[i].price %>
-                                                                        </div>
-                                                                        <div class="mt-1">
-                                                                            <% if (data.status==='delivered' ) { %>
-                                                                                <p
-                                                                                    class="text-success font-weight-bold">
-                                                                                    Delivered on </p>
-                                                                                <%= data.deliveryDate.toDateString() %>
-                                                                                    <% } else
-                                                                                        if(data.status==='cancelled' ){
-                                                                                        %>
-                                                                                        <p
-                                                                                            class="text-danger font-weight-bold">
-                                                                                            Cancelled on</p><strong>
-                                                                                            <%= data.deliveryDate.toDateString()
-                                                                                                %>
-                                                                                        </strong>
-                                                                                        <% } else {%>
-                                                                                            <p
-                                                                                                class="text-primary font-weight-bold">
-                                                                                                Delivery expect on</p>
-                                                                                            <%= data.deliveryDate.toDateString()
-                                                                                                %>
-                                                                                                <%} %>
-                                                                        </div>
-                                                                        <!-- More button -->
-                                                                        <div class="mt-3">
 
-                                                                        </div>
+                                        <h3>Orders</h3>
+                                        <% if(orderData ){ %>
+                                            <% orderData.forEach((data,index)=> { %>
+                                                <div class="card col-4 m-2 shadow-sm bg-white rounded"
+                                                    style="float: left;">
+                                                    <div class="card-body">
+                                                        <% if (data.status=='cancelled' ) { %>
+                                                            <h4
+                                                                class="card-title mt-2 p-1 bg-danger text-wrap text-white">
+                                                                <% }else if(data.status=='delivered' ){%>
+                                                                    <h4
+                                                                        class="card-title mt-2 p-1 bg-success text-wrap text-white">
 
-                                                                    </div>
-                                                                    <div>
+                                                                        <%}else{%>
+                                                                            <h4
+                                                                                class="card-title mt-2 p-1 bg-success text-wrap text-white">
 
-                                                                    </div>
-                                                                    <p>
-
-                                                                    </p>
-                                                                    <div class="collapse mb-4"
-                                                                        id="collapseExample<%= index %>">
-                                                                        <div class="card card-body">
-                                                                            <div class="modal-body">
-                                                                                <h3>Product details</h3>
-                                                                                <strong>Name: </strong>
-                                                                                <%= data.products[i].product_id.productName
-                                                                                    %> <br>
-                                                                                    <strong>Price: </strong><i
-                                                                                        class="bi bi-currency-rupee"></i>
-                                                                                    <%= data.products[i].product_id.price
-                                                                                        %> <br>
-                                                                                        <strong>Discount: </strong>
-                                                                                        <%= data.products[i].product_id.discount
-                                                                                            %>% <br><br>
-                                                                                            <h3>Address</h3>
-                                                                                            <strong>Name: </strong>
-                                                                                            <%= data.address_id.name%>
-                                                                                                <br>
-                                                                                                <strong>Phone: </strong>
-                                                                                                <%=
-                                                                                                    data.address_id.phone%>
-                                                                                                    <br>
-                                                                                                    <strong>Email:
-                                                                                                    </strong>
-                                                                                                    <%=
-                                                                                                        data.address_id.email%>
-                                                                                                        <br>
-                                                                                                        <strong>Address:
-                                                                                                        </strong>
-                                                                                                        <%=
-                                                                                                            data.address_id.address%>
-                                                                                                            <br>
-                                                                                                            <strong>State:
-                                                                                                            </strong>
-                                                                                                            <%=
-                                                                                                                data.address_id.state%>
-                                                                                                                <br>
-                                                                                                                <strong>District:
-                                                                                                                </strong>
-                                                                                                                <%=
-                                                                                                                    data.address_id.district%>
-                                                                                                                    <br>
-                                                                                                                    <strong>City:
-                                                                                                                    </strong>
-                                                                                                                    <%=
-                                                                                                                        data.address_id.city%>
-                                                                                                                        <br>
-                                                                                                                        <strong>landMark:
-                                                                                                                        </strong>
-                                                                                                                        <%=
-                                                                                                                            data.address_id.landMark%>
-                                                                                                                            <br>
-                                                                                                                            <strong>Pincode:
-                                                                                                                            </strong>
-                                                                                                                            <%=
-                                                                                                                                data.address_id.pincode%>
-                                                                                                                                <br>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="mt-2">
-                                                                            <% if(data.status !=='delivered' &&
-                                                                                data.status !=='cancelled' ){%> <a
-                                                                                    href="/cancel-order?id=<%=data._id%>"><button
-                                                                                        type="button"
-                                                                                        class="btn-danger p-2">Cancel</button></a>
                                                                                 <%} %>
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <% } %>
-                                                            </div>
-                                                            <button class="p-2 m-2 rounded d-flex justify-content-end"
-                                                                type="button" data-toggle="collapse"
-                                                                data-target="#collapseExample<%= index %>"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapseExample<%= index %>"
-                                                                style="background-color: #5580dd;">
-                                                                <p class="m-1 text-white">More Info</p>
-                                                            </button>
-                                                        </div>
 
-                                                        <% }) %>
+                                                                                    <strong>TotalPrice</strong>:
+                                                                                    <%=data.totalPrice %><i
+                                                                                            class="bi bi-currency-rupee"></i>
+                                                                                        <br>
+                                                                                        <%= data.orderDate.toDateString()
+                                                                                            %>
+                                                                            </h4>
+                                                                            <hr style="height:2px;border-width:0;color:gray;background-color:gray;margin-top: 15px;"
+                                                                                class="mb-3">
 
-                                                            <% } %>
+                                                                            <h4><strong>
+                                                                                    <%=data.products.length %> Products
+                                                                                </strong></h4>
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                                                            <h5><strong>deliveryDate</strong>: <%=
+                                                                                    data.deliveryDate.toDateString() %>
+                                                                            </h5>
 
-                                    <!-- Single Tab Content End -->
+                                                                            <% if (data.status=='cancelled' ) { %>
+                                                                                <h5 class="text-danger">
+                                                                                    <strong>orderStatus</strong>: <%=
+                                                                                        data.status %>
+                                                                                </h5>
+                                                                                <% }else{%>
+                                                                                    <h5><strong>orderStatus</strong>:
+                                                                                        <%= data.status %>
+                                                                                    </h5>
+                                                                                    <%} %>
 
-                                    <!-- Single Tab Content Start -->
+                                                                                        <button type="button"
+                                                                                            class="font-weight-bold text-secondary"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#exampleModal<%=index %>">
+                                                                                            VIEW MORE <i
+                                                                                                class="bi bi-arrow-down-left-square-fill"></i>
+                                                                                        </button>
 
-                                    <!-- Single Tab Content End -->
+                                                                                        <!-- Modal -->
+                                                                                        <div class="modal fade"
+                                                                                            id="exampleModal<%=index %>"
+                                                                                            tabindex="-1" role="dialog"
+                                                                                            aria-labelledby="exampleModalLabel"
+                                                                                            aria-hidden="true">
+                                                                                            <div class="modal-dialog"
+                                                                                                role="document">
+                                                                                                <div
+                                                                                                    class="modal-content">
+                                                                                                    <div
+                                                                                                        class="modal-header">
+                                                                                                        <h5 class="modal-title"
+                                                                                                            id="exampleModalLabel">
+                                                                                                            Order Id :
+                                                                                                            <%=
+                                                                                                                data._id%>
+                                                                                                        </h5>
+                                                                                                        <button
+                                                                                                            type="button"
+                                                                                                            class="close"
+                                                                                                            data-dismiss="modal"
+                                                                                                            aria-label="Close">
+                                                                                                            <span
+                                                                                                                aria-hidden="true">&times;</span>
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="modal-body">
 
-                                    <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade" id="wallet" role="tabpanel">
-                                        <div class="myaccount-content">
-                                            <h3>Payment Method</h3>
-                                            <p class="saved-message">You Can't Saved Your Payment Method yet.</p>
-                                        </div>
-                                    </div>
-                                    <!-- Single Tab Content End -->
+                                                                                                        <table
+                                                                                                            class="table text-center table-striped">
+                                                                                                            <thead>
+                                                                                                                <tr>
+                                                                                                                    <th
+                                                                                                                        scope="col">
+                                                                                                                        No
+                                                                                                                    </th>
+                                                                                                                    <th
+                                                                                                                        scope="col">
+                                                                                                                        Image
+                                                                                                                    </th>
+                                                                                                                    <th
+                                                                                                                        scope="col">
+                                                                                                                        Name
+                                                                                                                    </th>
+                                                                                                                    <th
+                                                                                                                        scope="col">
+                                                                                                                        Price
+                                                                                                                    </th>
+                                                                                                                    <th
+                                                                                                                        scope="col">
+                                                                                                                        Quantity
+                                                                                                                    </th>
+                                                                                                                </tr>
+                                                                                                            </thead>
+                                                                                                            <tbody>
+                                                                                                                <% data.products.forEach((data,index)=> { %>
+                                                                                                                    <tr>
+                                                                                                                        <th scope="row">
+                                                                                                                            <%= index + 1 %>
+                                                                                                                        </th>
+                                                                                                                        <td><a href="/single-product?id=<%=data.product_id._id%>"><img src="/images/<%=data.product_id.images[0]%>" alt="" style="width: 40px; height: 40px;"></a></td>
+                                                                                                                        <td><a href="/single-product?id=<%=data.product_id._id%>"><%=data.product_id.productName %></a></td>
+                                                                                                                        <td><i class="bi bi-currency-rupee"></i>
+                                                                                                                            <%= Math.round(data.product_id.price - (data.product_id.price * data.product_id.discount / 100)) %></td>
+                                                                                                                            <td><%=data.quantity %></td>
+                                                                                                                    </tr>
+                                                                                                                    <% }) %>
+                                                                                                            </tbody>
+                                                                                                        </table>
 
-                                    <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade" id="address-edit" role="tabpanel">
-                                        <a href="/add-address"><button
-                                                class="btn flosun-button secondary-btn rounded-0 mb-3">Add New
-                                                Address</button></a>
-                                        <% if(addressData){ %>
-                                            <% addressData.forEach((data,index)=> { %>
-                                                <div class="myaccount-content">
-                                                    <h3>Your Address</h3>
-                                                    <address>
-                                                        <p><strong>
-                                                                Name: <%= data.name%>
-                                                            </strong></p>
-                                                        <p>
-                                                            <strong>Email:</strong>
-                                                            <%=data.email %><br>
-                                                                <strong>Mobile:</strong>
-                                                                <%=data.phone %><br>
-                                                                    <strong>Address:</strong>
-                                                                    <%=data.address %><br>
-                                                                        <strong>State:</strong>
-                                                                        <%=data.state %><br>
-                                                                            <strong>District:</strong>
-                                                                            <%=data.district %><br>
-                                                                                <strong>City:</strong>
-                                                                                <%=data.city %><br>
-                                                                                    <strong>LandMark:</strong>
-                                                                                    <%=data.landMark %><br>
-                                                                                        <strong>Pincode:</strong>
-                                                                                        <%=data.pincode %><br>
-                                                        </p>
-                                                    </address>
-                                                    <a href="/edit-address"
-                                                        class="btn flosun-button secondary-btn theme-color  rounded-0"><i
-                                                            class="fa fa-edit mr-2"></i>Edit</a>
-                                                    <a href="/delete-address?id=<%= data._id %>"
-                                                        class="btn flosun-button secondary-btn theme-color  rounded-0"><i
-                                                            class="fa fa-edit mr-2"
-                                                            onclick="return confirmAlert(event, '/delete-address?id=<%= data._id %>')"></i>Delete
-                                                        Address</a>
+                                                                                                        <h4 class="font-weight-bold">Total Price : <%=data.totalPrice %><i class="bi bi-currency-rupee"></i></h4>
+                                                                                                        <h5>Payment Method : <%=data.paymentMethod %></h5>
+                                                                                                        <hr style="height:2px;border-width:0;color:gray;background-color:gray;margin-top: 6px;" class="mb-2">
+                                                                                                        <h5>Order Date : <%=data.orderDate.toDateString() %></h5>
+                                                                                                        <h5>Delivery Date : <%=data.deliveryDate.toDateString() %></h5>
+                                                                                                        <hr style="height:2px;border-width:0;color:gray;background-color:gray;margin-top: 6px;" class="mb-2">
+                                                                                                        <h4 class="font-weight-bold">Order Status : <%=data.status %></h4>
+
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="modal-footer d-flex justify-content-start">
+                                                                                                        <% if (data.status !== 'cancelled' && data.status !== 'delivered') { %>
+                                                                                                            <a href="/cancel-order?id=<%=data._id %>"><button
+                                                                                                                type="button"
+                                                                                                                class="p-2 rounded btn-danger" onclick="confirmAlert(event,'/cancel-order?id=<%=data._id %>')">CANCEL
+                                                                                                                ORDER</button></a>
+                                                                                                        <% } %>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                                <% }); %>
+
+                                                <% } ) %>
+
                                                     <% } %>
                                     </div>
                                     <!-- Single Tab Content End -->
 
                                     <!-- Single Tab Content Start -->
+                                    <div class="tab-pane fade" id="wallet" role="tabpanel">
+                                        <div class="myaccount-content">
+                                            <h3>Wallet Balance</h3>
+                                            <% if(typeof walletData !=='undefined' && walletData !=null){ %>
+                                                <p class="saved-message">
+                                                    Your Balance is <%= walletData.amount%><i
+                                                            class="bi bi-currency-rupee"></i>
+                                                </p>
+                                                <%}else{%>
+                                                    <p class="saved-message">Zero Balance</p>
+                                                    <%}%>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="tab-pane fade " id="address-edit" role="tabpanel">
+                                        <a href="/add-address"><button
+                                                class="btn flosun-button secondary-btn rounded-0 mb-3">Add New
+                                                Address</button></a>
+                                        <div class="d-flex" style="overflow: scroll;">
+                                            <% if(addressData){ %>
+                                                <% addressData.forEach((data,index)=> { %>
+                                                    <div class="myaccount-content col-md-6 mr-3">
+                                                        <h3>Your Address - <%= index+1%>
+                                                        </h3>
+                                                        <address>
+                                                            <strong>
+                                                                Name:
+                                                            </strong>
+                                                            <p>
+                                                                <%= data.name%>
+                                                            </p>
+
+                                                            <strong>Email:</strong>
+                                                            <p>
+                                                                <%=data.email %>
+                                                            </p>
+
+                                                            <strong>Mobile:</strong>
+                                                            <p>
+                                                                <%=data.phone %>
+                                                            </p>
+
+                                                            <strong>Address:</strong>
+                                                            <p>
+                                                                <%=data.address %>
+                                                            </p>
+
+                                                            <strong>State:</strong>
+                                                            <p>
+                                                                <%=data.state %>
+                                                            </p>
+                                                            <strong>District:</strong>
+                                                            <p>
+                                                                <%=data.district %>
+                                                            </p>
+                                                            <strong>City:</strong>
+                                                            <p>
+                                                                <%=data.city %>
+                                                            </p>
+                                                            <strong>LandMark:</strong>
+                                                            <p>
+                                                                <%=data.landMark %>
+                                                            </p>
+                                                            <strong>Pincode:</strong>
+                                                            <p>
+                                                                <%=data.pincode %>
+                                                            </p>
+
+                                                        </address>
+                                                        <a href="/edit-address?id=<%= data._id %>"
+                                                            class="btn flosun-button secondary-btn theme-color  rounded-0"><i
+                                                                class="fa fa-edit mr-2"></i>Edit</a>
+                                                        <a href="/delete-address?id=<%= data._id %>"
+                                                            class="btn flosun-button secondary-btn theme-color  rounded-0"><i
+                                                                class="fa fa-edit mr-2"
+                                                                onclick="return confirmAlert(event, '/delete-address?id=<%= data._id %>')"></i>Delete
+                                                            Address</a>
+                                                    </div>
+
+                                                    <% }); %>
+                                                        <% } %>
+                                        </div>
+                                    </div>
+
 
                                     <% if(typeof userData !=='undefined' ){ %>
-
-
-
-
                                         <div class="tab-pane fade" id="account-info" role="tabpanel">
                                             <div class="myaccount-content">
                                                 <h3>Account Details</h3>
                                                 <div class="account-details-form">
                                                     <form action="#">
-
                                                         <div class="single-input-item mb-3">
                                                             <label for="display-name" class="required mb-1">Full
                                                                 Name</label>
                                                             <input type="text" id="display-name" placeholder="Full Name"
                                                                 value="<%= userData.name%>" readonly />
                                                         </div>
-
                                                         <div class="single-input-item mb-3">
                                                             <label for="display-name"
                                                                 class="required mb-1">Phone</label>
                                                             <input type="text" id="display-name" placeholder="Phone"
                                                                 value="<%= userData.phone%>" readonly />
                                                         </div>
-
                                                         <div class="single-input-item mb-3">
                                                             <label for="email" class="required mb-1">Email
                                                                 Address</label>
@@ -304,7 +333,6 @@
                                                                 <label for="current-pwd" class="required mb-1">Want to
                                                                     Change Password ?</label>
                                                             </div>
-
                                                         </fieldset>
                                                         <div class="single-input-item single-item-button">
                                                             <a href="/enter-email"
@@ -315,7 +343,6 @@
                                                 </div>
                                             </div>
                                         </div> <!-- Single Tab Content End -->
-
                                         <% } %>
                                 </div>
                             </div> <!-- My Account Tab Content End -->
@@ -331,7 +358,6 @@
         function confirmAlert(event, linkUrl) {
             // Prevent the default link behavior
             event.preventDefault();
-
             // Show the SweetAlert confirmation dialog
             swal({
                 title: 'Are you sure?',

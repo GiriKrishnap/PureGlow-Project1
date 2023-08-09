@@ -272,7 +272,7 @@
                 data: $('#checkout-form').serialize(),
                 success: (response) => {
 
-                    if (response.codSuccess) {
+                    if (response.codSuccess == true) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Order placed Successfully',

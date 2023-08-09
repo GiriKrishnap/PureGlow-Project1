@@ -55,7 +55,7 @@
                                     <%= data.productName %>
                                 </h2>
                             </div>
-                            <div class="price-box mb-2">
+                            <div class="price-box">
                                 <span class="regular-price"><i class="bi bi-currency-rupee"></i>
                                     <%= Math.round(data.price - (data.price * data.discount / 100)) %>
                                 </span>
@@ -63,38 +63,64 @@
                                         <%= data.price %>
                                     </del></span>
                             </div>
-                            <div class="sku mb-3">
+                            <div class="sku mb-3 ">
                                 <span>discount: -<%= data.discount %>%</span>
                             </div>
+                            <div class="sku mb-2 text-dark">
+                                <span>Category: <%= data.category.name %></span>
+                            </div>
+                            <hr style="height:2px;border-width:0;color:gray;background-color:gray;margin-top: 15px;"
+                                class="mb-3">
                             <p class="desc-content mb-5">
                                 <%= data.description %>
                             </p>
-                            <div class="quantity-with_btn mb-5">
-                                <div class="add-to_cart">
-                                    <a class="btn product-cart button-icon flosun-button dark-btn"
-                                        href="/add-to-cart?id=<%= data._id %>">Add
-                                        to cart</a>
+                            <% if (data.quantity < 5 && data.quantity> 0) { %>
+                                <h3 class="mb-4 text-danger"><i class="bi bi-exclamation-square-fill"></i> Only <%=
+                                        data.quantity%>
+                                        Products Left</h3>
+                                <% } %>
 
-                                    <% if (typeof userName !=='undefined' ) { %>
-                                        <a class="btn flosun-button secondary-btn secondary-border rounded-0"
-                                            onclick="addWishlist('<%= data._id %>')">
-                                            <p id="wishlistText">wishlist</p>
-                                        </a>
-                                        <% } else {%>
-                                            <a class="btn flosun-button secondary-btn secondary-border rounded-0"
-                                                href="/login">
-                                                <p id="wishlistText">wishlist</p>
-                                            </a>
-                                            <%}%>
-                                </div>
-                            </div>
-                            <div class="social-share mb-4">
-                                <span>Share :</span>
-                                <a href="#"><i class="fa fa-facebook-square facebook-color"></i></a>
-                                <a href="#"><i class="fa fa-twitter-square twitter-color"></i></a>
-                                <a href="#"><i class="fa fa-linkedin-square linkedin-color"></i></a>
-                                <a href="#"><i class="fa fa-pinterest-square pinterest-color"></i></a>
-                            </div>
+                                    <div class="quantity-with_btn mb-5">
+                                        <div class="add-to_cart">
+                                            <% if (data.quantity> 0) { %>
+                                                <a class="btn product-cart button-icon flosun-button dark-btn"
+                                                    href="/add-to-cart?id=<%= data._id %>">Add
+                                                    to cart</a>
+                                                <% }else{%>
+                                                    <button class="btn-danger flosun-button mr-2"
+                                                        style="cursor: not-allowed;" type="button"
+                                                        data-toggle="collapse" data-target="#collapseExample"
+                                                        aria-expanded="false" aria-controls="collapseExample"
+                                                        href="">Out Of Stock</button>
+                                                        
+                                                    <%} %>
+
+
+                                                        <% if (typeof userName !=='undefined' ) { %>
+                                                            <a class="btn flosun-button secondary-btn secondary-border rounded-0"
+                                                                onclick="addWishlist('<%= data._id %>')">
+                                                                <p id="wishlistText">wishlist</p>
+                                                            </a>
+                                                            <% } else {%>
+                                                                <a class="btn flosun-button secondary-btn secondary-border rounded-0"
+                                                                    href="/login">
+                                                                    <p id="wishlistText">wishlist</p>
+                                                                </a>
+                                                                <%}%>
+                                                                <div class="collapse mt-3 shadow-lg bg-white rounded" id="collapseExample">
+                                                                    <div class="card card-body">
+                                                                     <h4>THIS PRODUCT IS OUT OF STOCK! 😔</h4>
+                                                                    </div>
+                                                                  </div>
+                                        </div>
+                                    </div>
+                                    <div class="social-share mb-4">
+                                        <span>Share :</span>
+                                        <a href="#"><i class="fa fa-facebook-square facebook-color"></i></a>
+                                        <a href="#"><i class="fa fa-twitter-square twitter-color"></i></a>
+                                        <a href="#"><i class="fa fa-linkedin-square linkedin-color"></i></a>
+                                        <a href="#"><i class="fa fa-pinterest-square pinterest-color"></i></a>
+                                    </div>
                         </div>
                     </div>
                     <%})%>
@@ -102,6 +128,7 @@
         </div>
     </div>
 
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray;margin-top: 15px;" class="mb-3">
     <section class="shop_section layout_padding">
         <div class="container">
             <div class="heading_container heading_center">
@@ -113,7 +140,7 @@
                 <% if(typeof products!=='undefined' ){ %>
                     <% products.forEach(data=> {%>
                         <div class="col-sm-6 col-xl-3">
-                            <div class="box">
+                            <div class="box text-center">
                                 <a href="/single-product?id=<%=data._id%>">
                                     <div class="img-box">
                                         <img src="/images/<%=data.images[0]%>" alt="">

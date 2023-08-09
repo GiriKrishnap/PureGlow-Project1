@@ -5,6 +5,7 @@ const Products = require('../models/productModel');
 const Order = require('../models/orderModel');
 const Address = require('../models/addressModel');
 const Banner = require('../models/bannerModel');
+const Wallet = require('../models/walletModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,7 +321,8 @@ const loadUserDetails = async (req, res) => {
             const userName = req.session.userName;
             const orderData = (await Order.find({ user_id: userId }).populate('products.product_id').populate('address_id')).reverse();
             const addressData = await Address.find({ user_id: userId, list: true });
-            res.render('profile', { orderData, addressData, userName, userData });
+            const walletData = await Wallet.findOne({ user_id: userId })
+            res.render('profile', { orderData, addressData, userName, userData, walletData });
         } else {
             res.render('profile');
         }
