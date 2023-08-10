@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 const Users = require('../models/userModels');
 const bcrypt = require('bcrypt');
+const Orders = require('../models/orderModel');
 ///////////////////////////////////////////////////////////////////////////////
 
 ////////////--LOGIN--/////////////////////////////////////////////////////////
@@ -8,6 +9,7 @@ const loadLogin = async (req, res) => {
     try {
         const admin = req.session.adminId;
         if (admin) {
+
             res.render('dashboard');
         } else {
             res.render('admin-login');
@@ -59,7 +61,9 @@ const loadDashboard = async (req, res) => {
     try {
         const admin = req.session.isAdminLoggedIn;
         if (admin) {
-            res.render('admin-home');
+            const orderNumber = await Orders.countDocuments({});
+            const userNumber = await Users.countDocuments({});
+            res.render('admin-home', { orderNumber , userNumber});
         } else {
             res.redirect('/admin/admin-login');
         }
