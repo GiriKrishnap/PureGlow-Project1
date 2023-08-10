@@ -46,6 +46,13 @@
                                             <p class="mb-0">From your account dashboard. you can easily check & view
                                                 your recent orders, manage your shipping and billing addresses and edit
                                                 your password and account details.</p>
+
+                                                <h3 class="mt-4">Referral Link</h3>
+                                                <p class="mb-0 font-weight-bold">"Share your referral link with your family and
+                                                     friends. When they sign up, you'll receive 100rs and they'll get 50rs. Click the Button Bellow
+                                                     to copy your referral link" 
+                                                </p><p id="referralLink" hidden>http://localhost:3000/signup?refId=<%=userData._id %></p><br>
+                                                <button id="copyButton" class="btn flosun-button secondary-btn rounded-0 mb-3">Copy referral Link</button>
                                         </div>
                                     </div>
                                     <!-- Single Tab Content End -->
@@ -371,6 +378,29 @@
                 }
             });
         }
+
+          // Function to copy text to the clipboard
+          function copyTextToClipboard() {
+        var textElement = document.getElementById("referralLink");
+        var textToCopy = textElement.textContent;
+
+        navigator.clipboard.writeText(textToCopy)
+            .then(function() {
+                var copyButton = document.getElementById("copyButton");
+                copyButton.textContent = "Copied!";
+                setTimeout(function() {
+                    copyButton.textContent = "Copy referral link";
+                }, 3500);
+            })
+            .catch(function(error) {
+                console.error("Error copying text: ", error);
+            });
+    }
+
+    // Add a click event listener to the copy button
+    var button = document.getElementById("copyButton");
+    button.addEventListener("click", copyTextToClipboard);
+
     </script>
 
     <!-- my account wrapper end -->

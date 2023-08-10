@@ -21,7 +21,9 @@ const securePassword = async (password) => {
 // signUp //////////////////////////////////////////////////////////////////////////////////////
 const loadSignup = async (req, res) => {
     try {
+        req.session.referralLink = req.query.refId;
         res.render('signup')
+
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
@@ -32,6 +34,7 @@ const insertUser = async (req, res) => {
     try {
         const { name, email, phone } = req.body
         const emailExist = await Users.findOne({ email: email })
+
 
         if (emailExist) {
             res.json({ status: false, message: 'Email Already Exist 😨' })
@@ -47,7 +50,27 @@ const insertUser = async (req, res) => {
                 is_admin: 0
             });
 
+
             const userData = await user.save()
+            console.log("🚀🚀😀🚀🚀🚀🚀 - " + userData._id)
+            //referralLink
+            if (req.session.referralLink) {
+                console.log('🚀🚀< referral area >')
+                const referralUser = await Users.findOne({ _id: req.session.referralLink });
+                if (referralUser.status == true) {
+                    console.log('🚀🚀< referral user status is true >')
+                    await Wallet.findOneAndUpdate({ user_id: req.session.referralLink }, { $inc: { amount: 100 } });
+
+                    const newWallet = new Wallet({
+                        user_id: userData._id,
+                        amount: 50,
+                    })
+
+                    await newWallet.save();
+                    delete req.session.referralLink;
+                }
+
+            }
 
             const otp = Math.floor(100000 + Math.random() * 900000);
             req.session.Otp = otp;
@@ -74,7 +97,6 @@ const loadOtpVerifier = async (req, res) => {
 const verifyOtp = async (req, res) => {
     try {
         const user = req.session.user
-
 
         const { v1, v2, v3, v4, v5, v6 } = req.body
         const realOtp = v1 + v2 + v3 + v4 + v5 + v6

@@ -2,6 +2,8 @@
 const Users = require('../models/userModels');
 const bcrypt = require('bcrypt');
 const Orders = require('../models/orderModel');
+const Products = require('../models/productModel');
+const Category = require('../models/categoryModel');
 ///////////////////////////////////////////////////////////////////////////////
 
 ////////////--LOGIN--/////////////////////////////////////////////////////////
@@ -35,8 +37,7 @@ const verifyLogin = async (req, res) => {
                 } else {
                     req.session.isAdminLoggedIn = true;
                     req.session.adminId = userData._id;
-                    console.log(req.session.adminId + "<----session of ADMIN is here--//--");
-                    console.log(req.session.isAdminLoggedIn + '<--ADMIN LOGIN VERIFY  session is here --//--');
+
                     if (req.session.adminId) {
                         res.redirect('/admin/dashboard');
 
@@ -63,7 +64,21 @@ const loadDashboard = async (req, res) => {
         if (admin) {
             const orderNumber = await Orders.countDocuments({});
             const userNumber = await Users.countDocuments({});
-            res.render('admin-home', { orderNumber , userNumber});
+            const productNumber = await Products.countDocuments({});
+            const categoryNumber = await Category.countDocuments({});
+            const pipeline = [
+                {
+                    $group: {
+                        _id: null,
+                        totalAmount: { $sum: '$totalPrice' }
+                    }
+                }
+            ];
+            const aggregationResult = await Orders.aggregate(pipeline)
+
+            let totalRevenue = aggregationResult[0].totalAmount;
+
+            res.render('admin-home', { orderNumber, userNumber, totalRevenue, productNumber, categoryNumber });
         } else {
             res.redirect('/admin/admin-login');
         }
