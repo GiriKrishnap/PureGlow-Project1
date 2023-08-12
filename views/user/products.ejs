@@ -67,6 +67,17 @@
                             <div class="col-lg-3 col-md-6 col-sm-6 col-custom product-area product <%= data.category.name%>"
                                 id="product">
                                 <div class="product-item">
+                                    
+                                    <div class="new">
+                                        <span>
+                                            <% if (data.discount > 0) { %>
+                                                <%=data.discount %>% Off
+                                                <% }else{%>
+                                                    <br>
+                                                    <%} %>
+                                        </span>
+                                      </div>
+                                      
                                     <div class="single-product position-relative mr-0 ml-0">
                                         <div class="product-image">
                                             <a class="d-block" href="/single-product?id=<%=data._id%>">
@@ -96,9 +107,12 @@
                                                 <span class="regular-price "><i class="bi bi-currency-rupee"></i>
                                                     <%= Math.round(data.price - (data.price * data.discount / 100)) %>
                                                 </span>
-                                                <span class="old-price"><del>
+                                                <% if (data.discount > 0) { %>
+                                                    <span class="old-price"><del>
                                                         <%=data.price%>
                                                     </del></span>
+                                                    <%} %>
+                                                
                                             </div>
                                             <a href="/add-to-cart?id=<%= data._id %>" class="btn product-cart">Add
                                                 to Cart</a>
@@ -110,12 +124,16 @@
                                                     </a></h4>
                                             </div>
                                             <div class="price-box">
-                                                <span class="regular-price "><i class="bi bi-currency-rupee"></i>
-                                                    <%=data.price * data.discount / 100 %>
-                                                </span>
+                                                
+                                                    <span class="regular-price "><i class="bi bi-currency-rupee"></i>
+                                                        <%= Math.round(data.price - (data.price * data.discount / 100)) %>
+                                                    </span>
+                                                    
+                                                    <% if (data.discount > 0) { %>
                                                 <span class="old-price"><del>
                                                         <%=data.price%>
                                                     </del></span>
+                                                    <%} %>
                                             </div>
                                             <p class="desc-content">
                                                 <%=data.description%>
@@ -136,6 +154,7 @@
                                                 </a>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
