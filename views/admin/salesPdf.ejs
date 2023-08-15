@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #customers {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #customers td,
+    #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #customers tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #customers tr:hover {
+      background-color: #ddd;
+    }
+
+    #customers th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #000000;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="container-fluid mt-2 text-center">
+
+    <div class="col-md-12">
+      <div class="main-card mb-3 card">
+
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-dark  border-radius-lg pt-4 pb-3">
+            <h3 class="text-white text-capitalize ps-3">Sales Report</h3>
+          </div>
+        </div>
+
+        <div class="table-responsive ">
+          <table class="align-middle" id="customers">
+            <thead>
+              <tr class="bg-dark text-white">
+                <th class="ms-3 ">order no:</th>
+                <th class="ms-3 ">user Name</th>
+                <th class="ms-3 ">product Cost</th>
+                <th class="ms-3 ">payment Mode</th>
+                <th class="ms-3 ">deliver Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.forEach((data,i)=>{ %>
+                <tr>
+                  <td class="text-center text-muted ms-2 ">
+                    <%= i+1 %>
+                  </td>
+                  <td class="ms-2 ">
+                    <div class="widget-content p-0">
+                      <div class="widget-content-wrapper">
+                        <div class="widget-content-left mr-3">
+                          <div class="widget-content-left">
+                            <%=data.address_id.name %>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="text-center ms-2 ">
+                    <%= data.totalPrice %>
+                  </td>
+                  <td class="text-center ms-2 ">
+                    <%= data.paymentMethod %>
+                  </td>
+                  <td class="text-center ms-2 ">
+                    <%= data.deliveryDate.toDateString() %>
+                  </td>
+                </tr>
+                <% }) %>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -4,6 +4,11 @@ const bcrypt = require('bcrypt');
 const Orders = require('../models/orderModel');
 const Products = require('../models/productModel');
 const Category = require('../models/categoryModel');
+//--
+const path = require('path');
+const fs = require('fs');
+const pdf = require('html-pdf');
+const ejs = require('ejs');
 ///////////////////////////////////////////////////////////////////////////////
 
 ////////////--LOGIN--/////////////////////////////////////////////////////////
@@ -136,7 +141,75 @@ const unblockUser = async (req, res) => {
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
-///////////////////ADMIN_LOGOUT/////////////////////////////////////////////////////////////////////
+///////////////////SALES_REPORT////////////////////////////////////////////////////////////////////
+const loadSalesReport = async (req, res) => {
+    try {
+
+        const orderData = await Orders.find({ status: "delivered" }).populate('address_id').populate('user_id')
+        res.render('sales-report', { orderData: orderData.reverse() })
+
+    } catch (error) {
+        console.log(err.message);
+        res.status(500).json({ error: true, message: 'internal sever error' })
+    }
+}
+
+
+//--date
+const searchDate = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.body;
+        console.log('🚀dates - ' + startDate + '- - -' + endDate);
+
+        const productData = await Orders.find().populate('address_id');
+        const deliveryDate = productData.map(data => {
+            const year = data.deliveryDate.getFullYear();
+            const month = String(data.deliveryDate.getMonth() + 1).padStart(2, '0');
+            const day = String(data.deliveryDate.getDate()).padStart(2, '0');
+            console.log(`🚀year-month-day - + ${year}-${month}-${day}`)
+
+            return `${year}-${month}-${day}`;
+
+        });
+
+        const filterOrders = productData.filter(data => {
+            const date = data.deliveryDate.toISOString().substr(0, 10);
+            return data.status == 'delivered' && date >= startDate && date <= endDate
+        });
+        console.log(`🚀🚀🚀 filteredOrders- ${filterOrders}`);
+
+        const data = {
+            orderSuccess: filterOrders
+        }
+        const filePath = path.resolve(__dirname, '../views/admin/salesPdf.ejs');
+        console.log(`🚀 filepath - ${filePath}`);
+        const htmlString = fs.readFileSync(filePath).toString();
+        console.log(`🚀htmlString - ${htmlString}`);
+        const ejsData = ejs.render(htmlString, { data: data.orderSuccess });
+        let options = {
+            format: "A4",
+            orientation: "portrait",
+            border: "10mm",
+            html: htmlString
+        }
+        pdf.create(ejsData, options).toStream((err, stream) => {
+            if (err) {
+                console.log('pdf error : ' + err);
+            }
+            res.set({
+                'content-Type': 'application/pdf',
+                'content-Disposition': 'attachment; filename="sales-report.pdf"'
+            });
+
+            stream.pipe(res);
+        })
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: true, message: 'internal server error' });
+    }
+}
+///////////////////ADMIN_LOGOUT////////////////////////////////////////////////////////////////////
 const logout = async (req, res) => {
     try {
         req.session.destroy();
@@ -156,5 +229,7 @@ module.exports = {
     logout,
     blockUser,
     unblockUser,
+    loadSalesReport,
+    searchDate,
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////

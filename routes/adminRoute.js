@@ -54,11 +54,14 @@ router.post('/add-banner', auth.verify_admin, upload.array('images', 5), bannerC
 router.get('/edit-banner', auth.verify_admin, bannerController.loadEditBanner);
 router.post('/edit-banner', auth.verify_admin, upload.array('images', 5), bannerController.insertEditedBanner);
 router.get('/delete-banner', auth.verify_admin, bannerController.deleteBanner);
-router.get('/banner-unlistBanner', auth.verify_admin, bannerController.unListBanner)
-router.get('/banner-listBanner', auth.verify_admin, bannerController.listBanner)
+router.get('/banner-unlistBanner', auth.verify_admin, bannerController.unListBanner);
+router.get('/banner-listBanner', auth.verify_admin, bannerController.listBanner);
 //AdminCouponsManagements----------------------------------------------------------
 router.get('/create-coupon', auth.verify_admin, couponController.loadCreateCouponPage);
 router.post('/create-coupon', auth.verify_admin, couponController.insertCoupon);
+//SALEsREPORT----------------------------------------------------------------------
+router.get('/sales-report', auth.verify_admin, adminController.loadSalesReport);
+router.post('/salesReport', auth.verify_admin, adminController.searchDate);
 //AdminLogout----------------------------------------------------------------------
 router.get('/admin-logout', auth.verify_admin, adminController.logout);
 //---------------------------------------------------------------------------------
