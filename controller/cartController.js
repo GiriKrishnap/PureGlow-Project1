@@ -2,7 +2,7 @@
 const Users = require('../models/userModels');
 const Products = require('../models/productModel');
 const Cart = require('../models/cartModel');
-
+const Coupons = require('../models/couponModel');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 const addToCart = async (req, res) => {
@@ -63,13 +63,14 @@ const loadCart = async (req, res) => {
             const userId = req.session.userId
             const userName = req.session.userName;
             const cartData = await Cart.findOne({ user_id: userId }).populate('products.product_id');
+            
             if (cartData) {
                 const carts = await Cart.findOne({ user_id: userId });
                 const subTotalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
 
                 res.render('cart', { cartData, subTotalPrice, userName });
             } else {
-                res.render('cart', { cartData, subTotalPrice: ' ', userName }); console.log('here----');
+                res.render('cart', { cartData: '', subTotalPrice: ' ', userName });
             }
         } else {
             res.redirect('/login');
@@ -109,7 +110,6 @@ const incrementQuantity = async (req, res) => {
         if (req.session.isLoggedIn) {
             const productId = req.query.id;
             const cartQuantity = (parseInt(req.body.quantity) + 1);
-            console.log("🚀🚀🚀"+cartQuantity)
             const userId = req.session.userId;
             const cartData = await Cart.findOne({ user_id: userId });
             const productData = await Products.findOne({ _id: productId });
@@ -117,9 +117,9 @@ const incrementQuantity = async (req, res) => {
 
             if (cartData && cartQuantity <= productData.quantity) {
                 await Cart.findOneAndUpdate({ user_id: userId, "products.product_id": productId }, { $inc: { "products.$.quantity": 1, "products.$.totalPrice": salePrice } });
-                res.json({status:true})
+                res.json({ status: true })
             } else {
-                res.json({status:false,message:'Maximum Quantity Reached'});
+                res.json({ status: false, message: 'Maximum Quantity Reached' });
             }
 
         } else {
@@ -144,9 +144,9 @@ const decrementQuantity = async (req, res) => {
             if (cartData && cartQuantity > 1) {
 
                 await Cart.findOneAndUpdate({ user_id: userId, "products.product_id": productId }, { $inc: { "products.$.quantity": -1, "products.$.totalPrice": -salePrice } });
-                res.json({status:true})
+                res.json({ status: true })
             } else {
-                res.json({status:false,message:'Minimum Quantity Reached'});
+                res.json({ status: false, message: 'Minimum Quantity Reached' });
             }
         } else {
             res.redirect('/login')

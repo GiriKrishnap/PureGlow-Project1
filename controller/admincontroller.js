@@ -159,14 +159,14 @@ const loadSalesReport = async (req, res) => {
 const searchDate = async (req, res) => {
     try {
         const { startDate, endDate } = req.body;
-        console.log('🚀dates - ' + startDate + '- - -' + endDate);
+
 
         const productData = await Orders.find().populate('address_id');
         const deliveryDate = productData.map(data => {
             const year = data.deliveryDate.getFullYear();
             const month = String(data.deliveryDate.getMonth() + 1).padStart(2, '0');
             const day = String(data.deliveryDate.getDate()).padStart(2, '0');
-            console.log(`🚀year-month-day - + ${year}-${month}-${day}`)
+         
 
             return `${year}-${month}-${day}`;
 
@@ -176,15 +176,15 @@ const searchDate = async (req, res) => {
             const date = data.deliveryDate.toISOString().substr(0, 10);
             return data.status == 'delivered' && date >= startDate && date <= endDate
         });
-        console.log(`🚀🚀🚀 filteredOrders- ${filterOrders}`);
+   
 
         const data = {
             orderSuccess: filterOrders
         }
         const filePath = path.resolve(__dirname, '../views/admin/salesPdf.ejs');
-        console.log(`🚀 filepath - ${filePath}`);
+
         const htmlString = fs.readFileSync(filePath).toString();
-        console.log(`🚀htmlString - ${htmlString}`);
+
         const ejsData = ejs.render(htmlString, { data: data.orderSuccess });
         let options = {
             format: "A4",

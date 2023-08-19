@@ -99,8 +99,6 @@
         const minPrice = document.getElementById('minPrice').value.trim();
         const maxPrice = document.getElementById('maxPrice').value.trim();
 
-        console.log(expireDate)
-
         $.ajax({
           method: "post",
           url: "/admin/create-coupon",

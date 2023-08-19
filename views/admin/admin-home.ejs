@@ -1,150 +1,165 @@
 <%-include('../admin/partials/aheader.ejs') %>
-<link rel="stylesheet" href="/admin/admin-home/style.css">
-<link href="https://demo.dashboardpack.com/architectui-html-free/main.css" rel="stylesheet"></head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<div class="container-fluid mt-3">
-     
-   
-      <div class="row">
-        <!-- TOTAL PRICE -->
-        
-        
-        <div class="col-md-6 col-xl-4">
-          <div class="card mb-3 widget-content bg-warning">
-              <div class="widget-content-wrapper text-white">
-                  <div class="widget-content-left">
-                      <div class="widget-heading">Total Revenue</div>
-                      <div class="widget-subheading">Your total Revenue</div>
-                  </div>
-                  <div class="widget-content-right">
-                      <div class="widget-numbers"><% if (typeof totalRevenue !== 'undefined' && totalRevenue !== null) { %>
-                        <span></span><%=totalRevenue %><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-currency-rupee" viewBox="0 0 16 16">
-                          <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"/>
-                        </svg>
-                      <% }else{%> 
-                        <span>0</span><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-currency-rupee" viewBox="0 0 16 16">
-                          <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"/>
-                        </svg>
-                        <%} %></div>
-                  </div>
-              </div>
-          </div>
-      </div>
-          <!-- TOTAL ORDERS -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-midnight-bloom">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">Total Orders</div>
-                        <div class="widget-subheading">total number of orders</div>
-                    </div>
-                    <div class="widget-content-right">
-                        <% if (typeof orderNumber !== 'undefined' && orderNumber !== null) { %>
-                          <div class="widget-numbers"><span><%= orderNumber %></span></div>
-                        <% }else{%> 
-                          <div class="widget-numbers"><span>0</span></div>
-                          <%} %>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- TOTAL USERS -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-info">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">Total Clients</div>
-                        <div class="widget-subheading">Total number of users</div>
-                    </div>
-                    <div class="widget-content-right">
-                      <% if (typeof userNumber !== 'undefined' && userNumber !== null) { %>
-                        <div class="widget-numbers"><span><%= userNumber %></span></div>
-                      <% }else{%> 
-                        <div class="widget-numbers"><span>0</span></div>
-                        <%} %>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- products -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-secondary">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">Total Products</div>
-                        <div class="widget-subheading">Total Number of Products</div>
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers"><% if (typeof productNumber !== 'undefined' && productNumber !== null) { %>
-                          <span></span><%=productNumber %>
-                        <% }else{%> 
-                          <span>0</span>
-                          <%} %></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <link rel="stylesheet" href="/admin/admin-home/style.css">
+  <link href="https://demo.dashboardpack.com/architectui-html-free/main.css" rel="stylesheet">
+  </head>
+  <div class="container-fluid mt-3">
 
-        <div class="col-md-6 col-xl-4">
-          <div class="card mb-3 widget-content bg-grow-early">
-              <div class="widget-content-wrapper text-white">
-                  <div class="widget-content-left">
-                      <div class="widget-heading">Total Category</div>
-                      <div class="widget-subheading">Total number of category</div>
-                  </div>
-                  <div class="widget-content-right">
-                      <div class="widget-numbers"><% if (typeof categoryNumber!== 'undefined' && categoryNumber !== null) { %>
-                        <span></span><%=categoryNumber %>
-                      <% }else{%> 
-                        <span>0</span>
-                        <%} %></div>
-                  </div>
+
+    <div class="row">
+      <!-- TOTAL PRICE -->
+      <div class="col-md-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-warning">
+          <div class="widget-content-wrapper text-white">
+            <div class="widget-content-left">
+              <div class="widget-heading">Total Revenue</div>
+              <div class="widget-subheading">Your total Revenue</div>
+            </div>
+            <div class="widget-content-right">
+              <div class="widget-numbers">
+                <% if (typeof totalRevenue !=='undefined' && totalRevenue !==null) { %>
+                  <%=totalRevenue %><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                      class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                      <path
+                        d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z" />
+                    </svg>
+                    <% }else{%>
+                      <span>0</span><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                          d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z" />
+                      </svg>
+                      <%} %>
               </div>
+            </div>
           </div>
+        </div>
+      </div>
+      <!-- TOTAL ORDERS -->
+      <div class="col-md-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-midnight-bloom">
+          <div class="widget-content-wrapper text-white">
+            <div class="widget-content-left">
+              <div class="widget-heading">Total Orders</div>
+              <div class="widget-subheading">total number of orders</div>
+            </div>
+            <div class="widget-content-right">
+              <% if (typeof orderNumber !=='undefined' && orderNumber !==null) { %>
+                <div class="widget-numbers" id="orders"><span>
+                    <%= orderNumber %>
+                  </span></div>
+                <% }else{%>
+                  <div class="widget-numbers"><span>0</span></div>
+                  <%} %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- TOTAL USERS -->
+      <div class="col-md-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-info">
+          <div class="widget-content-wrapper text-white">
+            <div class="widget-content-left">
+              <div class="widget-heading">Total Clients</div>
+              <div class="widget-subheading">Total number of users</div>
+            </div>
+            <div class="widget-content-right">
+              <% if (typeof userNumber !=='undefined' && userNumber !==null) { %>
+                <div class="widget-numbers" id="clients"><span>
+                    <%= userNumber %>
+                  </span></div>
+                <% }else{%>
+                  <div class="widget-numbers"><span>0</span></div>
+                  <%} %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- products -->
+      <div class="col-md-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-secondary">
+          <div class="widget-content-wrapper text-white">
+            <div class="widget-content-left">
+              <div class="widget-heading">Total Products</div>
+              <div class="widget-subheading">Total Number of Products</div>
+            </div>
+            <div class="widget-content-right">
+              <div class="widget-numbers">
+                <% if (typeof productNumber !=='undefined' && productNumber !==null) { %>
+                  <span id="products">
+                    <%=productNumber %>
+                  </span>
+                  <% }else{%>
+                    <span>0</span>
+                    <%} %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-grow-early">
+          <div class="widget-content-wrapper text-white">
+            <div class="widget-content-left">
+              <div class="widget-heading">Total Category</div>
+              <div class="widget-subheading">Total number of category</div>
+            </div>
+            <div class="widget-content-right">
+              <div class="widget-numbers">
+                <% if (typeof categoryNumber!=='undefined' && categoryNumber !==null) { %>
+                  <span></span>
+                  <%=categoryNumber %>
+                    <% }else{%>
+                      <span>0</span>
+                      <%} %>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-      
-    
-</div>
-<div class="col-md-12">
-<div class="row">
-    <div class="card col-md-7 me-2 p-4">
+
+
+  </div>
+  <div class="col-md-12 m-3">
+    <div class="row">
+      <div class="card col-md-7 p-5 mb-3">
         <canvas id="myChart"></canvas>
+      </div>
     </div>
-    </div>
-</div>
-</div>
+  </div>
+  </div>
 
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('myChart');
+    const products = document.getElementById('products');
+    const Clients = document.getElementById('clients');
+    const orders = document.getElementById('orders');
 
-
-
-<script>
-    const xValues = [100,200,300,400,500,600,700,800,900,1000];
-    
-    new Chart("myChart", {
-      type: "line",
+    new Chart(ctx, {
+      type: 'pie',
       data: {
-        labels: xValues,
-        datasets: [{ 
-          data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-          borderColor: "red",
-          fill: false
-        }, { 
-          data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-          borderColor: "green",
-          fill: false
-        }, { 
-          data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-          borderColor: "blue",
-          fill: false
-        }]
+        labels: [
+          `Orders(${orders.textContent.trim()})`,
+          `Clients(${Clients.textContent.trim()})`,
+          `products(${products.textContent.trim()})`  
+        ],
+        datasets: [{
+          label: 'My First Dataset',
+          data: [orders.textContent, Clients.textContent, products.textContent],
+          backgroundColor: [
+            'RGB(54, 81, 118)',
+            'RGB(54, 162, 235)',
+            'RGB(108, 117, 125)'
+          ],
+          hoverOffset: 4
+        }],
       },
-      options: {
-        legend: {display: false}
-      }
+
     });
-    </script>
-  
+  </script>
+
+
   <%-include('../admin/partials/afooter.ejs') %>

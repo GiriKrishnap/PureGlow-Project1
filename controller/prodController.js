@@ -96,7 +96,7 @@ const loadEditProduct = async (req, res) => {
             res.redirect('/admin/admin-login')
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
@@ -132,7 +132,7 @@ const updateEditProduct = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
@@ -167,7 +167,7 @@ const productlist = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }
@@ -180,7 +180,7 @@ const productUnList = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         res.status(500).json({ error: true, message: 'internal sever error' })
     }
 }

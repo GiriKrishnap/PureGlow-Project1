@@ -8,21 +8,16 @@ const addToWishlist = async (req, res) => {
         const userId = req.session.userId
         if (userId) {
             const productId = req.query.id;
-            console.log("🚀 productId is here - " + productId);
             const exist = await Wishlist.findOne({ user_id: userId });
-            console.log('🚀 Exist is here - ' + exist);
             if (exist) {
                 const productsExist = exist.products.find((data) => data.product_id.toString() === productId);
-                console.log('🚀 productExist is here - ' + productsExist)
                 if (!productsExist) {
                     const updateWishlist = await Wishlist.updateOne({ user_id: userId }, { $push: { products: { product_id: productId } } }).then(() => {
                         res.json({ status: true });
-                        console.log('🚀 item ADDED ',)
                     })
                 } else {
                     const removeWishlist = await Wishlist.updateOne({ user_id: userId }, { $pull: { products: { product_id: productId } } }).then(() => {
                         res.json({ status: false });
-                        console.log('🚀 item is REMOVED')
                     })
                 }
             } else {
@@ -53,7 +48,6 @@ const loadWishlist = async (req, res) => {
         const userId = req.session.userId
         if (userId) {
             const wishlistData = await Wishlist.findOne({ user_id: userId }).populate('products.product_id');
-            console.log('🚀 wishlist Data is here ' + wishlistData);
             const userName = req.session.userName;
             res.render('wishlist', { wishlistData, userName });
         } else {

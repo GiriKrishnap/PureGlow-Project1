@@ -22,13 +22,14 @@ const loadCheckout = async (req, res) => {
             const cartData = await Cart.findOne({ user_id: userId }).populate('products.product_id');
             const carts = await Cart.findOne({ user_id: userId });
             const couponData = await Coupon.findOne({ _id: carts.couponId });
+            const availableCoupon = await Coupon.find({ status: true });
 
             const subTotalPrice = carts ? carts.products.reduce((acc, cur) => acc + cur.totalPrice, 0) : 0;
             if (couponData) {
                 res.render('checkout', { address, cartData, subTotalPrice, userId, couponData });
                 await Coupon.updateOne({ _id: carts.couponId }, { $set: { status: false } });
             } else {
-                res.render('checkout', { address, cartData, subTotalPrice, userId, couponData: null });
+                res.render('checkout', { address, cartData, subTotalPrice, userId, couponData: null, availableCoupon });
             }
 
         } else {
@@ -131,7 +132,7 @@ const generateRazorpay = async (orderId, orderPrice) => {
 
         return response;
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         throw error;
     }
 };
@@ -158,15 +159,14 @@ const verifyPayment = async (req, res) => {
                 await Cart.deleteOne({ user_id: userId });
 
             }).catch((error) => {
-                console.log('🚀 payment failed');
-                console.log(error);
+                console.log(error.message);
                 res.json({ status: false, errMsg: '' })
             })
         } else {
             res.redirect('/');
         }
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         res.status(500).send('Server Error');
     }
 };
@@ -179,12 +179,11 @@ const checkPayment = (orderId, paymentId, razorpay_signature) => {
         let hmac = crypto.createHmac('sha256', 'mO9uCY5olfBQmpjGI4ReV4wE');
         hmac.update(orderId + '|' + paymentId);
         hmac = hmac.digest('hex');
-        console.log(`HMC = razorpay_signature ${hmac} === ${razorpay_signature}`)
         if (hmac === razorpay_signature) {
             resolve()
         } else {
             reject();
-            console.log("🚀 REJECTED")
+
         }
     })
 }

@@ -52,13 +52,10 @@ const insertUser = async (req, res) => {
 
 
             const userData = await user.save()
-            console.log("🚀🚀😀🚀🚀🚀🚀 - " + userData._id)
             //referralLink
             if (req.session.referralLink) {
-                console.log('🚀🚀< referral area >')
                 const referralUser = await Users.findOne({ _id: req.session.referralLink });
                 if (referralUser.status == true) {
-                    console.log('🚀🚀< referral user status is true >')
                     await Wallet.findOneAndUpdate({ user_id: req.session.referralLink }, { $inc: { amount: 100 } });
 
                     const newWallet = new Wallet({

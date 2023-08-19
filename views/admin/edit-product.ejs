@@ -106,7 +106,7 @@
   </div>
   <script>
     function inserProduct() {
-      console.log("working")
+   
       const updateProduct = document.querySelector('#update-product');
       addProduct.addEventListener('submit', event => {
         event.preventDefault();
@@ -117,7 +117,7 @@
         const quantity = document.getElementById('quantity').value.trim();
         const description = document.getElementById('description').value.trim();
         const imageMultiple = document.getElementById('imageMultiple').value
-        console.log(category)
+     
         if (!productName || !price || !discount || !quantity || !description) {
           Swal.fire({
             icon: 'error',
@@ -127,7 +127,7 @@
           })
 
         } else {
-          console.log("working")
+        
           updateProduct.submit()
         }
 
@@ -136,7 +136,7 @@
 
     function deleteimgEdidtproducts(id, images) {
       event.preventDefault()
-      console.log("working")
+     
       $.ajax({
         method: 'delete',
         url: '/admin/delete-edit-productimages',

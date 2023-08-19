@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 
-
 const orderSchema = new mongoose.Schema({
     products: [{
         product_id: {
