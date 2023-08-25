@@ -8,6 +8,9 @@ const Category = require('../models/categoryModel');
 const path = require('path');
 const fs = require('fs');
 const pdf = require('html-pdf');
+const options = {
+    phantomPath: '../node_modules/phantomjs-prebuilt/bin/phantomjs'
+  }
 const ejs = require('ejs');
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -192,7 +195,7 @@ const searchDate = async (req, res) => {
             border: "10mm",
             html: htmlString
         }
-        
+
         pdf.create(ejsData, options).toStream((err, stream) => {
             if (err) {
                 console.log('pdf error : ' + err);
