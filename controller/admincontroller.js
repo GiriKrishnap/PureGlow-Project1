@@ -189,7 +189,6 @@ const searchDate = async (req, res) => {
         let options = {
             format: "A4",
             orientation: "portrait",
-            phantomPath: "../node_modules/phantomjs-prebuilt/bin/phantomjs",
             border: "10mm",
             html: htmlString
         }
