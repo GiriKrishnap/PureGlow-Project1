@@ -95,21 +95,23 @@
         <% if (productData.length> 0) { %>
           <% if(typeof productData !=='undefined' ){ %>
             <% productData.forEach(data=> {%>
-              <div class="col-sm-6 col-xl-3">
+              <div class="col-6 col-xl-3">
                 <div class="box text-center">
                   <a href="/single-product?id=<%=data._id%>">
                     <div class="img-box">
-                      <img src="/images/<%=data.images[0]%>" alt="">
+                      <img src="/images/<%=data.images[0]%>" alt=""> 
+                      
                     </div>
+                    <p><%=data.productName%></p>
                     <div class="detail-box">
-                      <h6 class="mr-1">
-                        <%=data.productName%>
-                      </h6>
-                      <h6>
+                      
+                       
+                      
+                      <h6 class="col-12">
                         Price:
-                        <span><br>
-                          <i class="bi bi-currency-rupee"></i>
-                          <%= Math.round(data.price - (data.price * data.discount / 100)) %>
+                        <span>
+                          <br>
+                          <i class="bi bi-currency-rupee"></i><%= Math.round(data.price - (data.price * data.discount / 100)) %>
                         </span>
                       </h6>
                     </div>
@@ -191,7 +193,7 @@
         </p>
       </div>
       <div class="row">
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div class="box">
             <div class="img-box">
               <img src="/images/user/f1.png" alt="">
@@ -206,7 +208,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div class="box">
             <div class="img-box">
               <img src="/images/user/f2.png" alt="">
@@ -221,7 +223,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div class="box">
             <div class="img-box">
               <img src="/images/user/f3.png" alt="">
@@ -237,7 +239,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3" >
           <div class="box">
             <div class="img-box">
               <img src="/images/user/f4.png" alt="">

@@ -11,24 +11,18 @@
     <!-- Shop Main Area Start Here -->
     <div class="shop-main-area">
         <div class="container container-default custom-area">
-            <div class="row flex-row-reverse">
+         
                 <div class="col-12 col-custom mt-2">
 
 
                     <div class="shop_toolbar_wrapper mb-2">
                         <div class="shop_toolbar_btn col-4">
-                            <button data-role="grid_4" type="button" class="active btn-grid-4" title="Grid-4"><i
-                                    class="fa fa-th"></i></button>
-                            <button data-role="grid_3" type="button" class="btn-grid-3" title="Grid-3"> <i
-                                    class="fa fa-th-large"></i></button>
-                            <button data-role="grid_list" type="button" class="btn-list" title="List"><i
-                                    class="fa fa-th-list"></i></button>
-                        </div>
-                        <div class="text-center mt-2 col-4">
+                           </div>
+                        <div class="text-center mt-2 col-sm-12 col-md-4">
                             <h3 class="">Shopping Products</h3>
                         </div>
                         
-                        <div class="col-4">
+                        <div class="col-sm-12 col-md-4">
 
                             <form>
                                 <input type="text" onkeyup="search()" id="search-item" class="form-control text-center"
@@ -58,13 +52,11 @@
 
                 </div>
 
-                <!--shop toolbar end-->
-                <!-- Shop Wrapper Start -->
                 <div class="row shop_wrapper grid_4 product-list" id="product-list">
                     <% if (productData.length> 0) { %>
                         <% productData.forEach(data=> { %>
 
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-custom product-area product <%= data.category.name%>"
+                            <div class="col-lg-3 col-md-3 col-6 col-custom product-area product <%= data.category.name%>"
                                 id="product">
                                 <div class="product-item">
                                     
@@ -172,16 +164,15 @@
                             <div class="pagination">
                                 <ul>
                                     <li class="current">1</li>
-                                    <li><a href="#">2</a></li>
-                                    <li class="next"><a href="#">next</a></li>
+                                    <li class="next" hidden><a href="#">next</a></li>
                                     <li><a href="#">&gt;&gt;</a></li>
                                 </ul>
                             </div>
-                            <p class="desc-content text-center text-sm-right mb-0">Showing 1 - 12 of 34 result</p>
+                            <p class="desc-content text-center text-sm-right mb-0">Showing 1 - 4 of 4 result</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            
         </div>
     </div>
     </div>

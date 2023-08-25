@@ -181,7 +181,7 @@ const searchDate = async (req, res) => {
         const data = {
             orderSuccess: filterOrders
         }
-        const filePath = path.resolve(__dirname, '../views/admin/salesPdf.ejs');
+        const filePath = path.join(__dirname, '..', 'views', 'admin', 'salesPdf.ejs');
 
         const htmlString = fs.readFileSync(filePath).toString();
 
