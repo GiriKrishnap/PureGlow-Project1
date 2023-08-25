@@ -192,6 +192,7 @@ const searchDate = async (req, res) => {
             border: "10mm",
             html: htmlString
         }
+        
         pdf.create(ejsData, options).toStream((err, stream) => {
             if (err) {
                 console.log('pdf error : ' + err);
