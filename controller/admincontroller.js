@@ -166,7 +166,7 @@ const searchDate = async (req, res) => {
             const year = data.deliveryDate.getFullYear();
             const month = String(data.deliveryDate.getMonth() + 1).padStart(2, '0');
             const day = String(data.deliveryDate.getDate()).padStart(2, '0');
-         
+
 
             return `${year}-${month}-${day}`;
 
@@ -176,7 +176,7 @@ const searchDate = async (req, res) => {
             const date = data.deliveryDate.toISOString().substr(0, 10);
             return data.status == 'delivered' && date >= startDate && date <= endDate
         });
-   
+
 
         const data = {
             orderSuccess: filterOrders
@@ -189,6 +189,7 @@ const searchDate = async (req, res) => {
         let options = {
             format: "A4",
             orientation: "portrait",
+            phantomPath: "../node_modules/phantomjs-prebuilt/bin/phantomjs",
             border: "10mm",
             html: htmlString
         }
