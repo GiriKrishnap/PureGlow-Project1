@@ -144,7 +144,7 @@
             <div class="row">
                 <% if(typeof products!=='undefined' ){ %>
                     <% products.forEach(data=> {%>
-                        <div class="col-sm-6 col-xl-3">
+                        <div class="col-6 col-xl-3">
                             <div class="box text-center">
                                 <a href="/single-product?id=<%=data._id%>">
                                     <div class="img-box">
@@ -157,6 +157,7 @@
                                         <h6>
                                             Price:
                                             <span>
+                                                <br>
                                                 <i class="bi bi-currency-rupee"></i>
                                                 <%= Math.round(data.price - (data.price * data.discount / 100)) %>
                                             </span>
