@@ -11,7 +11,11 @@ const mongoose = require('mongoose');
 const sessionMiddleWare = require('./middleware/session');
 require('dotenv/config');
 // mongoDB---------------------------------------------------------------------
-mongoose.connect(process.env.CONNECTION_STRING);
+mongoose.connect(process.env.CONNECTION_STRING)
+    .catch((e) => {
+        console.log(e);
+        process.exit(0);
+    })
 
 // Router-import---------------------------------------------------------------
 const adminRouter = require('./routes/adminRoute');
@@ -29,6 +33,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(sessionMiddleWare);
 app.use(nocache())
+app.use(function (req, res, next) {
+    if (!req.session) {
+        return next(new Error('Oh no')) //handle error
+    }
+    next() //otherwise continue
+});
+
+app.set('trust proxy', 1);
 // router--------------------------------------------------------------------
 app.use('/admin', adminRouter);
 app.use('/', userRouter);

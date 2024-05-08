@@ -8,16 +8,8 @@ const Banner = require('../models/bannerModel');
 const Wallet = require('../models/walletModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-///////////////////////////////////////////////////////////////////////////////////////////////
-const securePassword = async (password) => {
-    try {
-        const passwordHash = await bcrypt.hash(password, 10);
-        return passwordHash;
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ error: true, message: 'internal sever error' })
-    }
-}
+const securePassword = require('../config/securePassword');
+
 // signUp //////////////////////////////////////////////////////////////////////////////////////
 const loadSignup = async (req, res) => {
     try {
@@ -98,6 +90,7 @@ const verifyOtp = async (req, res) => {
         const { v1, v2, v3, v4, v5, v6 } = req.body
         const realOtp = v1 + v2 + v3 + v4 + v5 + v6
         const userOtp = req.session.Otp
+        console.log('the otp is here - ', userOtp);
         if (realOtp == userOtp) {
             if (typeof req.session.newEmail !== 'undefined') {
 
