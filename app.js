@@ -11,11 +11,15 @@ const mongoose = require('mongoose');
 const sessionMiddleWare = require('./middleware/session');
 require('dotenv/config');
 // mongoDB---------------------------------------------------------------------
-mongoose.connect(process.env.CONNECTION_STRING)
-    .catch((e) => {
-        console.log(e);
-        process.exit(0);
-    })
+mongoose.connect(process.env.CONNECTION_STRING, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    socketTimeoutMS: 60000, // Set the timeout to 60 seconds (adjust as needed)
+}).catch((e) => {
+    console.log(e);
+    process.exit(0);
+});
+
 
 // Router-import---------------------------------------------------------------
 const adminRouter = require('./routes/adminRoute');
