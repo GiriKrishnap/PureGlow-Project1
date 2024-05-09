@@ -241,14 +241,17 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                    <% availableCoupon?.forEach((data,index) => { %>
-                                  <tr class="text-center">
-                                    <th scope="row"><%= index + 1 %></th>
-                                    <td><%= data.name %></td>
-                                    <td><%= data.minPrice %> <i class="bi bi-currency-rupee"></i></td>
-                                    <td>- <%= data.discount %> off</td>
-                                  </tr>
-                                  <% }) %>
+                                    <% if (availableCoupon) { %>
+  <% availableCoupon.forEach((data,index) => { %>
+    <tr class="text-center">
+      <th scope="row"><%= index + 1 %></th>
+      <td><%= data.name %></td>
+      <td><%= data.minPrice %> <i class="bi bi-currency-rupee"></i></td>
+      <td>- <%= data.discount %> off</td>
+    </tr>
+  <% }) %>
+<% } %>
+
                                 </tbody>
                               </table>
                     </form>
